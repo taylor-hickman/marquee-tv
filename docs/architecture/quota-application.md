@@ -29,6 +29,8 @@ So the earliest honest submission is when the P0 app is live with its privacy po
 1. Build only the P1 export's OAuth and `playlists.insert` path on staging right after D3, film it, and submit then. Approval can run in parallel with the rest of Phase 3.
 2. Submit at Phase 3 exit and accept that P1 waits on approval. Nothing in P0 needs extra quota: ingestion uses under 1% of the default 10,000 units a day (below).
 
+**Decision, Nov 8, 2026: option 1.** Taylor chose it. The backlog item `marquee-r3-quota-extension-application` now carries it and waits on D3.
+
 PRD 14's Phase 0 row should change from "submitted" to "drafted". This doc doesn't edit the PRD.
 
 ## Quota arithmetic
