@@ -107,6 +107,7 @@ const report = {
   eligibleAndAvailableHours: Math.round(eligibleSeconds / 360) / 10,
   distinctArtists: new Set(usable.flatMap((p) => p.artists)).size,
 };
+mkdirSync(new URL('./results/', import.meta.url), { recursive: true });
 writeFileSync(new URL('./results/report.json', import.meta.url), JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify(report, null, 2));
 
