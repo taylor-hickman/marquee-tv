@@ -91,7 +91,7 @@ missing() {
 
 # sb runs the Supabase CLI from a scratch workdir, so the project cache it
 # writes (supabase/.temp) stays out of the repo; card T2 owns supabase/.
-SB_WORKDIR="${TMPDIR:-/tmp}/marquee-provision"
+SB_WORKDIR="${TMPDIR:-/tmp}"; SB_WORKDIR="${SB_WORKDIR%/}/marquee-provision"
 sb() { mkdir -p "$SB_WORKDIR" && supabase --workdir "$SB_WORKDIR" "$@"; }
 
 # ── CLI sessions ──────────────────────────────────────────────────────────
