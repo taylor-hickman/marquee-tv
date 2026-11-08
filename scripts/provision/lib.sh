@@ -89,13 +89,18 @@ missing() {
   done
 }
 
+# sb runs the Supabase CLI from a scratch workdir, so the project cache it
+# writes (supabase/.temp) stays out of the repo; card T2 owns supabase/.
+SB_WORKDIR="${TMPDIR:-/tmp}/marquee-provision"
+sb() { mkdir -p "$SB_WORKDIR" && supabase --workdir "$SB_WORKDIR" "$@"; }
+
 # ── CLI sessions ──────────────────────────────────────────────────────────
 # logged_in CLI succeeds when that CLI has a working session.
 logged_in() {
   case "$1" in
     gh) gh auth status >/dev/null 2>&1 ;;
     vercel) vc whoami >/dev/null 2>&1 ;;
-    supabase) supabase orgs list -o json >/dev/null 2>&1 ;;
+    supabase) sb orgs list -o json >/dev/null 2>&1 ;;
     stripe) return 0 ;; # every Stripe call passes --api-key; no login needed
     gcloud) [[ -n "$(gcloud auth list --filter=status:ACTIVE --format='value(account)' 2>/dev/null)" ]] ;;
     sentry-cli) return 0 ;; # every Sentry call passes the auth token
@@ -104,7 +109,7 @@ logged_in() {
 
 # supabase_ref NAME prints the ref of the project with that name, if any.
 supabase_ref() {
-  supabase projects list -o json 2>/dev/null | jq -r --arg n "$1" '.[] | select(.name == $n) | .id'
+  sb projects list -o json 2>/dev/null | jq -r --arg n "$1" '.[] | select(.name == $n) | .id'
 }
 
 # gcp_project_id prints the id of the Google Cloud project named GCP_PROJECT_NAME.

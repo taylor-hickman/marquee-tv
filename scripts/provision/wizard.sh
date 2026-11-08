@@ -313,10 +313,10 @@ supabase_project() {
   name=$(supabase_project_name "$env")
   ref=$(supabase_ref "$name")
   if [[ -z "$ref" ]]; then
-    org=$(supabase orgs list -o json 2>/dev/null | jq -r '.[0].id')
+    org=$(sb orgs list -o json 2>/dev/null | jq -r '.[0].id')
     confirm "Create Supabase project $name in $SUPABASE_REGION (org $org)?" || { SKIPPED+=("Supabase $name"); return; }
     password=$(openssl rand -hex 24)
-    supabase projects create "$name" --org-id "$org" --region "$SUPABASE_REGION" \
+    sb projects create "$name" --org-id "$org" --region "$SUPABASE_REGION" \
       --db-password "$password" -o json >/dev/null 2>&1
     ref=$(supabase_ref "$name")
     printf '  %s✓%s created %s (%s)\n' "$GREEN" "$RESET" "$name" "$ref"
@@ -324,11 +324,11 @@ supabase_project() {
 
   say "waiting for $name to come up…"
   for _ in $(seq 60); do
-    [[ "$(supabase projects list -o json 2>/dev/null | jq -r --arg r "$ref" '.[] | select(.id == $r) | .status')" == ACTIVE_HEALTHY ]] && break
+    [[ "$(sb projects list -o json 2>/dev/null | jq -r --arg r "$ref" '.[] | select(.id == $r) | .status')" == ACTIVE_HEALTHY ]] && break
     sleep 10
   done
 
-  keys=$(supabase projects api-keys --project-ref "$ref" --reveal -o json 2>/dev/null)
+  keys=$(sb projects api-keys --project-ref "$ref" --reveal -o json 2>/dev/null)
   put NEXT_PUBLIC_SUPABASE_URL "$env" "https://$ref.supabase.co"
   put NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY "$env" "$(jq -r '[.[] | select(.type == "publishable")][0].api_key' <<<"$keys")"
   put SUPABASE_SECRET_KEY "$env" "$(jq -r '[.[] | select(.type == "secret")][0].api_key' <<<"$keys")"
