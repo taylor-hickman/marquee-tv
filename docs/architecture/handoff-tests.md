@@ -76,3 +76,21 @@ Write each cell as pass or fail, with a one-line note on what happened (which ap
 1. In Instagram, DM yourself the page URL and tap it, so it opens in Instagram's browser.
 2. Tap **1 · Play**, **2 · Play from 3** and **3 · Play via 302** in turn. For each, record whether the YouTube app opens or YouTube loads inside Instagram, and whether the queue is intact.
 3. If YouTube loads inside Instagram, use the ⋯ menu → "Open in external browser" and record whether that hands off to the app (the hint J5 proposes).
+
+## Non-browser response
+
+Build plan A0; answers architecture 14, third bullet, for `check-handoff` (architecture 8, card A6). Run Nov 9, 2026 from a US residential connection, twice, with the same result both times.
+
+The probe is `scripts/probe/watch-videos/probe.mjs`. It requests `https://www.youtube.com/watch_videos?video_ids=QrR_gm6RqCo,ferZnZ0_rSM,73wCQRQb7v0` (the first three Tiny Desk IDs above) three ways, follows redirects one hop at a time, and writes `results/watch-videos.json`.
+
+| Client | First response | `Location` | Final URL has `list=` |
+| --- | --- | --- | --- |
+| Node 24 `fetch`, default User-Agent, no cookies | `303` | `/watch?v=QrR_gm6RqCo&list=TLGG…` | Yes, `200` |
+| Node 24 `fetch`, desktop Chrome User-Agent | `303` | the same | Yes, `200` |
+| Playwright headless Chromium 158 | `303` | the same | Yes, `200` |
+
+All three got one redirect, no consent or sign-in page, and the same playlist ID. `v=` is the first ID passed. The `TLGG…` ID repeated across runs on the same day, and the part after `TLGG` decodes from base64 to 8 opaque bytes followed by the date, `09112026`, so it's a temporary list built from the IDs and the day, not a saved one.
+
+**Plain `fetch` is enough for `check-handoff`. Playwright isn't needed.** The check doesn't need to follow the redirect or download the watch page (about 1.4 MB): request the URL with `redirect: 'manual'`, then pass only if the status is `3xx` and `Location` has a `list=` parameter. Anything else fails, including a `200`, a redirect to `consent.youtube.com` or `accounts.google.com`, or a `Location` without `list=`.
+
+Not tested: a request from a GitHub Actions runner. YouTube treats datacenter IPs more strictly than home connections, and this run can't show whether that reaches `watch_videos`. A6's first `workflow_dispatch` run settles it. If the runner gets a consent or bot-check page instead of the `303`, the check fails rather than passing falsely, and A6 should move to Playwright using `probe.mjs` as the starting point.
