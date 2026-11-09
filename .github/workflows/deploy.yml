@@ -1,0 +1,61 @@
+name: Deploy
+
+# The only path to production (build plan 6.3): after CI passes on a push to
+# main, migrate staging, migrate production, then deploy. vercel.json turns off
+# Vercel's own Git deploys for main.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+# One `supabase db push` at a time (ADR 0006), and deploys land in merge order.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  staging:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    environment: preview
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.113.0
+      # DATABASE_URL is the transaction pooler (6543); migrations run in
+      # session mode on the same host (docs/ops/provisioning.md).
+      - run: supabase db push --yes --db-url "${DATABASE_URL/:6543\//:5432/}"
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+  production:
+    needs: staging
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      VERCEL_ORG_ID: team_eyBWXF3LSFu9dTiEXvRzk1yi
+      VERCEL_PROJECT_ID: prj_3UQEg2z3T07E7iJUOAvoaEvmoYeY
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.113.0
+      - run: supabase db push --yes --db-url "${DATABASE_URL/:6543\//:5432/}"
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      # Vercel builds it with the Production environment's variables.
+      - run: npx --yes vercel@65.14.0 deploy --prod --yes --token "$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
