@@ -26,7 +26,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
-      - uses: supabase/setup-cli@v1
+      - uses: supabase/setup-cli@v3
         with:
           version: 2.113.0
       # DATABASE_URL is the transaction pooler (6543); migrations run in
@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
-      - uses: supabase/setup-cli@v1
+      - uses: supabase/setup-cli@v3
         with:
           version: 2.113.0
       - run: supabase db push --yes --db-url "${DATABASE_URL/:6543\//:5432/}"
