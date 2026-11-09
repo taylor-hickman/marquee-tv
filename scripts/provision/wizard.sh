@@ -292,11 +292,15 @@ stage_vercel() {
   if vc project inspect "$VERCEL_PROJECT" >/dev/null 2>&1; then
     note "project $VERCEL_PROJECT exists"
   else
-    vc project create "$VERCEL_PROJECT" >/dev/null
+    show vc project create "$VERCEL_PROJECT" >/dev/null
     printf '  %s✓%s created project %s\n' "$GREEN" "$RESET" "$VERCEL_PROJECT"
   fi
-  until vc git connect "https://github.com/$GITHUB_REPO" --project "$VERCEL_PROJECT" --yes >/dev/null 2>&1; do
-    warn "Vercel can't see $GITHUB_REPO yet. Its GitHub app needs access to the repo."
+  local out
+  # The CLI exits 1 with "already connected" when there's nothing to do.
+  until out=$(vc git connect "https://github.com/$GITHUB_REPO" --project "$VERCEL_PROJECT" --yes 2>&1) ||
+    grep -q 'already connected' <<<"$out"; do
+    sed 's/^/    /' <<<"$out"
+    warn "Vercel couldn't connect $GITHUB_REPO. If the error above is about access, its GitHub app needs the repo."
     open_url "https://github.com/apps/vercel/installations/new"
     step "Choose your account → Only select repositories → add ${GITHUB_REPO#*/} → Save."
     confirm "Done? Try connecting again" || { SKIPPED+=("Vercel git connect (re-run --only vercel)"); return; }
@@ -309,26 +313,34 @@ stage_vercel() {
 # supabase_project ENV finds or creates the project behind ENV and sets its
 # URL, keys and DATABASE_URL.
 supabase_project() {
-  local env="$1" name ref org password="" keys pooler _
+  local env="$1" name ref orgs org password="" keys pooler status=""
   name=$(supabase_project_name "$env")
   ref=$(supabase_ref "$name")
   if [[ -z "$ref" ]]; then
-    org=$(sb orgs list -o json 2>/dev/null | jq -r '.[0].id')
-    confirm "Create Supabase project $name in $SUPABASE_REGION (org $org)?" || { SKIPPED+=("Supabase $name"); return; }
+    orgs=$(show sb orgs list -o json)
+    if [[ $(jq length <<<"$orgs") -gt 1 ]]; then
+      jq -r '.[] | "    \(.id)  \(.name)"' <<<"$orgs"
+      ask org "Organization id for $name:"
+    else
+      org=$(jq -r '.[0].id' <<<"$orgs")
+    fi
+    confirm "Create Supabase project $name in $SUPABASE_REGION (org $(jq -r --arg o "$org" '.[] | select(.id == $o) | .name' <<<"$orgs"))?" || { SKIPPED+=("Supabase $name"); return; }
     password=$(openssl rand -hex 24)
-    sb projects create "$name" --org-id "$org" --region "$SUPABASE_REGION" \
-      --db-password "$password" -o json >/dev/null 2>&1
+    show sb projects create "$name" --org-id "$org" --region "$SUPABASE_REGION" \
+      --db-password "$password" -o json >/dev/null
     ref=$(supabase_ref "$name")
     printf '  %s✓%s created %s (%s)\n' "$GREEN" "$RESET" "$name" "$ref"
   fi
 
   say "waiting for $name to come up…"
   for _ in $(seq 60); do
-    [[ "$(sb projects list -o json 2>/dev/null | jq -r --arg r "$ref" '.[] | select(.id == $r) | .status')" == ACTIVE_HEALTHY ]] && break
+    status=$(show sb projects list -o json | jq -r --arg r "$ref" '.[] | select(.id == $r) | .status') || true
+    [[ "$status" == ACTIVE_HEALTHY ]] && break
     sleep 10
   done
+  [[ "$status" == ACTIVE_HEALTHY ]] || { warn "$name is still ${status:-unknown} after 10 minutes; re-run --only supabase"; exit 1; }
 
-  keys=$(sb projects api-keys --project-ref "$ref" --reveal -o json 2>/dev/null)
+  keys=$(show sb projects api-keys --project-ref "$ref" --reveal -o json)
   put NEXT_PUBLIC_SUPABASE_URL "$env" "https://$ref.supabase.co"
   put NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY "$env" "$(jq -r '[.[] | select(.type == "publishable")][0].api_key' <<<"$keys")"
   put SUPABASE_SECRET_KEY "$env" "$(jq -r '[.[] | select(.type == "secret")][0].api_key' <<<"$keys")"
@@ -366,20 +378,20 @@ stage_google_cloud() {
   if [[ -z "$project" ]]; then
     project="marquee-tv-$(openssl rand -hex 3)"
     confirm "Create Google Cloud project \"$GCP_PROJECT_NAME\" ($project)?" || { SKIPPED+=("Google Cloud project"); return; }
-    gcloud projects create "$project" --name="$GCP_PROJECT_NAME" --quiet
+    show gcloud projects create "$project" --name="$GCP_PROJECT_NAME" --quiet
   fi
   note "project $project"
-  gcloud services enable youtube.googleapis.com apikeys.googleapis.com --project "$project" --quiet
+  show gcloud services enable youtube.googleapis.com apikeys.googleapis.com --project "$project" --quiet
 
-  key=$(gcloud services api-keys list --project "$project" --filter='displayName="marquee-ingest"' \
-    --format='value(name)' 2>/dev/null | head -n1)
+  key=$(show gcloud services api-keys list --project "$project" --filter='displayName="marquee-ingest"' \
+    --format='value(name)' | head -n1)
   if [[ -z "$key" ]]; then
-    gcloud services api-keys create --project "$project" --display-name=marquee-ingest \
-      --api-target=service=youtube.googleapis.com --quiet >/dev/null 2>&1
-    key=$(gcloud services api-keys list --project "$project" --filter='displayName="marquee-ingest"' \
+    show gcloud services api-keys create --project "$project" --display-name=marquee-ingest \
+      --api-target=service=youtube.googleapis.com --quiet >/dev/null
+    key=$(show gcloud services api-keys list --project "$project" --filter='displayName="marquee-ingest"' \
       --format='value(name)' | head -n1)
   fi
-  put_both YOUTUBE_API_KEY "$(gcloud services api-keys get-key-string "$key" --format='value(keyString)')"
+  put_both YOUTUBE_API_KEY "$(show gcloud services api-keys get-key-string "$key" --format='value(keyString)')"
   pause
 }
 
@@ -428,9 +440,9 @@ stage_google_oauth() {
 stripe_price() {
   local id recurring=()
   [[ -n "${4:-}" ]] && recurring=(-d "recurring[interval]=$4")
-  id=$(stripe prices list --api-key "$STRIPE_SECRET_KEY" --lookup-keys "$1" | jq -r '.data[0].id // empty')
+  id=$(show stripe prices list --api-key "$STRIPE_SECRET_KEY" --lookup-keys "$1" | jq -r '.data[0].id // empty')
   if [[ -z "$id" ]]; then
-    id=$(stripe prices create --api-key "$STRIPE_SECRET_KEY" --currency usd --unit-amount "$3" \
+    id=$(show stripe prices create --api-key "$STRIPE_SECRET_KEY" --currency usd --unit-amount "$3" \
       -d "lookup_key=$1" -d "product_data[name]=$2" ${recurring[@]+"${recurring[@]}"} | jq -r .id)
   fi
   echo "$id"
@@ -444,14 +456,14 @@ stripe_webhook() {
   for event in checkout.session.completed invoice.paid customer.subscription.updated customer.subscription.deleted; do
     args+=(--enabled-events "$event")
   done
-  existing=$(stripe webhook_endpoints list --api-key "$STRIPE_SECRET_KEY" --limit 100 |
+  existing=$(show stripe webhook_endpoints list --api-key "$STRIPE_SECRET_KEY" --limit 100 |
     jq -r --arg u "$url" '.data[] | select(.url == $u) | .id')
   if [[ -n "$existing" ]]; then
     [[ -z "$(missing STRIPE_WEBHOOK_SECRET | awk -v e="$env" '$3 == e')" ]] && { note "webhook for $env exists"; return; }
     confirm "The $env webhook exists but its secret isn't in Vercel. Replace the endpoint?" || return
-    stripe webhook_endpoints delete "$existing" --api-key "$STRIPE_SECRET_KEY" --confirm >/dev/null
+    show stripe webhook_endpoints delete "$existing" --api-key "$STRIPE_SECRET_KEY" --confirm >/dev/null
   fi
-  put STRIPE_WEBHOOK_SECRET "$env" "$(stripe webhook_endpoints create --api-key "$STRIPE_SECRET_KEY" \
+  put STRIPE_WEBHOOK_SECRET "$env" "$(show stripe webhook_endpoints create --api-key "$STRIPE_SECRET_KEY" \
     --url "$url" "${args[@]}" | jq -r .secret)"
 }
 

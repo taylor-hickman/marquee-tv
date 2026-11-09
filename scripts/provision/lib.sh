@@ -38,6 +38,17 @@ env_inventory() {
 # targets_of NAME: "vercel github", or a subset.
 targets_of() { env_inventory | awk -v n="$1" '$1 == n { $1 = ""; $2 = ""; sub(/^ +/, ""); print }'; }
 
+# show CMD...: runs CMD and passes its stdout through. Its stderr appears only
+# when it fails, so a failure never ends the wizard without saying why.
+show() {
+  local err rc=0
+  err=$(mktemp)
+  "$@" 2>"$err" || rc=$?
+  if (( rc )); then printf '  ✗ %s failed:\n' "$*" | cut -c1-100 >&2; sed 's/^/    /' "$err" >&2; fi
+  rm -f "$err"
+  return "$rc"
+}
+
 # ── Writing ───────────────────────────────────────────────────────────────
 # vc runs the Vercel CLI against VERCEL_SCOPE (a team slug) when one is set.
 vc() { if [[ -n "${VERCEL_SCOPE:-}" ]]; then vercel "$@" --scope "$VERCEL_SCOPE"; else vercel "$@"; fi; }
@@ -46,7 +57,7 @@ vc() { if [[ -n "${VERCEL_SCOPE:-}" ]]; then vercel "$@" --scope "$VERCEL_SCOPE"
 # .env.example lists for it. Overwrites what is there.
 put() {
   local name="$1" env="$2" value="$3" target vis
-  [[ -n "$value" ]] || { printf '  ! %s is empty; not set\n' "$name" >&2; return 1; }
+  [[ -n "$value" && "$value" != null ]] || { printf '  ✗ %s came back empty; not set\n' "$name" >&2; return 1; }
   for target in $(targets_of "$name"); do
     case "$target" in
       vercel)
@@ -109,10 +120,10 @@ logged_in() {
 
 # supabase_ref NAME prints the ref of the project with that name, if any.
 supabase_ref() {
-  sb projects list -o json 2>/dev/null | jq -r --arg n "$1" '.[] | select(.name == $n) | .id'
+  show sb projects list -o json | jq -r --arg n "$1" '.[] | select(.name == $n) | .id'
 }
 
 # gcp_project_id prints the id of the Google Cloud project named GCP_PROJECT_NAME.
 gcp_project_id() {
-  gcloud projects list --filter="name=\"$GCP_PROJECT_NAME\"" --format='value(projectId)' 2>/dev/null | head -n1
+  show gcloud projects list --filter="name=\"$GCP_PROJECT_NAME\"" --format='value(projectId)' | head -n1
 }
