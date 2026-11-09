@@ -1,6 +1,7 @@
 // Loads db/fixtures/catalog.json into the local Supabase stack, replacing the
 // catalog tables. Always targets the local stack: the connection comes from
-// `supabase status`, never from DATABASE_URL.
+// `supabase status`, never from DATABASE_URL. An argument names another
+// database on the stack, such as the test template (src/test/db.ts).
 
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
@@ -65,7 +66,9 @@ const catalog: Catalog = JSON.parse(
 const status = JSON.parse(
   execFileSync("supabase", ["status", "-o", "json"], { encoding: "utf8" }),
 );
-const sql = postgres(status.DB_URL, { onnotice: () => {} });
+const url = new URL(status.DB_URL);
+if (process.argv[2]) url.pathname = `/${process.argv[2]}`;
+const sql = postgres(url.toString(), { onnotice: () => {} });
 
 const tables = [
   "publisher",
