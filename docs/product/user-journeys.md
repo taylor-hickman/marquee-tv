@@ -333,7 +333,7 @@ The daily automated check finds that `watch_videos` no longer turns into a queue
 ### 5.2 Where the mockups disagree with the PRD
 
 1. The Dinner Party chip prefills "Start mellow, get groovier as the night goes on." PRD 7.1 says copy never assumes a time of day. Suggested fix: "Start mellow, get groovier as it goes." Mockup to change.
-2. PRD 7.1 lists duration presets (30 min, 1 h, 2 h, 3 h, custom). The mockups use a −30 min / +30 min stepper around 2 hours. Open in PRD 18.2.
+2. ~~PRD 7.1 lists duration presets (30 min, 1 h, 2 h, 3 h, custom). The mockups use a −30 min / +30 min stepper around 2 hours.~~ Resolved: presets, as 7.1 says; mockups updated (PRD 18.2).
 3. Session pass library: PRD 16.1 includes one; the plan screen limits the library to the subscription. Mockup to change.
 4. ~~The plan screen has no annual price.~~ Resolved: annual billing is deferred, so the mockup is right.
 5. ~~PRD 5 says one button opens YouTube; the mockups insert the handoff sheet.~~ Resolved: sheet on first handoff only (PRD 18.1).

@@ -439,9 +439,9 @@ Named as in `docs/README.md`.
 | `0003-curator-precomputed-artist-profiles.md` | Offline artist profiles plus a two-call pipeline, instead of a request-time tool loop |
 | `0004-revisions-as-snapshots.md` | Immutable revision snapshots as the only store of playlist items |
 | `0005-ingestion-on-github-actions.md` | Where scheduled jobs run |
-| `0006-data-access-and-migrations.md` | Server-only DB access, RLS as a backstop, migration tool |
+| `0006-data-access-and-migrations.md` | Server-only DB access, RLS as a backstop, migration tool. Decided: Supabase CLI migrations, plain SQL in `supabase/migrations/`, applied by `supabase db reset` locally and `supabase db push` from CI; not Drizzle Kit |
 | `0007-auth-and-payments.md` | Supabase Auth for sign-in, Stripe Checkout and webhooks for entitlements |
-| `0008-llm-provider-and-models.md` | Provider, the small and main models, and the adapter contract |
+| `0008-llm-provider-and-models.md` | Provider, the small and main models, and the adapter contract. Decided: Anthropic, Claude Haiku 5.5 (`claude-haiku-5-5`) for the brief and Claude Sonnet 5.5 (`claude-sonnet-5-5`) for composition; about $0.016 per generation against the $0.05 cap |
 | `0009-first-party-event-store.md` | Journey events in Postgres instead of a third-party product analytics tool |
 | `0010-paywall-on-model-runs.md` | Entitlements gate model-backed runs, not drafts; hand-built sets are free |
 | `0011-branded-share-links.md` | Short-code redirect for Copy and Share; direct youtube.com URL for Play |

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Handoff probe</title>
+<style>
+  body { font: 16px/1.4 ui-monospace, Menlo, monospace; margin: 24px 16px; max-width: 32rem; background: #fff; color: #000; }
+  button, a.button { display: block; width: 100%; box-sizing: border-box; margin: 0 0 12px; padding: 16px; font: inherit; text-align: left; background: #000; color: #fff; border: 0; text-decoration: none; cursor: pointer; }
+  ol { padding-left: 1.5rem; }
+  code { word-break: break-all; font-size: 12px; }
+</style>
+</head>
+<body>
+<h1>Handoff probe</h1>
+<button id="play" type="button">1 · Play</button>
+<button id="from3" type="button">2 · Play from 3</button>
+<a id="redirect" class="button" href="/r">3 · Play via 302</a>
+<ol id="tracks"></ol>
+<p><code id="url"></code></p>
+<script>
+  // Five NPR Music Tiny Desk concerts, checked with YouTube oEmbed on Nov 8, 2026.
+  const TRACKS = [
+    ['QrR_gm6RqCo', 'Mac Miller'],
+    ['ferZnZ0_rSM', 'Anderson .Paak & The Free Nationals'],
+    ['73wCQRQb7v0', 'Jungle'],
+    ['M34D3Ktovfw', 'Noah Kahan'],
+    ['WgqaxMOKfnI', 'Billy Strings'],
+  ];
+  const watchVideos = (ids) => 'https://www.youtube.com/watch_videos?video_ids=' + ids.join(',');
+  const ids = TRACKS.map(([id]) => id);
+
+  // window.open runs synchronously in the click handler, as the product will (CLAUDE.md rule 4).
+  document.getElementById('play').onclick = () => window.open(watchVideos(ids), '_blank');
+  document.getElementById('from3').onclick = () => window.open(watchVideos(ids.slice(2)), '_blank');
+
+  document.getElementById('tracks').innerHTML = TRACKS.map(([, artist]) => '<li>' + artist + '</li>').join('');
+  document.getElementById('url').textContent = location.origin + '/r';
+</script>
+</body>
+</html>

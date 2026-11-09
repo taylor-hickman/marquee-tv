@@ -484,7 +484,7 @@ Annual billing, crediting a session pass toward a subscription bought within the
 ### 18.2 Still open
 
 - [ ] **Name and brand.** "Marquee TV" is the name, getmarquee.tv the domain, @marquee.tv the Instagram handle. Remaining: trademark search in the software and entertainment classes.
-- [ ] **Duration control.** Section 7.1 specifies presets (30 min, 1 h, 2 h, 3 h, custom); the mockups use a ±30 min stepper around 2 h. Pick one and update the other.
+- [x] **Duration control.** Section 7.1 specifies presets (30 min, 1 h, 2 h, 3 h, custom); the mockups use a ±30 min stepper around 2 h. Pick one and update the other. Decided Nov 8, 2026: presets, as 7.1 says; the landing mockups now show them with 2 h selected.
 - [ ] **Duration tolerance.** ±10% is the proposed default. Decide whether the user can tighten it, and whether the editor offers "Fill to 2 h" when removals leave a shortfall.
 - [ ] **Artist repetition cap.** Two appearances per artist is proposed. Confirm with beta feedback.
 - [ ] **Undo depth.** One step in the UI; revisions support more. Decide whether to expose history.

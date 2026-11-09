@@ -1,0 +1,38 @@
+{
+  "ranAt": "2026-11-09T18:06:43.071Z",
+  "channel": {
+    "handle": "@nprmusic",
+    "id": "UC4eYXhJI4-7wSWc8UNRwD4A",
+    "uploadsPlaylist": "UU4eYXhJI4-7wSWc8UNRwD4A"
+  },
+  "quotaUnits": 125,
+  "seconds": 23,
+  "uploadsListed": 3059,
+  "returnedByVideosList": 3059,
+  "missingFromVideosList": 0,
+  "outOfSeries": 1161,
+  "inSeries": 1898,
+  "byKind": {
+    "performance": 1784,
+    "null": 112,
+    "interview": 1,
+    "clip": 1
+  },
+  "byReviewStatus": {
+    "accepted": 1769,
+    "flagged": 129
+  },
+  "byRuleReason": {
+    "concert title rule": 1767,
+    "no series name": 1064,
+    "possible multiple artists": 17,
+    "names the series, matches no rule": 112,
+    "other Tiny Desk series": 97,
+    "interview words": 1,
+    "under 180 s": 1
+  },
+  "unavailableInSeries": 3,
+  "eligibleAndAvailable": 1764,
+  "eligibleAndAvailableHours": 496.5,
+  "distinctArtists": 1653
+}
