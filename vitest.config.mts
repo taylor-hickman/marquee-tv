@@ -22,7 +22,7 @@ export default defineConfig({
       provider: "v8",
       include: ["src/**/*.{ts,tsx}"],
       exclude: ["src/test/**", "src/**/*.test.ts"],
-      reporter: ["text-summary", "json-summary", "html"],
+      reporter: ["text-summary", ["text", { file: "coverage.txt" }], "html"],
       thresholds: Object.fromEntries(
         ruleCode.map((glob) => [glob, { branches: 90 }]),
       ),
