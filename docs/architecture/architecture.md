@@ -427,6 +427,7 @@ Every row below was adopted into PRD 1.1 (section 18.1 there) unless the Status 
 | 15 | Branded share link | Bare YouTube URL | `share_link` table and `/s/:code` redirect | Adopted into P0 |
 | 16 | Account management | Account screen listed (7.7), no design | Stripe Customer Portal plus `DELETE /api/account` | Adopted |
 | 17 | `kind` classification | Binary eligibility flag (12) | Four-value `kind` kept for the review queue | Adopted with a memo check |
+| 18 | Rate-limit columns | Not covered; 9.2 counts model-backed runs per IP hash from `curator_run`, but 5.2 gave `curator_run` no IP | `curator_run.ip_hash`, indexed with `created_at` for the per-hour count; per-guest and per-user counts join through `draft_id` | Added in T2's initial migration |
 
 ## 13. ADR backlog
 
