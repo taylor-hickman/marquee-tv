@@ -25,6 +25,12 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.113.0
+      # Only what the db tests touch: Postgres, the API gateway, PostgREST and Auth.
+      - run: supabase start -x studio,imgproxy,mailpit,realtime,storage-api,postgres-meta,edge-runtime,logflare,vector,supavisor
+      - run: pnpm seed
       - run: pnpm check
       - name: Coverage summary
         if: always() && hashFiles('coverage/coverage.txt') != ''

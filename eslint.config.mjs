@@ -50,6 +50,7 @@ export default defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "supabase/.temp/**",
     "coverage/**",
     "playwright-report/**",
     "test-results/**",
