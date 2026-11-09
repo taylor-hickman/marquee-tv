@@ -89,9 +89,11 @@ export const refineRequest = z.object({
   instruction: z.string().trim().min(1).max(500),
 });
 
-// POST /api/drafts/:id/ops
+// POST /api/drafts/:id/ops. Null writes the first revision of a draft that has
+// none, as a hand-built set's first adds do (J4). Undo, refine and share-link need
+// a revision to act on, so they never take null.
 export const opsRequest = z.object({
-  baseRevision: revisionNumber,
+  baseRevision,
   ops: z.array(op).min(1),
 });
 

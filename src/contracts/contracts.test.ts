@@ -76,6 +76,22 @@ describe("contracts", () => {
     expect(Object.keys(invalid).sort()).toEqual(Object.keys(schemas).sort());
   });
 
+  test("a hand-built draft's first adds go through ops with no base revision (J4)", () => {
+    const firstAdds = {
+      baseRevision: null,
+      ops: [{ op: "add", performance_id: 101 }],
+    };
+    expect(schemas.opsRequest.safeParse(firstAdds).success).toBe(true);
+    for (const name of [
+      "undoRequest",
+      "refineRequest",
+      "shareLinkRequest",
+    ] as const) {
+      const body = { ...examples[name], baseRevision: null };
+      expect(schemas[name].safeParse(body).success, name).toBe(false);
+    }
+  });
+
   test.each(Object.keys(schemas) as (keyof typeof schemas)[])("%s", (name) => {
     const schema = schemas[name];
     const valid = schema.safeParse(examples[name]);
