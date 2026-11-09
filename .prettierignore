@@ -3,3 +3,4 @@ docs/
 pnpm-lock.yaml
 .next/
 scripts/probe/
+supabase/.temp/
