@@ -1,12 +1,14 @@
 # Marquee TV: build plan
 
-Nov 8, 2026 · Taylor Hickman · Version 0.1 · Status: Draft · Built from PRD v1.1, user journeys v0.2, architecture v0.2
+Nov 8, 2026 · Taylor Hickman · Version 0.2 · Status: Draft · Built from PRD v1.1, user journeys v0.2, architecture v0.2
+
+**Changes in 0.2.** Added section 6, testing and CI: test layers, shared test helpers and their owners, and the workflows that run them. T1 and T2 now build the full PR gate, the production deploy and migrations in CI. Every E card owns an `e2e/` folder. B3 and C3 add property tests, B5 owns the evals workflow, I1 owns the nightly journeys. A1 checks index use instead of wall-clock time. Open items moved to section 7.
 
 ## 1. How this plan works
 
 The PRD's five phases (section 14) are paced for a human team. This plan re-cuts the same work for Claude Code agents run by an orchestrator. Two things decide the order: what must exist before a task can start, and which files a task may write. Agents working in parallel worktrees collide on shared files, so every card owns a disjoint set of paths and the shared ones (schema, contracts, tooling) land first.
 
-Each task is a card in section 5. The card is the whole brief: an agent reads it, `CLAUDE.md`, and the doc sections the card names, and nothing else is assumed. Cards have the same fields:
+Each task is a card in section 5. The card is the whole brief: an agent reads it, `CLAUDE.md`, section 6 of this plan, and the doc sections the card names, and nothing else is assumed. Cards have the same fields:
 
 | Field | Meaning |
 | --- | --- |
@@ -19,7 +21,7 @@ Each task is a card in section 5. The card is the whole brief: an agent reads it
 
 Every card is run by an agent. Some cards reach outside the repo: a phone, a third-party dashboard, policy text. The agent does what its tools reach, the card says what it produces for the rest and marks it unverified, and the downstream card names the default it takes when a result is missing.
 
-`pnpm check` (typecheck, lint, unit tests) is the gate on every card; the card lists what else must hold. A reviewer agent that did not write the code runs once per milestone against the milestone's exit gate (section 3).
+`pnpm check` (format, typecheck, lint, unit and integration tests) is the gate on every card, plus `pnpm test:e2e` on cards with Playwright specs; the card lists what else must hold. Section 6 says where tests live, what they may touch and which workflow runs them. A reviewer agent that did not write the code runs once per milestone against the milestone's exit gate (section 2).
 
 Status lives in the table in section 4. The orchestrator updates it; the cards do not change.
 
@@ -28,9 +30,9 @@ Status lives in the table in section 4. The orchestrator updates it; the cards d
 | Milestone | What it produces | Exit gate | PRD phase |
 | --- | --- | --- | --- |
 | M0 Decisions and de-risk | ADRs written, including the two open choices; handoff tested on every surface a tool reaches; compliance memo; accounts and secrets provisioned | Every M0 card closed; ADRs 0001–0011 exist | 0 |
-| M1 Foundation | Repo, tooling, CI, database with every table in architecture 5, shared contracts, module stubs, guest auth, rate limits, flags, events | `pnpm check` green in CI; local stack seeds 300 fixture performances; a preview deploy serves a page | 0–1 |
+| M1 Foundation | Repo, tooling, CI, database with every table in architecture 5, shared contracts, module stubs, guest auth, rate limits, flags, events | `pnpm check` and `pnpm test:e2e` green in CI and required on `main`; local stack seeds 300 fixture performances; a preview deploy passes the smoke spec; a push to `main` migrates staging and deploys | 0–1 |
 | M2 Lanes | Five lanes in parallel: catalog, curator, playlist API, billing and accounts, app UI | Every lane's cards merged; reviewer sign-off per lane | 1–3 |
-| M3 Integration | End-to-end journeys, observability, alerts, runbook, latency and cost measured | A first-time user goes from landing to YouTube playing in under 60 s on a preview deploy; p90 generation under 8 s; zero invalid IDs in 500 eval runs | 2–3 |
+| M3 Integration | End-to-end journeys, observability, alerts, runbook, latency and cost measured | A first-time user goes from landing to YouTube playing in under 60 s on a preview deploy; journeys pass on three consecutive nightly runs; p90 generation under 8 s; zero invalid IDs in 500 eval runs | 2–3 |
 | M4 Beta | Catalog at full launch depth, eval ratings, invite cohort, metrics queries | 2,000+ eligible performances, under 2% misclassified in a 200-item audit; 45 of 50 eval prompts acceptable | 1, 4 |
 
 Lanes in M2 start as soon as M1 merges and run concurrently. Within a lane, cards are ordered. Across lanes, the only couplings are through `src/contracts/`, which M1 fixes, and through the few cross-lane dependencies each card names.
@@ -174,7 +176,7 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 
 - Owns: `.env.example`, `docs/ops/provisioning.md`, `scripts/provision/**`
 - Reads: architecture 9.2 (secrets), 9.4
-- Deliverable: Vercel project linked to the GitHub repo; Supabase staging and production projects; Stripe account in test mode with a session pass price and a monthly subscription price; Sentry project; Google Cloud project with the YouTube Data API enabled and one API key; a Google OAuth client for Supabase Auth. Each done through its CLI (`vercel`, `supabase`, `stripe`, `sentry-cli`, `gcloud`, `gh`) where the CLI is authenticated. Secrets set in Vercel and GitHub Actions environments. Names of every secret listed in `.env.example` with no values. Where a CLI needs an interactive login or a dashboard step with no CLI, `scripts/provision/wizard.sh` walks through exactly that step and `docs/ops/provisioning.md` lists what remains.
+- Deliverable: Vercel project linked to the GitHub repo; Supabase staging and production projects; Stripe account in test mode with a session pass price and a monthly subscription price; Sentry project; Google Cloud project with the YouTube Data API enabled and one API key; a Google OAuth client for Supabase Auth. Each done through its CLI (`vercel`, `supabase`, `stripe`, `sentry-cli`, `gcloud`, `gh`) where the CLI is authenticated. Secrets set in Vercel and in GitHub Actions environments named `staging` and `production`; the PR gate gets none (section 6.1). A Vercel protection bypass secret for automation, stored in GitHub Actions, so workflows can reach preview deploys. Names of every secret listed in `.env.example` with no values. Where a CLI needs an interactive login or a dashboard step with no CLI, `scripts/provision/wizard.sh` walks through exactly that step and `docs/ops/provisioning.md` lists what remains.
 - Done when: `.env.example` lists every variable; `scripts/provision/verify.sh` confirms each exists in Vercel and GitHub Actions, or prints the ones missing and the wizard step that sets them.
 
 #### R5 · Duration control decision
@@ -197,19 +199,19 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 #### T1 · Scaffold and CI
 
 - Depends on: T0, R4
-- Owns: everything at the repo root except `docs/`, plus `.github/**`, `src/app/layout.tsx`, `src/app/page.tsx` (placeholder)
-- Reads: architecture 3, 9.4, 10
-- Deliverable: Next.js app with TypeScript strict, pnpm, ESLint, Prettier, Vitest, Playwright installed but with no tests yet. `pnpm check` runs typecheck, lint and unit tests. GitHub Actions workflow runs `pnpm check` on every PR and deploys preview through Vercel's integration. `.env.example` from R4. The directory layout from architecture 10 exists as empty folders with a `README.md` of one line each.
-- Done when: `pnpm check` passes locally and in CI on the PR; a Vercel preview URL serves the placeholder page.
-- Out of scope: any product code, database, or UI beyond the placeholder.
+- Owns: root config files (`package.json`, lockfile, `tsconfig.json`, ESLint, Prettier, Vitest and Playwright configs, `.nvmrc`, `.env.example`), `.github/**`, `src/test/setup.ts`, `e2e/support/**`, `e2e/smoke/**`, `src/app/layout.tsx`, `src/app/page.tsx` (placeholder)
+- Reads: architecture 3, 9.4, 10; this plan, section 6
+- Deliverable: Next.js app with TypeScript strict, pnpm pinned through `packageManager`, Node pinned in `.nvmrc`, ESLint, Prettier. Every test tool in 6.1 installed and configured: Vitest with the network guard and the coverage thresholds, Playwright with an axe helper and a `live` project, and one smoke spec that loads the placeholder page with zero axe violations. Scripts `pnpm check`, `pnpm test:e2e` and `pnpm test:live`. ESLint `no-restricted-imports` holding architecture 3's boundaries: modules import each other only through `index.ts`, and nothing under `src/modules/curator/**` imports `src/lib/db`. `ci.yml` (`check`, `e2e`, `actionlint`), `preview-smoke.yml` and `dependabot.yml` per 6.3, and the `main` ruleset set through `gh api`. Vercel previews through its Git integration. `.env.example` from R4 plus the test-only variables in 6.1. The directory layout from architecture 10 exists as empty folders with a `README.md` of one line each.
+- Done when: `pnpm check` and `pnpm test:e2e` pass locally and in CI on the PR; a test that fetches `https://example.com` fails; importing `src/lib/db` from a file under `src/modules/curator/` fails lint; `preview-smoke.yml` passes against the Vercel preview; a direct push to `main` is refused.
+- Out of scope: any product code, database, or UI beyond the placeholder. The database steps in CI (T2).
 
 #### T2 · Database and fixtures
 
 - Depends on: T1
-- Owns: `db/**`, `src/lib/db/**`, `supabase/**`, `scripts/seed/**`
-- Reads: architecture 4, 5 (all of it), 9.2 (first bullet), 9.4; ADR 0006
-- Deliverable: Supabase CLI local stack configured. Migrations for every table in architecture 5.1, 5.2 and 5.4 with the constraints the text names: exactly one owner on `playlist_draft`, at most one `free` draft per owner, `(draft_id, number)` primary key on revisions, unique `video_id`, hashed `guest.token_hash`. `performance_tag` created empty. Full-text and `pg_trgm` indexes from 5.1. Row-level security on with no policies. A server-only db client in `src/lib/db`. A fixture of about 300 performances across three publishers and six series with synthetic video IDs and plausible artists, loaded by `pnpm seed`.
-- Done when: `pnpm db:reset && pnpm seed` leaves 300 rows in `performance` with matching `performance_yt_cache` rows; a test proves the anon key reads zero rows from every table; `pnpm check` green.
+- Owns: `db/**`, `src/lib/db/**`, `supabase/**`, `scripts/seed/**`, `src/test/db.ts`, `src/test/factories/**`, `e2e/support/db.ts`, `.github/workflows/ci.yml` (database steps and the `migrations` job), `.github/workflows/deploy.yml`, `vercel.json`
+- Reads: architecture 4, 5 (all of it), 9.2 (first bullet), 9.4; ADR 0006; this plan, section 6
+- Deliverable: Supabase CLI local stack configured. Migrations for every table in architecture 5.1, 5.2 and 5.4 with the constraints the text names: exactly one owner on `playlist_draft`, at most one `free` draft per owner, `(draft_id, number)` primary key on revisions, unique `video_id`, hashed `guest.token_hash`. `performance_tag` created empty. Full-text and `pg_trgm` indexes from 5.1. Row-level security on with no policies. A server-only db client in `src/lib/db`. A fixture of about 300 performances across three publishers and six series with synthetic video IDs and plausible artists, loaded by `pnpm seed`. The test database from 6.1, isolated per Vitest worker and per worktree and built from the migrations in the checkout. A factory per table that returns a valid row and takes overrides. `e2e/support/db.ts` resetting and seeding the stack before a Playwright run. In CI, `check` and `e2e` start the local stack with only the services tests use (Postgres, Auth, REST, mail), and the `migrations` job runs and joins the required checks. `deploy.yml` and `vercel.json` per 6.3.
+- Done when: `pnpm db:reset && pnpm seed` leaves 300 rows in `performance` with matching `performance_yt_cache` rows; a test proves the anon key reads zero rows from every table; `pnpm check` passes in two worktrees run at the same time; the migration-edit check fails on a local branch that edits a migration from `main`; a push to `main` migrates staging and production and deploys; `pnpm check` green.
 - Out of scope: queries beyond the client, any ingestion, any API route.
 
 #### T3 · Contracts and module stubs
@@ -217,8 +219,8 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 - Depends on: T2
 - Owns: `src/contracts/**`, `src/modules/*/index.ts`, `src/modules/*/types.ts`
 - Reads: architecture 5.2 (`items` shape), 6.2 step 1 (brief shape), 6.3 (ops), 9.1 (every route and the `baseRevision` rule); PRD 7.4
-- Deliverable: Zod schemas for every request and response body in architecture 9.1, the brief, revision items, ops (`add`, `remove`, `replace`, `move`, `pin`, `unpin`, `rename`), curator output, and stream events. Every module in architecture 10 exports a typed interface in `index.ts` with function signatures and bodies that throw `NotImplemented`. Where a lane calls another (curator calls catalog retrieval, playlist calls curator and billing), the call shape is fixed here.
-- Done when: every route in 9.1 has a request and response schema; every stub compiles; a test imports every schema and parses one valid and one invalid example; `pnpm check` green.
+- Deliverable: Zod schemas for every request and response body in architecture 9.1, the brief, revision items, ops (`add`, `remove`, `replace`, `move`, `pin`, `unpin`, `rename`), curator output, and stream events. Every module in architecture 10 exports a typed interface in `index.ts` with function signatures and bodies that throw `NotImplemented`. Where a lane calls another (curator calls catalog retrieval, playlist calls curator and billing), the call shape is fixed here. One valid example per schema exported from `src/contracts/examples.ts`, for tests and for UI mocks (6.1).
+- Done when: every route in 9.1 has a request and response schema; every stub compiles; a test parses every schema's example from `examples.ts` and rejects one invalid example per schema; `pnpm check` green.
 - Out of scope: any implementation. The stubs exist so five lanes can compile against the same shapes.
 
 #### T4 · Guest auth, rate limit, flags, events
@@ -226,7 +228,7 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 - Depends on: T3
 - Owns: `src/lib/auth/**`, `src/lib/rate-limit/**`, `src/lib/flags/**`, `src/modules/events/**`, `src/app/api/events/**`
 - Reads: architecture 4 (guest identity, claiming), 5.4 (`guest`, `event`, `app_flag`), 9.2 (tokens, rate limits), 9.3; journeys 6
-- Deliverable: issue a 128-bit guest token, store its hash, verify in constant time, attach `guest` to the request. Assign `cohort` at creation. A `requireOwner(draft)` helper that accepts either the guest token or a Supabase session. Rate limits counted from `curator_run` and `guest` rows per IP hash, guest and user, with the limits from 9.2 as constants. `getFlag(key)` over `app_flag` with `handoff_mode` seeded to `url`. `events.write(name, props)` and `POST /api/events` with a plain per-IP limit and a schema that accepts only the event names in journeys 6.
+- Deliverable: issue a 128-bit guest token, store its hash, verify in constant time, attach `guest` to the request. Assign `cohort` at creation. A `requireOwner(draft)` helper that accepts either the guest token or a Supabase session. Rate limits counted from `curator_run` and `guest` rows per IP hash, guest and user, with the limits from 9.2 as constants. `getFlag(key)` over `app_flag` with `handoff_mode` seeded to `url`. `events.write(name, props)` and `POST /api/events` with a plain per-IP limit and a schema that accepts only the event names in journeys 6. `src/lib/auth/testing.ts` with `asGuest()` and `asUser()`, which create the owner and return the request headers a route handler test needs.
 - Done when: tests cover token issue and verify, a wrong token rejected, the rate limit refusing the eleventh run in an hour, an unknown event name rejected; `pnpm check` green.
 - Out of scope: sign-in (D1), claiming drafts (C4).
 
@@ -247,7 +249,7 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 - Owns: `src/modules/catalog/**`, `src/app/api/catalog/**`
 - Reads: architecture 5.1, 6.1 (influence-only artists), 6.2 step 2, 6.3 (Replace one), 9.1 (catalog routes), 9.2 (rate limit on search); PRD 7.2, 7.3, 13 (300 ms)
 - Deliverable: `search(query, filters)` over full-text title and artist with publisher, series and artist filters; `artistTypeahead(prefix)` over names and aliases with `pg_trgm`; `retrieveCandidates(brief, state)` in SQL following step 2's order (seeds, similar artists, profile matches within the curve's energy range), filtered by series constraints, exclusions, removals, `eligible AND available`, capped at 150, with "surprise me" widening and `prefer_unfamiliar` reordering; `replaceOptions(draft, index)` returning three per 6.3. Routes `GET /api/catalog/search` and `GET /api/catalog/artists`.
-- Done when: tests against the fixture cover each retrieval tier, the cap, exclusion and removal filtering, the three replace options matching energy within 1 and duration within 30%; search over the fixture returns in under 300 ms in a test; `pnpm check` green.
+- Done when: tests against the fixture cover each retrieval tier, the cap, exclusion and removal filtering, the three replace options matching energy within 1 and duration within 30%; on a generated 5,000-row catalog, `EXPLAIN` shows search using the full-text index and typeahead using the trigram index (I4 measures the 300 ms on staging); `pnpm check` green.
 - Out of scope: anything that calls a model. Ingestion.
 
 #### A2 · Ingest, refresh, expire
@@ -255,7 +257,7 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 - Depends on: A1
 - Owns: `scripts/ingest/**`, `src/modules/catalog/youtube/**`
 - Reads: architecture 5.3, 8 (`ingest:new`, `refresh`, `expire` rows); PRD 9.2, 9.3, 12
-- Deliverable: a YouTube Data API client limited to `playlistItems.list` and `videos.list`. `ingest:new` pages each series' uploads playlist until known IDs, writes `performance` rows with `review_status = pending` and `performance_yt_cache` rows with `fetched_at`. `refresh` re-fetches cache rows, flips `available`, sets `last_verified_at`. `expire` deletes cache rows past the retention window (a constant, default 30 days until R2 sets it) and marks those performances ineligible. API responses recorded as fixtures so tests run without a key.
+- Deliverable: a YouTube Data API client limited to `playlistItems.list` and `videos.list`. `ingest:new` pages each series' uploads playlist until known IDs, writes `performance` rows with `review_status = pending` and `performance_yt_cache` rows with `fetched_at`. `refresh` re-fetches cache rows, flips `available`, sets `last_verified_at`. `expire` deletes cache rows past the retention window (a constant, default 30 days until R2 sets it) and marks those performances ineligible. API responses recorded as fixtures under `src/modules/catalog/youtube/fixtures/` so tests run without a key.
 - Done when: tests run all three jobs against recorded responses and check row counts, `available` flips and expiry; one real run against a single series with the R4 key writes rows and a short note of unit cost to the handback; `pnpm check` green.
 - Out of scope: classification, artist parsing, schedules.
 
@@ -302,8 +304,8 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 - Depends on: M1, T0
 - Owns: `src/modules/curator/llm/**`
 - Reads: architecture 6.4, 6.2 (token budget); PRD 8.5; ADR 0008
-- Deliverable: `extractBrief(input, schema)` and `compose(input, schema)` behind one file, each returning parsed output or a typed error (`schema`, `timeout`, `provider`). Prompt caching on the fixed system prompt. Each call records model, tokens in and out, and latency to a `CallRecord` the caller writes to `curator_run`. A fake adapter for tests that returns canned output. Retry once on a schema failure.
-- Done when: tests cover a valid response, a schema failure retried once then surfaced, a timeout, and token accounting; one real call per function against the chosen models succeeds and the handback reports measured latency and tokens; `pnpm check` green.
+- Deliverable: `extractBrief(input, schema)` and `compose(input, schema)` behind one file, each returning parsed output or a typed error (`schema`, `timeout`, `provider`). Prompt caching on the fixed system prompt. Each call records model, tokens in and out, and latency to a `CallRecord` the caller writes to `curator_run`. A fake adapter in `fake.ts` that returns canned or recorded output, selected when `LLM_ADAPTER=fake` so e2e runs need no key. The app refuses the fake when `VERCEL_ENV=production`. Retry once on a schema failure.
+- Done when: tests cover a valid response, a schema failure retried once then surfaced, a timeout, token accounting, and the fake refused in production; one real call per function against the chosen models succeeds and the handback reports measured latency and tokens; `pnpm check` green.
 - Out of scope: prompts. Anything catalog.
 
 #### B2 · Brief extraction
@@ -321,7 +323,7 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 - Owns: `src/modules/curator/compose/**`, `src/modules/curator/validate/**`, `src/modules/curator/generate.ts`
 - Reads: architecture 6.2 steps 2 to 5 (validate and repair in full), 6.3 (pins paragraph and the "drop Khruangbin" rule); PRD 4.5, 4.6, 7.4, 8.4
 - Deliverable: `generate(state)` running brief, retrieval, compose, validate, repair and returning a proposed revision with warnings. Candidates go to the model as `id, artist, series, duration_s, artist_energy, genres` only. The repair step in code: drop IDs outside the candidate set and log them; restore pins to their positions; apply removals and exclusions; at most two per artist, no duplicates; must-include seeds present or a gap warning; duration to target ±10% by adding or dropping the best energy match; schema failure retried once then `generation_failed` with the draft untouched. An unpin or remove on a pinned item is allowed only when the instruction names that artist.
-- Done when: unit tests, each with a fake adapter output designed to break one rule: an invented ID, a moved pin, a removed ID returned, three of one artist, a duration 30% off, a missing seed, a pin removed without naming the artist, a pin removed with the artist named. Every test asserts the repaired output and the warning. `pnpm check` green.
+- Done when: unit tests, each with a fake adapter output designed to break one rule: an invented ID, a moved pin, a removed ID returned, three of one artist, a duration 30% off, a missing seed, a pin removed without naming the artist, a pin removed with the artist named. Every test asserts the repaired output and the warning. A fast-check property test: for any composer output drawn from the candidates plus invented and duplicate IDs, with any pins and removals, the repaired list holds only candidate IDs, every position pin at its index, no removed ID, and at most two per artist. `pnpm check` green.
 - Out of scope: writing revisions (C2 does that), streaming.
 
 #### B4 · Refine, regenerate, fill the rest
@@ -336,10 +338,10 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 #### B5 · Eval runner
 
 - Depends on: B4
-- Owns: `scripts/evals/**`, `docs/evals/prompts.md`
-- Reads: architecture 6.5; PRD 14 (Phase 2 exit gate)
-- Deliverable: 50 prompts in `docs/evals/prompts.md` spread across the chips, artist seeds, durations and the five instruction types, each with a one-line expectation a rater can judge. `pnpm evals` runs every prompt through `generate` against the staging catalog with the real adapter, writes `evals/results/<date>.json`, and checks mechanically: zero IDs outside the candidate set, pins intact, duration in range, artist cap held. Exits non-zero on any violation. A `--runs N` flag repeats for the 500-run check.
-- Done when: `pnpm evals --runs 1` completes against staging with zero invariant failures and the results file lists latency and token totals per run; `pnpm check` green.
+- Owns: `scripts/evals/**`, `docs/evals/prompts.md`, `.github/workflows/evals.yml`
+- Reads: architecture 6.5; PRD 14 (Phase 2 exit gate); this plan, 6.3
+- Deliverable: 50 prompts in `docs/evals/prompts.md` spread across the chips, artist seeds, durations and the five instruction types, each with a one-line expectation a rater can judge. `pnpm evals` runs every prompt through `generate` against the staging catalog with the real adapter, writes `evals/results/<date>.json`, and checks mechanically: zero IDs outside the candidate set, pins intact, duration in range, artist cap held. Exits non-zero on any violation. A `--runs N` flag repeats for the 500-run check. `evals.yml` per 6.3, writing the invariant summary to the run's job summary.
+- Done when: `pnpm evals --runs 1` completes against staging with zero invariant failures and the results file lists latency and token totals per run; `evals.yml` passes on a manual dispatch and fails when one result is edited to hold an invented ID; `pnpm check` green.
 - Out of scope: the rating (K3).
 
 ### M2 Lane C · Playlist API
@@ -358,7 +360,7 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 - Depends on: C1, B4, D2
 - Owns: `src/app/api/drafts/[id]/generate/**`, `src/app/api/drafts/[id]/refine/**`, `src/app/api/drafts/[id]/replace-options/**`, `src/modules/playlist/runs.ts`
 - Reads: architecture 4 (what the free limit counts), 6.2 (sequence, latency budget, disconnects), 6.3 (cap paragraph), 7.1 step 3, 7.3 steps 1 and 5 and the entitlement table, 9.1; PRD 7.6, 8.5, 13
-- Deliverable: streamed `POST /generate` and `POST /refine`. Order per request: owner, `baseRevision`, rate limit, entitlement. A guest's first model-backed draft becomes `free`; any other draft without an entitlement gets `402`, `status = awaiting_payment`, brief held on the draft. Over 25 runs returns a typed error that leaves manual edits working. Stream events: `started`, `brief`, `candidates`, `result` or `error`, with `started` sent before any model call. The run finishes and writes revision plus `curator_run` in one transaction even when the client disconnects. A 20 s ceiling returns `generation_failed`. `GET /replace-options?index=` calls A1 with no entitlement check.
+- Deliverable: streamed `POST /generate` and `POST /refine`. Order per request: owner, `baseRevision`, rate limit, entitlement. A guest's first model-backed draft becomes `free`; any other draft without an entitlement gets `402`, `status = awaiting_payment`, brief held on the draft. Over 25 runs returns a typed error that leaves manual edits working. Stream events: `started`, `brief`, `candidates`, `result` or `error`, with `started` sent before any model call. The run finishes and writes revision plus `curator_run` in one transaction even when the client disconnects. A 20 s ceiling, injected so tests set it to milliseconds, returns `generation_failed`. `GET /replace-options?index=` calls A1 with no entitlement check.
 - Done when: tests cover the free draft, the `402` on a second draft, a pass holder on and off their draft, a subscriber, the run cap, the `409`, a disconnect still writing the revision, and `started` arriving before the fake adapter is called; `pnpm check` green.
 - Out of scope: UI, payment flows.
 
@@ -368,7 +370,7 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 - Owns: `src/app/api/drafts/[id]/share-link/**`, `src/app/s/[code]/**`, `src/modules/playlist/handoff.ts`, `src/lib/handoff-url.ts`
 - Reads: architecture 5.2 (`share_link`, `handoff_event`), 7.2, 9.1, 9.2 (`/s/:code` limit); PRD 7.5; journeys J5, J9, 6; R1's table
 - Deliverable: a pure function building `watch_videos` URLs from an ordered ID list and a start index, split into parts of at most 50, shared by client and server. `POST /share-link` idempotent on (draft, revision, start index) returning a short code. `GET /s/:code` logging `share_link_opened` then, per R1: a `302` to the YouTube URL, or a minimal page with one tap-to-open button. `handoff_event` written from `POST /api/events` with `type`, `part`, `start_index`, `surface`.
-- Done when: tests cover a 120-item list splitting into three parts, play-from-here slicing before splitting, idempotent codes, the redirect or page per R1, the per-IP limit; `pnpm check` green.
+- Done when: tests cover a 120-item list splitting into three parts, play-from-here slicing before splitting, a fast-check property test that for any list and start index the parts concatenated equal the slice and no part holds more than 50 IDs, idempotent codes, the redirect or page per R1, the per-IP limit; `pnpm check` green.
 - Out of scope: the handoff UI (E5), the flag read (E5 reads `handoff_mode` from `GET /api/drafts/:id`).
 
 #### C4 · Library, claim, retention
@@ -396,7 +398,7 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 - Depends on: D1
 - Owns: `src/modules/billing/**` (except `users.ts`), `src/app/api/billing/**`, `src/app/api/webhooks/stripe/**`
 - Reads: architecture 5.4 (`entitlement`), 7.3 steps 3 to 5, the entitlement table and Account management; PRD 16.1, 16.3, 18.1 (Session pass after day 7, Wallet payments); ADR 0007, 0010
-- Deliverable: `POST /api/billing/checkout` creating a Checkout session for a one-off pass or a monthly subscription with wallet payments on, bound to the held draft. `POST /api/webhooks/stripe` verifying signatures and handling `checkout.session.completed`, `invoice.paid`, `customer.subscription.updated` and `.deleted` as the only writer of `entitlement`. On a new entitlement, set the held draft `active` and bind a pass to it. `canRunCurator(owner, draft)` implementing the table in 7.3. A job or query flipping pass drafts to `read_only` at `period_end`. `POST /api/billing/portal` returning a Customer Portal URL.
+- Deliverable: `POST /api/billing/checkout` creating a Checkout session for a one-off pass or a monthly subscription with wallet payments on, bound to the held draft. `POST /api/webhooks/stripe` verifying signatures and handling `checkout.session.completed`, `invoice.paid`, `customer.subscription.updated` and `.deleted` as the only writer of `entitlement`. On a new entitlement, set the held draft `active` and bind a pass to it. `canRunCurator(owner, draft)` implementing the table in 7.3. A job or query flipping pass drafts to `read_only` at `period_end`. `POST /api/billing/portal` returning a Customer Portal URL. `src/modules/billing/testing.ts` building signed webhook events from Stripe's fixtures. The Stripe client honours `STRIPE_API_BASE` so e2e runs go to `stripe-mock`.
 - Done when: tests with Stripe's test fixtures cover each webhook event, an unsigned webhook rejected, every row of the entitlement table, and a pass draft becoming `read_only` after seven days; a test-mode checkout on a preview deploy produces an entitlement; `pnpm check` green.
 - Out of scope: the plan screen (E8), refunds (PRD 18.2, still open).
 
@@ -413,10 +415,12 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 
 Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 for screens and states the mockups lack; `CLAUDE.md` UI copy rule.
 
+Every E card owns the `e2e/<area>/` folder named in its Owns line and puts its Playwright specs there. Specs run in the PR gate under 6.1's e2e rules: routes not yet merged are mocked with T3 examples, and every spec ends with an axe check of the page it visited.
+
 #### E1 · App shell and primitives
 
 - Depends on: M1
-- Owns: `src/app/layout.tsx`, `src/app/globals.css`, `src/components/ui/**`, `src/lib/client/**`
+- Owns: `src/app/layout.tsx`, `src/app/globals.css`, `src/components/ui/**`, `src/lib/client/**`, `e2e/primitives/**`
 - Reads: PRD 13 (accessibility); mockups
 - Deliverable: design tokens (colour, type, spacing) extracted from the mockups into CSS variables with light and dark. Primitives: button, input, chip, list row, sheet, dialog, toast, skeleton. A typed API client over the T3 contracts with `baseRevision` handling: a `409` replaces local state and re-renders. Local storage helpers for the guest token, draft cache and `handoff_sheet_seen`, each wrapped in try/catch.
 - Done when: a Storybook or a `/dev/primitives` page shows every primitive in both themes; every primitive passes an axe check; `pnpm check` green.
@@ -425,7 +429,7 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 #### E2 · Landing and returning guest card
 
 - Depends on: E1, R5
-- Owns: `src/app/page.tsx`, `src/components/landing/**`
+- Owns: `src/app/page.tsx`, `src/components/landing/**`, `e2e/landing/**`
 - Reads: PRD 7.1, 7.7 (Landing, Returning guest card rows); journeys J1, J6; architecture 7.1
 - Deliverable: static landing with the prompt box, six chips that prefill it, the duration control per R5, and the two secondary entry links. Submit creates a draft and navigates to the editor. On load, a cached draft from local storage renders the returning-guest card above the prompt with title, runtime, Play on YouTube and Open.
 - Done when: a Playwright test types a prompt and lands on the editor route; a second test with a seeded local storage draft sees the card; `pnpm check` green.
@@ -434,7 +438,7 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 #### E3 · Editor
 
 - Depends on: E2, C1
-- Owns: `src/app/d/[id]/**`, `src/components/editor/**`
+- Owns: `src/app/d/[id]/**`, `src/components/editor/**`, `e2e/editor/**`
 - Reads: PRD 7.4, 7.7 (Playlist editor row), 13 (accessibility); journeys J2; architecture 5.2 (`items`), 9.1
 - Deliverable: ordered list with thumbnail from `i.ytimg.com`, artist, title, publisher, duration, runtime against target. Remove, pin, drag reorder with keyboard up and down, replace one with three options from `/replace-options`, regenerate unpinned, editable title and description. Every change calls `/ops` or `/undo` with `baseRevision` and renders the returned revision. Generation progress states from the stream: `started`, `brief` echo, `candidates`, `result`.
 - Done when: Playwright tests against the fixture cover pin, remove, keyboard reorder, replace, undo, and the `409` path re-rendering; screen-reader order matches visual order in an axe check; `pnpm check` green.
@@ -443,7 +447,7 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 #### E4 · Refine input and diff
 
 - Depends on: E3, C2
-- Owns: `src/components/editor/refine/**`, `src/components/editor/diff/**`
+- Owns: `src/components/editor/refine/**`, `src/components/editor/diff/**`, `e2e/refine/**`
 - Reads: PRD 7.4 (conversational input, diff, pins vs instructions); journeys J2, J11; architecture 6.3, 7.3 step 1 (the `402` path)
 - Deliverable: the refine input anchored to the editor. Streams `/refine` and renders the new revision with a diff against the previous one: added, removed, moved, "Unpinned and removed". One-step undo. The 25-run message. A `402` navigates to the plan screen (E8) with the brief held.
 - Done when: Playwright tests with a fake stream cover a diff with each change type, undo restoring the prior list, and the `402` navigation; `pnpm check` green.
@@ -452,7 +456,7 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 #### E5 · Handoff
 
 - Depends on: E4, C3
-- Owns: `src/components/handoff/**`
+- Owns: `src/components/handoff/**`, `e2e/handoff/**`
 - Reads: PRD 7.5, 7.7 (Handoff sheet row); journeys J5, J9, J16; architecture 7.2; CLAUDE.md rule 4
 - Deliverable: Play on YouTube opening the `watch_videos` URL from `src/lib/handoff-url.ts` synchronously in the click handler, then `sendBeacon` to `/api/events`. Play from here on every row. Part 1 and Part 2 when over 50. Copy link and Share through `/share-link`, Clipboard API and Web Share API. The sheet with the two tips on first handoff per browser, reachable afterwards. `handoff_mode = copy_list` turns the button into Copy video list.
 - Done when: a Playwright test asserts `window.open` is called before any network request in the click; a test with 60 items shows two parts; a test with `handoff_mode = copy_list` shows the copy button; `pnpm check` green.
@@ -461,7 +465,7 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 #### E6 · Artist seed entry
 
 - Depends on: E1, A1
-- Owns: `src/app/artist/**`, `src/components/seed/**`
+- Owns: `src/app/artist/**`, `src/components/seed/**`, `e2e/seed/**`
 - Reads: PRD 7.2; journeys J3
 - Deliverable: typeahead over `/api/catalog/artists`, multiple seeds, influence-only for names not in the catalog, the must-include toggle defaulting on for catalog artists, and the "no eligible performance" state offering the closest artists. Submit creates a draft with seeds and navigates to the editor.
 - Done when: Playwright tests cover a catalog seed, an influence-only seed, and the no-performance state; `pnpm check` green.
@@ -470,7 +474,7 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 #### E7 · Performance browser and drawer
 
 - Depends on: E1, A1
-- Owns: `src/app/browse/**`, `src/components/browser/**`
+- Owns: `src/app/browse/**`, `src/components/browser/**`, `e2e/browse/**`
 - Reads: PRD 7.3, 7.7 (Performance browser row); journeys J4
 - Deliverable: search and filters over `/api/catalog/search`, performance cards, add to playlist, a drawer with the running total, and "let AI fill the rest" that creates a draft with picks as inclusion pins and navigates to the editor, which starts `fill`.
 - Done when: Playwright tests cover add, drawer total, and the fill handoff carrying the picks; `pnpm check` green.
@@ -479,16 +483,16 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 #### E8 · Sign-up, pay, library, account
 
 - Depends on: E3, D2, C4
-- Owns: `src/app/plan/**`, `src/app/library/**`, `src/app/account/**`, `src/components/billing/**`
+- Owns: `src/app/plan/**`, `src/app/library/**`, `src/app/account/**`, `src/components/billing/**`, `e2e/billing/**`
 - Reads: PRD 7.7 (Sign-up and pay, Library, Account rows), 16.1, 16.3; journeys J7, J8, J10; architecture 7.3
 - Deliverable: the plan screen with the default plan chosen by `cohort`, Google and email sign-in, Checkout redirect, and polling for the entitlement that then resumes the held generation without retyping. Library listing drafts with re-open and hand off again. Account with plan, portal link, and delete my data with confirmation.
-- Done when: Playwright tests with Stripe test mode cover the held brief resuming after checkout, a library open, and account deletion returning to the landing page; `pnpm check` green.
+- Done when: Playwright tests cover sign-in by email link through the local stack's mail server, the held brief resuming after a checkout completed by a signed webhook from D2's builder (API calls to `stripe-mock`), a library open, and account deletion returning to the landing page; `pnpm check` and `pnpm test:e2e` green. A real test-mode checkout runs in I1.
 - Out of scope: pricing numbers (constants from Stripe prices).
 
 #### E9 · Error states and accessibility
 
 - Depends on: E5, E6, E7, E8
-- Owns: every path in E1 to E8 for this card only
+- Owns: every path in E1 to E8 for this card only, `e2e/errors/**`
 - Reads: PRD 13; journeys J11; architecture 9.5
 - Deliverable: every failure in 9.5 has a visible state: generation failed with the last revision intact, Postgres down showing the cached list with Play still working, Stripe error with the brief held. Keyboard paths through every screen. Axe checks on every route.
 - Done when: Playwright tests simulate each failure; axe reports zero violations on every route; `pnpm check` green.
@@ -499,10 +503,10 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 #### I1 · End-to-end journeys
 
 - Depends on: M2
-- Owns: `e2e/**`
-- Reads: journeys J1 to J11; PRD 14 (Phase 3 exit gate)
-- Deliverable: one Playwright test per P0 journey against a preview deploy with the staging catalog and the real adapter, J1 timed from landing load to `window.open`.
-- Done when: all eleven pass; J1 completes in under 60 s; `pnpm check` green.
+- Owns: `e2e/journeys/**`, `.github/workflows/nightly-e2e.yml`
+- Reads: journeys J1 to J11; PRD 14 (Phase 3 exit gate); ADR 0005; this plan, 6.3
+- Deliverable: one Playwright test per P0 journey in the `live` project, run against a preview deploy with the staging catalog and the real adapter, J1 timed from landing load to `window.open`. J7 completes a real Stripe test-mode checkout. `nightly-e2e.yml` per 6.3, with failures sent to the ADR 0005 channel.
+- Done when: all eleven pass on three consecutive nightly runs; J1 completes in under 60 s; `pnpm check` green.
 
 #### I2 · Observability and alerts
 
@@ -525,7 +529,7 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 - Depends on: I3
 - Owns: `docs/architecture/measurements.md`
 - Reads: architecture 6.2 (latency and token budgets), 12 row 5; PRD 13
-- Deliverable: `pnpm evals --runs 10` against staging; p50 and p90 per pipeline step from `curator_run`, cost per generation and per draft at the chosen models' prices, compared with the budgets.
+- Deliverable: `pnpm evals --runs 10` against staging; p50 and p90 per pipeline step from `curator_run`, cost per generation and per draft at the chosen models' prices, and catalog search p90 against PRD 13's 300 ms, all compared with the budgets.
 - Done when: the doc shows every figure against its budget and names any that miss.
 
 #### I5 · Reviewer pass
@@ -533,8 +537,8 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 - Depends on: I4
 - Owns: `docs/reviews/m3.md`
 - Run by an agent that wrote none of M2.
-- Reads: CLAUDE.md "Rules the code enforces"; every M2 card's Done when
-- Deliverable: for each of the five rules, the test that proves it and the code path that enforces it, by file and line. For each M2 card, pass or a named gap. Departures recorded in architecture 12.
+- Reads: CLAUDE.md "Rules the code enforces"; every M2 card's Done when; this plan, section 6
+- Deliverable: for each of the five rules, the test that proves it, found by its `rule N` name and confirmed to run in the PR gate, and the code path that enforces it, by file and line. For each M2 card, pass or a named gap. Departures recorded in architecture 12.
 - Done when: every rule has a cited enforcement point; every gap has a follow-up card appended to section 5.
 
 ### M4 Beta
@@ -573,7 +577,73 @@ Reads for every E card: `docs/design/mockups.html` for the look; journeys 5.1 fo
 - Deliverable: an invite script that reads a contacts file at `docs/beta/invites.csv` (provided by the user; the card stops and asks when it is absent) and sends each person an invite with a tracking code. A query proving the cohort split is near half and half. A weekly workflow that runs the I2 metric views and writes `docs/beta/week-N.md` with every PRD 15 metric against its target. A day-7 survey as a single-question page at `/survey/:code` writing to `event`, sent by a scheduled job.
 - Done when: the split query, the weekly report and the survey each run once against staging with seeded data; the invite script runs in dry-run mode listing who would be invited.
 
-## 6. Open items this plan depends on
+## 6. Testing and CI
+
+Cards name the tests. This section says where each test lives, what it may touch, and which workflow runs it. It binds every card.
+
+### 6.1 Test layers
+
+| Layer | Tool | May touch | Lives in | Command | Runs |
+| --- | --- | --- | --- | --- | --- |
+| Unit | Vitest | Nothing outside the process | `*.test.ts` beside the code | `pnpm check` | PR gate |
+| Integration | Vitest | The local Supabase stack. Route handlers are imported and called with a `Request`, no server | `*.int.test.ts` beside the code | `pnpm check` | PR gate |
+| E2E | Playwright on `next build && next start` | The seeded local stack, the fake LLM adapter, `stripe-mock` | `e2e/<area>/*.spec.ts` | `pnpm test:e2e` | PR gate |
+| Live | Playwright `live` project, eval script | Staging, the real LLM, Stripe test mode, YouTube | `e2e/journeys/`, `scripts/evals/` | `pnpm test:live`, `pnpm evals` | Nightly, post-merge, curator PRs |
+
+Rules for every layer:
+
+- The PR gate reaches no third party and needs no secret. The Vitest setup fails any request to a host other than localhost. In e2e, `LLM_ADAPTER=fake` selects B1's fake and `STRIPE_API_BASE` points the Stripe client at `stripe-mock`; T1 sets both in `ci.yml`, runs `stripe-mock` as a service in the `e2e` job, and lists the variables in `.env.example`. YouTube is touched only by ingestion, which tests against A2's recorded responses.
+- Integration test files run in parallel, and two worktrees can run `pnpm check` on one machine against one shared local stack. T2 picks the mechanism. The default to beat is a database per Vitest worker, cloned from a template that is migrated and seeded once per hash of the migrations folder.
+- Logic that depends on time takes `now` as an argument. Tests backdate rows instead of waiting. Ceilings and timeouts are parameters, so a test sets the 20 s ceiling to 50 ms.
+- Wall-clock assertions stay out of the PR gate because shared runners make them flaky. Tests check the mechanism (an index used, a call made before another). I4 measures latency on staging.
+- Each rule in `CLAUDE.md` "Rules the code enforces" has at least one PR-gate test with `rule N` in its name. I5 finds them by that name.
+- Code that must hold for any input gets a fast-check property test as well as examples: B3's repair step and C3's URL builder.
+- An e2e spec that mocks a route with `page.route` builds the body from `src/contracts/examples.ts` and parses it with the T3 schema, so a contract change breaks the mock at the same moment it breaks the route.
+- Playwright retries twice in CI and keeps a trace on the first retry. A spec that passes only on retry counts as failing for the card that owns it. Skipping a spec needs a follow-up card in section 5.
+- Coverage is reported on every PR. Thresholds sit only on code that enforces a rule: 90% of branches in `src/modules/curator/validate/**`, `src/lib/handoff-url.ts`, `src/lib/auth/**` and `src/modules/billing/**`. No global threshold.
+- T1 installs every test dependency (Vitest, coverage, Playwright, `@axe-core/playwright`, MSW, fast-check). Lane cards add product dependencies only.
+- Left out of P0 on purpose: visual snapshot tests (fonts render differently on macOS worktrees and Linux CI), mutation testing, load testing.
+
+### 6.2 Shared test helpers
+
+Helpers live beside what they fake and are written once, by the card that owns that code.
+
+| Helper | Path | Owner |
+| --- | --- | --- |
+| Vitest setup, network guard | `src/test/setup.ts` | T1 |
+| Playwright config, axe helper, smoke spec | `playwright.config.ts`, `e2e/support/**`, `e2e/smoke/**` | T1 |
+| Test database, a factory per table, e2e reset and seed | `src/test/db.ts`, `src/test/factories/**`, `e2e/support/db.ts` | T2 |
+| One valid example per contract schema | `src/contracts/examples.ts` | T3 |
+| `asGuest()`, `asUser()` | `src/lib/auth/testing.ts` | T4 |
+| Fake LLM adapter, recorded outputs | `src/modules/curator/llm/fake.ts` | B1 |
+| Recorded YouTube responses | `src/modules/catalog/youtube/fixtures/**` | A2 |
+| Signed Stripe webhook builder | `src/modules/billing/testing.ts` | D2 |
+
+A card that needs a helper another card owns and finds it missing says so in the handback and writes a local one inside its own paths.
+
+### 6.3 Workflows
+
+| Workflow | Trigger | What it runs | Secrets | Owner |
+| --- | --- | --- | --- | --- |
+| `ci.yml` | Every PR; push to `main` | `check`: format, typecheck, lint, unit, integration, coverage. `e2e`: build, Playwright, report and traces uploaded on failure. `migrations`: apply every migration to an empty database, the migration tool's drift check, fail if a migration file already on `main` changed. `actionlint` when `.github/**` changes | None | T1; T2 adds the database and `migrations` |
+| `preview-smoke.yml` | Vercel `deployment_status` success on a PR | `e2e/smoke` against the preview URL | Vercel bypass | T1 |
+| `deploy.yml` | `ci.yml` succeeds on `main` | Migrate staging, migrate production, `vercel deploy --prod` | `staging`, `production` | T2 |
+| `evals.yml` | PRs changing `src/modules/curator/**`; nightly; manual | `pnpm evals --runs 1`, failing on any invariant violation | `staging` | B5 |
+| `nightly-e2e.yml` | Nightly; manual | `pnpm test:live` against the latest `main` preview | `staging`, Vercel bypass | I1 |
+| Scheduled jobs | Architecture 8 | Ingestion, retention, alerts, metrics | `staging` or `production` | A6, C4, I2, K4 |
+
+How the workflows fit together:
+
+- A ruleset protects `main`: changes arrive by PR only, `check`, `e2e` and `migrations` are required, the branch must be up to date with `main`, merges are squash merges, force pushes are refused. Merge queues are not available on a personal-account repo; if the repo moves to an organisation, turn the queue on and drop the up-to-date rule.
+- The PR gate finishes in under 10 minutes. The pnpm store and Playwright browsers are cached, `concurrency` cancels superseded runs on a branch, and Playwright shards once `e2e` passes 6 minutes.
+- A red `main` stops merges. The orchestrator merges nothing else until the push-to-`main` run passes again.
+- `deploy.yml` migrates before it deploys, so the running code meets the new schema for a few minutes. Every migration works with the code already deployed: add a column or table in one PR, drop the old one in a later PR.
+- Vercel builds previews from its Git integration. Production deploys only from `deploy.yml`, so `vercel.json` turns off Git deploys for `main`.
+- Previews share the staging database, and only `deploy.yml` migrates it. A PR that adds a migration gets a preview on the old schema; its own tests run against the CI database.
+- Failures of nightly, live and scheduled workflows go to the channel from ADR 0005.
+- Dependabot opens weekly PRs for npm and GitHub Actions, with minor and patch updates grouped.
+
+## 7. Open items this plan depends on
 
 From PRD 18.2 and architecture 14, the ones that change a card:
 
