@@ -62,7 +62,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Playwright version
         id: playwright
-        run: echo "version=$(pnpm exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
       - uses: actions/cache@v6
         id: browsers
         with:
