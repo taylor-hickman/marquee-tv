@@ -43,6 +43,7 @@ export const handoffEvent = z.object({
   startIndex: z.number().int().nonnegative(),
   surface: z.string().max(64).optional(),
 });
+export type HandoffEvent = z.infer<typeof handoffEvent>;
 
 export const analyticsEvent = z.object({
   name: eventName.exclude(handoffNames),

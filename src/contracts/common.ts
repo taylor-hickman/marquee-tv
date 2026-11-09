@@ -10,11 +10,16 @@ export const performanceId = catalogId;
 export const artistId = catalogId;
 export const seriesId = catalogId;
 export const publisherId = catalogId;
+export type PerformanceId = z.infer<typeof performanceId>;
+export type ArtistId = z.infer<typeof artistId>;
 
 export const draftId = z.uuid();
 export const guestId = z.uuid();
 export const userId = z.uuid();
 export const runId = z.uuid();
+export type DraftId = z.infer<typeof draftId>;
+export type GuestId = z.infer<typeof guestId>;
+export type UserId = z.infer<typeof userId>;
 
 // playlist_revision.number starts at 1. A draft with no revision yet has null.
 export const revisionNumber = z.number().int().positive();

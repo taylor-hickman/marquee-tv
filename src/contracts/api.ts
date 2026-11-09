@@ -25,9 +25,7 @@ import { streamEvent } from "./stream";
 export const emptyRequest = z.strictObject({});
 export const urlResponse = z.object({ url: z.url({ protocol: /^https$/ }) });
 
-// Non-2xx bodies. Status per code: invalid_request 400, unauthorized 401,
-// payment_required 402, read_only 403, not_found 404, conflict 409,
-// rate_limited and run_cap_reached 429.
+// Non-2xx bodies, with their status in `errorStatus`.
 export const errorBody = z.discriminatedUnion("error", [
   z.object({
     error: z.literal("invalid_request"),
@@ -47,6 +45,21 @@ export const errorBody = z.discriminatedUnion("error", [
   z.object({ error: z.literal("run_cap_reached") }),
 ]);
 export type ErrorBody = z.infer<typeof errorBody>;
+
+export const errorStatus = {
+  invalid_request: 400,
+  unauthorized: 401,
+  payment_required: 402,
+  read_only: 403,
+  not_found: 404,
+  conflict: 409,
+  rate_limited: 429,
+  run_cap_reached: 429,
+} as const satisfies Record<ErrorBody["error"], number>;
+
+// What a module returns to its route: a body, or the error the route sends.
+export type ApiResult<T> =
+  { ok: true; value: T } | { ok: false; error: ErrorBody };
 
 // POST /api/drafts. The guest token comes back only when the request had none.
 export const createDraftRequest = z.object({
@@ -255,3 +268,5 @@ export type EventsRequest = z.infer<typeof eventsRequest>;
 export type CheckoutRequest = z.infer<typeof checkoutRequest>;
 export type UrlResponse = z.infer<typeof urlResponse>;
 export type LibraryResponse = z.infer<typeof libraryResponse>;
+export type ReplaceOptionsResponse = z.infer<typeof replaceOptionsResponse>;
+export type StripeWebhookResponse = z.infer<typeof stripeWebhookResponse>;

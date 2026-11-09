@@ -93,6 +93,7 @@ export const curatorOp = z.discriminatedUnion("op", [
 export type CuratorOp = z.infer<typeof curatorOp>;
 
 export const draftStatus = z.enum(["active", "awaiting_payment", "read_only"]);
+export type DraftStatus = z.infer<typeof draftStatus>;
 
 // Entry type, as `brief_submitted` records it (journeys 6).
 export const creationMethod = z.enum(["typed", "chip", "artist", "manual"]);
@@ -105,6 +106,7 @@ export const entitlementState = z.enum([
   "payment_required",
   "read_only",
 ]);
+export type EntitlementState = z.infer<typeof entitlementState>;
 
 // P0 values of app_flag.handoff_mode (architecture 7.2; T4 seeds `url`).
 export const handoffMode = z.enum(["url", "copy_list"]);
