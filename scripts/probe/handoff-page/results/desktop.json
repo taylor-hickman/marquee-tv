@@ -1,0 +1,178 @@
+{
+  "ranAt": "2026-11-08T18:18:44.035Z",
+  "base": "http://localhost:8787",
+  "ids": [
+    "QrR_gm6RqCo",
+    "ferZnZ0_rSM",
+    "73wCQRQb7v0",
+    "M34D3Ktovfw",
+    "WgqaxMOKfnI"
+  ],
+  "results": [
+    {
+      "probe": "play",
+      "finalUrl": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGG97Ncks8jbHMwODExMjAyNg",
+      "list": "TLGG97Ncks8jbHMwODExMjAyNg",
+      "firstVideo": "QrR_gm6RqCo",
+      "firstVideoMatches": true,
+      "queueIds": [
+        "QrR_gm6RqCo",
+        "ferZnZ0_rSM",
+        "73wCQRQb7v0",
+        "M34D3Ktovfw",
+        "WgqaxMOKfnI"
+      ],
+      "queueMatches": true,
+      "autoplayed": true,
+      "playing": true,
+      "browser": "Chrome",
+      "version": "156.0.8078.80"
+    },
+    {
+      "probe": "from3",
+      "finalUrl": "https://www.youtube.com/watch?v=73wCQRQb7v0&list=TLGGjLG7tHCFpvYwODExMjAyNg",
+      "list": "TLGGjLG7tHCFpvYwODExMjAyNg",
+      "firstVideo": "73wCQRQb7v0",
+      "firstVideoMatches": true,
+      "queueIds": [
+        "73wCQRQb7v0",
+        "M34D3Ktovfw",
+        "WgqaxMOKfnI"
+      ],
+      "queueMatches": true,
+      "autoplayed": true,
+      "playing": true,
+      "browser": "Chrome",
+      "version": "156.0.8078.80"
+    },
+    {
+      "probe": "redirect",
+      "finalUrl": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGG97Ncks8jbHMwODExMjAyNg",
+      "list": "TLGG97Ncks8jbHMwODExMjAyNg",
+      "firstVideo": "QrR_gm6RqCo",
+      "firstVideoMatches": true,
+      "queueIds": [
+        "QrR_gm6RqCo",
+        "ferZnZ0_rSM",
+        "73wCQRQb7v0",
+        "M34D3Ktovfw",
+        "WgqaxMOKfnI"
+      ],
+      "queueMatches": true,
+      "autoplayed": true,
+      "playing": true,
+      "browser": "Chrome",
+      "version": "156.0.8078.80"
+    },
+    {
+      "probe": "play",
+      "finalUrl": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGG97Ncks8jbHMwODExMjAyNg",
+      "list": "TLGG97Ncks8jbHMwODExMjAyNg",
+      "firstVideo": "QrR_gm6RqCo",
+      "firstVideoMatches": true,
+      "queueIds": [
+        "QrR_gm6RqCo",
+        "ferZnZ0_rSM",
+        "73wCQRQb7v0",
+        "M34D3Ktovfw",
+        "WgqaxMOKfnI"
+      ],
+      "queueMatches": true,
+      "autoplayed": true,
+      "playing": true,
+      "browser": "WebKit",
+      "version": "26.0"
+    },
+    {
+      "probe": "from3",
+      "finalUrl": "https://www.youtube.com/watch?v=73wCQRQb7v0&list=TLGGjLG7tHCFpvYwODExMjAyNg",
+      "list": "TLGGjLG7tHCFpvYwODExMjAyNg",
+      "firstVideo": "73wCQRQb7v0",
+      "firstVideoMatches": true,
+      "queueIds": [
+        "73wCQRQb7v0",
+        "M34D3Ktovfw",
+        "WgqaxMOKfnI"
+      ],
+      "queueMatches": true,
+      "autoplayed": true,
+      "playing": true,
+      "browser": "WebKit",
+      "version": "26.0"
+    },
+    {
+      "probe": "redirect",
+      "finalUrl": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGG97Ncks8jbHMwODExMjAyNg",
+      "list": "TLGG97Ncks8jbHMwODExMjAyNg",
+      "firstVideo": "QrR_gm6RqCo",
+      "firstVideoMatches": true,
+      "queueIds": [
+        "QrR_gm6RqCo",
+        "ferZnZ0_rSM",
+        "73wCQRQb7v0",
+        "M34D3Ktovfw",
+        "WgqaxMOKfnI"
+      ],
+      "queueMatches": true,
+      "autoplayed": true,
+      "playing": true,
+      "browser": "WebKit",
+      "version": "26.0"
+    },
+    {
+      "probe": "play",
+      "finalUrl": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGG97Ncks8jbHMwODExMjAyNg",
+      "list": "TLGG97Ncks8jbHMwODExMjAyNg",
+      "firstVideo": "QrR_gm6RqCo",
+      "firstVideoMatches": true,
+      "queueIds": [
+        "QrR_gm6RqCo",
+        "ferZnZ0_rSM",
+        "73wCQRQb7v0",
+        "M34D3Ktovfw",
+        "WgqaxMOKfnI"
+      ],
+      "queueMatches": true,
+      "autoplayed": true,
+      "playing": true,
+      "browser": "Firefox",
+      "version": "142.0.1"
+    },
+    {
+      "probe": "from3",
+      "finalUrl": "https://www.youtube.com/watch?v=73wCQRQb7v0&list=TLGGjLG7tHCFpvYwODExMjAyNg",
+      "list": "TLGGjLG7tHCFpvYwODExMjAyNg",
+      "firstVideo": "73wCQRQb7v0",
+      "firstVideoMatches": true,
+      "queueIds": [
+        "73wCQRQb7v0",
+        "M34D3Ktovfw",
+        "WgqaxMOKfnI"
+      ],
+      "queueMatches": true,
+      "autoplayed": true,
+      "playing": true,
+      "browser": "Firefox",
+      "version": "142.0.1"
+    },
+    {
+      "probe": "redirect",
+      "finalUrl": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGG97Ncks8jbHMwODExMjAyNg",
+      "list": "TLGG97Ncks8jbHMwODExMjAyNg",
+      "firstVideo": "QrR_gm6RqCo",
+      "firstVideoMatches": true,
+      "queueIds": [
+        "QrR_gm6RqCo",
+        "ferZnZ0_rSM",
+        "73wCQRQb7v0",
+        "M34D3Ktovfw",
+        "WgqaxMOKfnI"
+      ],
+      "queueMatches": true,
+      "autoplayed": true,
+      "playing": true,
+      "browser": "Firefox",
+      "version": "142.0.1"
+    }
+  ]
+}
