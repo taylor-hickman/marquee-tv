@@ -51,16 +51,27 @@ export type RetrieveCandidates = (
   state: RetrievalState,
 ) => Promise<Candidate[]>;
 
-// Candidate rows for given ids, eligible or not: pins and kept items that retrieval
-// did not return still count toward duration and the artist cap.
-export type CandidatesById = (ids: PerformanceId[]) => Promise<Candidate[]>;
+// What repair needs about an item already in the list that retrieval may not have
+// returned (a pin, a kept item): it still counts toward the artist cap and the
+// duration. Duration is null once the item's cache row has expired (architecture 5.3).
+export type ListItemFacts = {
+  id: PerformanceId;
+  artistIds: ArtistId[];
+  durationS: number | null;
+};
+
+// One entry per id, in the order of `ids`, eligible or not.
+export type ListItemFactsById = (
+  ids: PerformanceId[],
+) => Promise<ListItemFacts[]>;
 
 // Three alternatives; no model call, never gated.
 export type ReplaceOptions = (
   input: ReplaceInput,
 ) => Promise<PerformanceCard[]>;
 
-// Display data for the editor, in the order of `ids`.
+// Display data for the editor, one card per id in the order of `ids`, including
+// performances whose cache row has expired.
 export type PerformanceCards = (
   ids: PerformanceId[],
 ) => Promise<PerformanceCard[]>;

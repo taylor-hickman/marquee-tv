@@ -76,6 +76,16 @@ describe("contracts", () => {
     expect(Object.keys(invalid).sort()).toEqual(Object.keys(schemas).sort());
   });
 
+  test("a card still describes a performance whose cache row has expired", () => {
+    const expired = {
+      ...examples.performanceCard,
+      title: null,
+      durationS: null,
+      publishedAt: null,
+    };
+    expect(schemas.performanceCard.safeParse(expired).success).toBe(true);
+  });
+
   test("a hand-built draft's first adds go through ops with no base revision (J4)", () => {
     const firstAdds = {
       baseRevision: null,

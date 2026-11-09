@@ -3,7 +3,7 @@
 import { notImplemented } from "@/contracts";
 import type {
   ArtistTypeahead,
-  CandidatesById,
+  ListItemFactsById,
   PerformanceCards,
   ReplaceOptions,
   RetrieveCandidates,
@@ -17,8 +17,8 @@ export const artistTypeahead: ArtistTypeahead = () =>
   notImplemented("catalog.artistTypeahead");
 export const retrieveCandidates: RetrieveCandidates = () =>
   notImplemented("catalog.retrieveCandidates");
-export const candidatesById: CandidatesById = () =>
-  notImplemented("catalog.candidatesById");
+export const listItemFacts: ListItemFactsById = () =>
+  notImplemented("catalog.listItemFacts");
 export const replaceOptions: ReplaceOptions = () =>
   notImplemented("catalog.replaceOptions");
 export const performanceCards: PerformanceCards = () =>

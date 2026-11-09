@@ -42,16 +42,18 @@ export const owner = z.discriminatedUnion("kind", [
 export type Owner = z.infer<typeof owner>;
 
 // What the editor, browser and library show for one performance (PRD 7.3, 7.4).
-// The title comes from performance_yt_cache and is for display only: it never
-// reaches the model (CLAUDE.md rule 5).
+// Title, duration and date come from performance_yt_cache, which expires
+// (architecture 5.3) while revisions are kept forever, so they are null once the
+// cache row is gone. The title is for display only: it never reaches the model
+// (CLAUDE.md rule 5).
 export const performanceCard = z.object({
   id: performanceId,
   videoId,
-  title: z.string().min(1),
+  title: z.string().min(1).nullable(),
   artists: z.array(z.object({ id: artistId, name: z.string().min(1) })).min(1),
   publisher: z.object({ id: publisherId, name: z.string().min(1) }),
   series: z.object({ id: seriesId, name: z.string().min(1) }),
-  durationS: z.number().int().positive(),
-  publishedAt: z.iso.datetime({ offset: true }),
+  durationS: z.number().int().positive().nullable(),
+  publishedAt: z.iso.datetime({ offset: true }).nullable(),
 });
 export type PerformanceCard = z.infer<typeof performanceCard>;

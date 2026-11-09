@@ -186,6 +186,7 @@ export const libraryResponse = z.object({
       status: draftStatus,
       free: z.boolean(),
       revision: revisionNumber.nullable(),
+      // Sum of the durations still cached; expired rows count as zero.
       runtimeS: z.number().int().nonnegative(),
       videoIds: z.array(videoId),
       updatedAt: z.iso.datetime({ offset: true }),
