@@ -2,7 +2,7 @@
 
 Nov 9, 2026 · Taylor Hickman · Version 0.3 · Status: Draft · Built from PRD v1.1, user journeys v0.2, architecture v0.2
 
-**Changes in 0.3.** Added card T1b for the test tooling that 0.2 added to T1 after T1 merged under 0.1. T2 now waits on T1b. Section 4 shows each card's status at `11bb638` and the orchestrator's merge rules.
+**Changes in 0.3.** Added card T1b for the test tooling that 0.2 added to T1 after T1 merged under 0.1. T2 now waits on T1b. Section 4 shows each card's status at `5649651` and the orchestrator's merge rules.
 
 **Changes in 0.2.** Added section 6, testing and CI: test layers, shared test helpers and their owners, and the workflows that run them. T1 and T2 now build the full PR gate, the production deploy and migrations in CI. Every E card owns an `e2e/` folder. B3 and C3 add property tests, B5 owns the evals workflow, I1 owns the nightly journeys. A1 checks index use instead of wall-clock time. Open items moved to section 7.
 
@@ -98,20 +98,20 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 
 ## 4. Status
 
-At `11bb638`, Nov 9, 2026. `done #N` means merged in pull request N.
+At `5649651`, Nov 9, 2026. `done #N` means merged in pull request N.
 
 | ID | Card | Milestone | Depends on | Status |
 | --- | --- | --- | --- | --- |
 | R1 | Handoff device matrix | M0 | | done #3; the test page is not on a preview URL |
 | R2 | Compliance memo | M0 | | done #3 |
 | R3 | Quota extension application | M0 | R4 | drafted #3; submitted after D3, when a live app exists |
-| R4 | Provision accounts and secrets | M0 | | done #6, #7; the Vercel bypass secret is not created |
+| R4 | Provision accounts and secrets | M0 | | done #6, #7; T1b created the Vercel bypass secret |
 | R5 | Duration control decision | M0 | | done #4 |
 | T0 | Decide and write ADRs | M0 | | done #5 |
 | T1 | Scaffold and CI | M1 | T0, R4 | done #2 against card 0.1; the 0.2 additions moved to T1b |
-| T1b | v0.2 test tooling | M1 | T1 | open |
-| T2 | Database and fixtures | M1 | T1b | held; draft #9 |
-| T3 | Contracts and module stubs | M1 | T2 | open |
+| T1b | v0.2 test tooling | M1 | T1 | done #12 |
+| T2 | Database and fixtures | M1 | T1b | done #9; its 0.2 test tooling done as T2b, #14 |
+| T3 | Contracts and module stubs | M1 | T2 | in progress #13 |
 | T4 | Guest auth, rate limit, flags, events | M1 | T3 | open |
 | A0 | `watch_videos` probe | M2 | T1 | done #8 |
 | A1 | Catalog queries and retrieval | M2 | M1 | open |
@@ -157,8 +157,8 @@ The orchestrator merges by these rules until this section changes. Section 6.3 d
 
 - `pnpm check` stays the gate on every card. A card runs it before handback, and the `check` job in `ci.yml` runs it in CI. New jobs run alongside it and never replace it, and `check` keeps its name, because the ruleset requires that name.
 - A pull request merges only after the required `check` job has passed on its latest commit. A pending, skipped or failed `check` blocks the merge, and so does a red `main` (6.3).
-- The `main` ruleset requires `check` and refuses deletion and force pushes. Nothing else is required. A card that would add a required check (`e2e`, `migrations`) or change another rule (pull requests only, up to date with `main`, merge method) asks Taylor first and changes the ruleset only after a yes. Until then its job runs on every pull request without being required.
-- T2 is held. Pull request #9 stays a draft until T1b merges, then rebases onto `main`. Both cards edit `ci.yml`, `package.json` and the ESLint config. T3 and every card after it wait with T2.
+- The `main` ruleset requires `check` and `e2e` and refuses deletion and force pushes. Taylor has agreed that `migrations` joins the required checks once it has run on `main`. A card that would add any other required check or change another rule (pull requests only, up to date with `main`, merge method) asks Taylor first and changes the ruleset only after a yes. Until then its job runs on every pull request without being required.
+- The hold on T2 is over. T2 merged as #9, T1b as #12 and T2b as #14, so T3 and the cards after it run.
 
 ## 5. Cards
 
