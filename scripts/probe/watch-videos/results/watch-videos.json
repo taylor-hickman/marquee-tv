@@ -1,0 +1,63 @@
+{
+  "ranAt": "2026-11-09T19:34:37.886Z",
+  "start": "https://www.youtube.com/watch_videos?video_ids=QrR_gm6RqCo,ferZnZ0_rSM,73wCQRQb7v0",
+  "results": [
+    {
+      "client": "fetch, default User-Agent",
+      "chain": [
+        {
+          "url": "https://www.youtube.com/watch_videos?video_ids=QrR_gm6RqCo,ferZnZ0_rSM,73wCQRQb7v0",
+          "status": 303,
+          "location": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGGq8zLGd825PIwOTExMjAyNg"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGGq8zLGd825PIwOTExMjAyNg",
+          "status": 200,
+          "location": null
+        }
+      ],
+      "finalUrl": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGGq8zLGd825PIwOTExMjAyNg",
+      "listInFinalUrl": true,
+      "listInAnyLocation": true,
+      "bodyBytes": 1431308,
+      "bodyMentionsList": true
+    },
+    {
+      "client": "fetch, Chrome User-Agent",
+      "chain": [
+        {
+          "url": "https://www.youtube.com/watch_videos?video_ids=QrR_gm6RqCo,ferZnZ0_rSM,73wCQRQb7v0",
+          "status": 303,
+          "location": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGGq8zLGd825PIwOTExMjAyNg"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGGq8zLGd825PIwOTExMjAyNg",
+          "status": 200,
+          "location": null
+        }
+      ],
+      "finalUrl": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGGq8zLGd825PIwOTExMjAyNg",
+      "listInFinalUrl": true,
+      "listInAnyLocation": true,
+      "bodyBytes": 1415786,
+      "bodyMentionsList": true
+    },
+    {
+      "client": "playwright chromium 158.0.8127.18 headless",
+      "chain": [
+        {
+          "url": "https://www.youtube.com/watch_videos?video_ids=QrR_gm6RqCo,ferZnZ0_rSM,73wCQRQb7v0",
+          "status": 303,
+          "location": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGGq8zLGd825PIwOTExMjAyNg"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGGq8zLGd825PIwOTExMjAyNg",
+          "status": 200,
+          "location": null
+        }
+      ],
+      "finalUrl": "https://www.youtube.com/watch?v=QrR_gm6RqCo&list=TLGGq8zLGd825PIwOTExMjAyNg",
+      "listInFinalUrl": true
+    }
+  ]
+}
