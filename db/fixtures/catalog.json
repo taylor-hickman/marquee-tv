@@ -1,0 +1,7002 @@
+{
+  "publishers": [
+    {
+      "id": 1,
+      "name": "NPR Music",
+      "channel_id": "UCOR4XSLBFn7WLBA3uzvCIEj",
+      "channel_url": "https://www.youtube.com/@nprmusic"
+    },
+    {
+      "id": 2,
+      "name": "KEXP",
+      "channel_id": "UC2n95CmWOEmW_ZxaMZG2cUn",
+      "channel_url": "https://www.youtube.com/@kexp"
+    },
+    {
+      "id": 3,
+      "name": "COLORS",
+      "channel_id": "UCKL-lQtnvxk8X8R1NL_4cL1",
+      "channel_url": "https://www.youtube.com/@COLORSxSTUDIOS"
+    }
+  ],
+  "series": [
+    {
+      "id": 1,
+      "publisher_id": 1,
+      "name": "Tiny Desk Concerts",
+      "uploads_playlist_id": "UUOR4XSLBFn7WLBA3uzvCIEj",
+      "title_rule": "{artist}: Tiny Desk Concert",
+      "launch_depth": "full",
+      "convention": "stripped-down, behind a desk in a small office"
+    },
+    {
+      "id": 2,
+      "publisher_id": 1,
+      "name": "Tiny Desk Home Concerts",
+      "uploads_playlist_id": "UUOR4XSLBFn7WLBA3uzvCIEj",
+      "title_rule": "{artist}: Tiny Desk (Home) Concert",
+      "launch_depth": "thin",
+      "convention": "filmed at home or on location, often a fuller band"
+    },
+    {
+      "id": 3,
+      "publisher_id": 2,
+      "name": "Live on KEXP",
+      "uploads_playlist_id": "UU2n95CmWOEmW_ZxaMZG2cUn",
+      "title_rule": "{artist} - Full Performance (Live on KEXP)",
+      "launch_depth": "full",
+      "convention": "full band live in a radio studio, loud and raw"
+    },
+    {
+      "id": 4,
+      "publisher_id": 2,
+      "name": "KEXP at Home",
+      "uploads_playlist_id": "UU2n95CmWOEmW_ZxaMZG2cUn",
+      "title_rule": "{artist} - Full Performance (Live on KEXP at Home)",
+      "launch_depth": "thin",
+      "convention": "full band recorded remotely in the artist's own space"
+    },
+    {
+      "id": 5,
+      "publisher_id": 3,
+      "name": "A COLORS SHOW",
+      "uploads_playlist_id": "UUKL-lQtnvxk8X8R1NL_4cL1",
+      "title_rule": "{artist} - {song} | A COLORS SHOW",
+      "launch_depth": "full",
+      "convention": "one voice and a beat, one song, minimal colored backdrop"
+    },
+    {
+      "id": 6,
+      "publisher_id": 3,
+      "name": "A COLORS ENCORE",
+      "uploads_playlist_id": "UUKL-lQtnvxk8X8R1NL_4cL1",
+      "title_rule": "{artist} - {song} | A COLORS ENCORE",
+      "launch_depth": "thin",
+      "convention": "a second song after a COLORS SHOW, same minimal setup"
+    }
+  ],
+  "artists": [
+    {
+      "id": 1,
+      "name": "Khruangbin",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["psychedelic", "funk", "global"],
+        "scenes": ["houston"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [17, 15, 16, 33, 38],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Anderson .Paak",
+      "review_status": "accepted",
+      "aliases": ["Anderson .Paak & The Free Nationals"],
+      "profile": {
+        "genres": ["funk", "soul", "hip-hop"],
+        "scenes": ["los angeles"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [95, 4, 35, 36, 37],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Mac Miller",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop", "jazz rap"],
+        "scenes": ["pittsburgh"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [114, 44, 115, 119, 2],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 4,
+      "name": "Tyler, The Creator",
+      "review_status": "accepted",
+      "aliases": ["Tyler The Creator"],
+      "profile": {
+        "genres": ["hip-hop"],
+        "scenes": ["los angeles"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [2, 42, 45, 56, 79],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 5,
+      "name": "Billie Eilish",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["pop", "alt pop"],
+        "scenes": ["los angeles"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [34, 60, 26],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 6,
+      "name": "Phoebe Bridgers",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie folk", "indie rock"],
+        "scenes": ["los angeles"],
+        "era": "2010s",
+        "energy": 1,
+        "similar_artist_ids": [9, 107, 10, 19, 21],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 7,
+      "name": "Mitski",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie rock", "art pop"],
+        "scenes": ["new york"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [8, 20, 22, 59, 9],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 8,
+      "name": "Japanese Breakfast",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie pop", "indie rock"],
+        "scenes": ["philadelphia"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [7, 20, 22, 59, 83],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 9,
+      "name": "Big Thief",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie folk", "indie rock"],
+        "scenes": ["brooklyn"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [6, 10, 19, 21, 23],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 10,
+      "name": "Fleet Foxes",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie folk"],
+        "scenes": ["seattle"],
+        "era": "2000s",
+        "energy": 2,
+        "similar_artist_ids": [9, 108, 6, 107],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 11,
+      "name": "Car Seat Headrest",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie rock"],
+        "scenes": ["seattle"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [89, 7, 8, 20, 22],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 12,
+      "name": "IDLES",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["post-punk", "punk"],
+        "scenes": ["bristol"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [91, 13, 89],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 13,
+      "name": "Fontaines D.C.",
+      "review_status": "accepted",
+      "aliases": ["Fontaines DC"],
+      "profile": {
+        "genres": ["post-punk"],
+        "scenes": ["dublin"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [89, 12, 91],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 14,
+      "name": "King Gizzard & the Lizard Wizard",
+      "review_status": "accepted",
+      "aliases": ["King Gizzard"],
+      "profile": {
+        "genres": ["psychedelic rock", "garage rock"],
+        "scenes": ["melbourne"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [18, 84],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 15,
+      "name": "Tinariwen",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["desert blues", "global"],
+        "scenes": ["sahara"],
+        "era": "2000s",
+        "energy": 3,
+        "similar_artist_ids": [16, 1, 17, 18, 68],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 16,
+      "name": "Bombino",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["desert blues", "global"],
+        "scenes": ["agadez"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [15, 1, 17, 18, 68],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 17,
+      "name": "Altin Gün",
+      "review_status": "accepted",
+      "aliases": ["Altin Gun"],
+      "profile": {
+        "genres": ["psychedelic", "anatolian rock", "global"],
+        "scenes": ["amsterdam"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [1, 76, 15, 16, 68],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 18,
+      "name": "Mdou Moctar",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["desert blues", "psychedelic rock"],
+        "scenes": ["agadez"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [14, 15, 16, 84],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 19,
+      "name": "Sharon Van Etten",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie rock", "singer-songwriter"],
+        "scenes": ["new york"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [21, 9, 23, 85, 6],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 20,
+      "name": "Courtney Barnett",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie rock"],
+        "scenes": ["melbourne"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [7, 8, 22, 59, 9],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 21,
+      "name": "Angel Olsen",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie rock", "singer-songwriter"],
+        "scenes": ["asheville"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [19, 9, 23, 85, 6],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 22,
+      "name": "Snail Mail",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie rock"],
+        "scenes": ["baltimore"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [7, 8, 20, 59, 9],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 23,
+      "name": "Soccer Mommy",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie rock"],
+        "scenes": ["nashville"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [9, 19, 21, 85, 6],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 24,
+      "name": "Black Pumas",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["soul", "psychedelic soul"],
+        "scenes": ["austin"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [25, 94, 2, 30, 93],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 25,
+      "name": "Durand Jones & The Indications",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["soul"],
+        "scenes": ["bloomington"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [24, 94, 2, 30, 93],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 26,
+      "name": "Lizzo",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["pop", "r&b", "hip-hop"],
+        "scenes": ["minneapolis"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [43, 46, 117, 118, 120],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 27,
+      "name": "H.E.R.",
+      "review_status": "accepted",
+      "aliases": ["HER"],
+      "profile": {
+        "genres": ["r&b"],
+        "scenes": ["bay area"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [28, 30, 49, 51, 110],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 28,
+      "name": "SZA",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["r&b"],
+        "scenes": ["st. louis"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [27, 30, 49, 51, 110],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 29,
+      "name": "Daniel Caesar",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["r&b", "soul"],
+        "scenes": ["toronto"],
+        "era": "2010s",
+        "energy": 1,
+        "similar_artist_ids": [30, 112, 41, 48, 113],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 30,
+      "name": "Jorja Smith",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["r&b", "soul"],
+        "scenes": ["walsall"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [112, 29, 27, 28, 49],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 31,
+      "name": "Kehlani",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["r&b"],
+        "scenes": ["oakland"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [32, 61, 121, 27, 28],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 32,
+      "name": "Masego",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz", "r&b"],
+        "scenes": ["virginia"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [31, 33, 34, 39, 61],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 33,
+      "name": "Tom Misch",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz", "funk", "neo-soul"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [96, 1, 32, 34, 38],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 34,
+      "name": "Jacob Collier",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz", "pop"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [32, 33, 39, 71, 129],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 35,
+      "name": "Snarky Puppy",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz fusion", "funk"],
+        "scenes": ["brooklyn"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [38, 2, 36, 37, 81],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 36,
+      "name": "Cory Wong",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["funk"],
+        "scenes": ["minneapolis"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [2, 35, 37, 81, 82],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 37,
+      "name": "Vulfpeck",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["funk"],
+        "scenes": ["ann arbor"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [2, 35, 36, 81, 82],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 38,
+      "name": "Thundercat",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz fusion", "funk"],
+        "scenes": ["los angeles"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [35, 1, 33, 84, 122],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 39,
+      "name": "Kamasi Washington",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz", "spiritual jazz"],
+        "scenes": ["los angeles"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [32, 33, 34, 71, 129],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 40,
+      "name": "Hiatus Kaiyote",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["neo-soul", "future soul"],
+        "scenes": ["melbourne"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [33, 47, 41],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 41,
+      "name": "Cleo Sol",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["neo-soul", "soul"],
+        "scenes": ["london"],
+        "era": "2020s",
+        "energy": 1,
+        "similar_artist_ids": [29, 48, 30, 47, 93],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 42,
+      "name": "Little Simz",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop", "grime"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [43, 46, 2, 4, 45],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 43,
+      "name": "Stormzy",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["grime", "hip-hop"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [46, 42, 26, 117, 118],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 44,
+      "name": "Dave",
+      "review_status": "accepted",
+      "aliases": ["Santan Dave"],
+      "profile": {
+        "genres": ["hip-hop", "uk rap"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [45, 114, 115, 119, 2],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 45,
+      "name": "Kojey Radical",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop", "uk rap"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [44, 2, 4, 42, 56],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 46,
+      "name": "slowthai",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop", "grime"],
+        "scenes": ["northampton"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [43, 42, 26, 117, 118],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 47,
+      "name": "Arlo Parks",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie pop", "neo-soul"],
+        "scenes": ["london"],
+        "era": "2020s",
+        "energy": 2,
+        "similar_artist_ids": [110, 111, 8, 33, 40],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 48,
+      "name": "Celeste",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["soul"],
+        "scenes": ["london"],
+        "era": "2020s",
+        "energy": 1,
+        "similar_artist_ids": [29, 41, 30, 93, 100],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 49,
+      "name": "Mahalia",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["r&b"],
+        "scenes": ["leicester"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [27, 28, 30, 51, 110],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 50,
+      "name": "Burna Boy",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["afrobeats", "afrofusion"],
+        "scenes": ["lagos"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [52, 53, 54, 55, 51],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 51,
+      "name": "Tems",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["afrobeats", "r&b"],
+        "scenes": ["lagos"],
+        "era": "2020s",
+        "energy": 2,
+        "similar_artist_ids": [27, 28, 30, 49, 110],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 52,
+      "name": "Wizkid",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["afrobeats"],
+        "scenes": ["lagos"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [50, 53, 54, 55, 51],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 53,
+      "name": "Rema",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["afrobeats"],
+        "scenes": ["benin city"],
+        "era": "2020s",
+        "energy": 4,
+        "similar_artist_ids": [50, 52, 54, 55, 51],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 54,
+      "name": "Ayra Starr",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["afrobeats", "afropop"],
+        "scenes": ["lagos"],
+        "era": "2020s",
+        "energy": 4,
+        "similar_artist_ids": [50, 52, 53, 55, 67],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 55,
+      "name": "Tiwa Savage",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["afrobeats"],
+        "scenes": ["lagos"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [50, 52, 53, 54, 51],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 56,
+      "name": "Sampa the Great",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop"],
+        "scenes": ["lusaka"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [2, 4, 42, 45, 79],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 57,
+      "name": "Koffee",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["reggae", "dancehall"],
+        "scenes": ["kingston"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [58],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 58,
+      "name": "Chronixx",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["reggae"],
+        "scenes": ["kingston"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [57],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 59,
+      "name": "Nilüfer Yanya",
+      "review_status": "accepted",
+      "aliases": ["Nilufer Yanya"],
+      "profile": {
+        "genres": ["indie rock", "alt r&b"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [7, 8, 20, 22, 122],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 60,
+      "name": "Rina Sawayama",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["pop"],
+        "scenes": ["london"],
+        "era": "2020s",
+        "energy": 4,
+        "similar_artist_ids": [26, 34, 5],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 61,
+      "name": "Kali Uchis",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["r&b", "latin pop"],
+        "scenes": ["bogotá"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [123, 31, 32, 121, 27],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 62,
+      "name": "Bad Bunny",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["latin trap", "reggaeton"],
+        "scenes": ["san juan"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 63,
+      "name": "Natalia Lafourcade",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["latin folk", "son jarocho"],
+        "scenes": ["veracruz"],
+        "era": "2000s",
+        "energy": 2,
+        "similar_artist_ids": [64],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 64,
+      "name": "Ed Maverick",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["latin folk"],
+        "scenes": ["chihuahua"],
+        "era": "2010s",
+        "energy": 1,
+        "similar_artist_ids": [63],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 65,
+      "name": "Bomba Estéreo",
+      "review_status": "accepted",
+      "aliases": ["Bomba Estereo"],
+      "profile": {
+        "genres": ["cumbia", "electronic"],
+        "scenes": ["bogotá"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [74, 76, 80, 75, 77],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 66,
+      "name": "Ibeyi",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["afro-cuban", "electronic soul"],
+        "scenes": ["paris"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 67,
+      "name": "Fatoumata Diawara",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["wassoulou", "afropop"],
+        "scenes": ["bamako"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [54, 126, 68],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 68,
+      "name": "Angélique Kidjo",
+      "review_status": "accepted",
+      "aliases": ["Angelique Kidjo"],
+      "profile": {
+        "genres": ["afropop", "global"],
+        "scenes": ["cotonou"],
+        "era": "1990s",
+        "energy": 5,
+        "similar_artist_ids": [17, 54, 67, 126, 1],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 69,
+      "name": "Seun Kuti & Egypt 80",
+      "review_status": "accepted",
+      "aliases": ["Seun Kuti"],
+      "profile": {
+        "genres": ["afrobeat"],
+        "scenes": ["lagos"],
+        "era": "2000s",
+        "energy": 5,
+        "similar_artist_ids": [70],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 70,
+      "name": "Ezra Collective",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz", "afrobeat"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [69, 96, 127, 128, 32],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 71,
+      "name": "Nubya Garcia",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [32, 33, 34, 39, 129],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 72,
+      "name": "Moses Sumney",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["art soul", "experimental"],
+        "scenes": ["los angeles"],
+        "era": "2010s",
+        "energy": 1,
+        "similar_artist_ids": [],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 73,
+      "name": "Sudan Archives",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["experimental r&b"],
+        "scenes": ["cincinnati"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 74,
+      "name": "Yaeji",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["house", "electronic"],
+        "scenes": ["new york"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [80, 76, 78, 79, 65],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 75,
+      "name": "Bonobo",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["downtempo", "electronic"],
+        "scenes": ["london"],
+        "era": "2000s",
+        "energy": 3,
+        "similar_artist_ids": [77, 74, 76, 80, 65],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 76,
+      "name": "Caribou",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["electronic", "psychedelic"],
+        "scenes": ["dundas"],
+        "era": "2000s",
+        "energy": 4,
+        "similar_artist_ids": [17, 74, 80, 1, 65],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 77,
+      "name": "Floating Points",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["electronic"],
+        "scenes": ["manchester"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [75, 74, 76, 80, 65],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 78,
+      "name": "Kaytranada",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["house", "electronic r&b"],
+        "scenes": ["montreal"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [74, 79, 80],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 79,
+      "name": "Channel Tres",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["house", "hip-hop"],
+        "scenes": ["compton"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [2, 4, 42, 45, 56],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 80,
+      "name": "Fred again..",
+      "review_status": "accepted",
+      "aliases": ["Fred again"],
+      "profile": {
+        "genres": ["electronic", "house"],
+        "scenes": ["london"],
+        "era": "2020s",
+        "energy": 4,
+        "similar_artist_ids": [74, 76, 78, 79, 65],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 81,
+      "name": "Jungle",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["funk", "disco"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [82, 2, 35, 36, 37],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 82,
+      "name": "Parcels",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["funk", "disco"],
+        "scenes": ["byron bay"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [81, 2, 35, 36, 37],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 83,
+      "name": "Glass Animals",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie pop", "psychedelic pop"],
+        "scenes": ["oxford"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [8, 88, 47, 110, 111],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 84,
+      "name": "Unknown Mortal Orchestra",
+      "review_status": "accepted",
+      "aliases": ["UMO"],
+      "profile": {
+        "genres": ["psychedelic rock", "funk"],
+        "scenes": ["portland"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [1, 33, 38, 122, 2],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 85,
+      "name": "Mac DeMarco",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie rock", "slacker rock"],
+        "scenes": ["edmonton"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [9, 19, 21, 23, 6],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 86,
+      "name": "Men I Trust",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["dream pop"],
+        "scenes": ["montreal"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [87, 124, 88],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 87,
+      "name": "Beach House",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["dream pop"],
+        "scenes": ["baltimore"],
+        "era": "2000s",
+        "energy": 2,
+        "similar_artist_ids": [86, 124, 88],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 88,
+      "name": "Alvvays",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie pop", "dream pop"],
+        "scenes": ["toronto"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [8, 83, 47, 86, 87],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 89,
+      "name": "Wet Leg",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie rock", "post-punk"],
+        "scenes": ["isle of wight"],
+        "era": "2020s",
+        "energy": 4,
+        "similar_artist_ids": [11, 13, 7, 8, 12],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 90,
+      "name": "black midi",
+      "review_status": "accepted",
+      "aliases": ["Black Midi"],
+      "profile": {
+        "genres": ["experimental rock", "math rock"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 91,
+      "name": "Shame",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["post-punk"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [12, 13, 89],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 92,
+      "name": "Turnstile",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hardcore punk"],
+        "scenes": ["baltimore"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 93,
+      "name": "Thee Sacred Souls",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["soul"],
+        "scenes": ["san diego"],
+        "era": "2020s",
+        "energy": 2,
+        "similar_artist_ids": [30, 100, 109, 112, 24],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 94,
+      "name": "Lake Street Dive",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["soul", "pop rock"],
+        "scenes": ["boston"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [24, 25, 2, 30, 93],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 95,
+      "name": "Tank and the Bangas",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["funk", "soul", "spoken word"],
+        "scenes": ["new orleans"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [2, 35, 36, 37, 81],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 96,
+      "name": "Trombone Shorty",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["funk", "jazz", "brass"],
+        "scenes": ["new orleans"],
+        "era": "2000s",
+        "energy": 5,
+        "similar_artist_ids": [33, 70, 127, 2, 35],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 97,
+      "name": "Preservation Hall Jazz Band",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["new orleans jazz", "brass"],
+        "scenes": ["new orleans"],
+        "era": "1960s",
+        "energy": 4,
+        "similar_artist_ids": [96],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 98,
+      "name": "Tedeschi Trucks Band",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["blues rock", "soul"],
+        "scenes": ["jacksonville"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [2, 95, 99, 128, 24],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 99,
+      "name": "Gary Clark Jr.",
+      "review_status": "accepted",
+      "aliases": ["Gary Clark Jr"],
+      "profile": {
+        "genres": ["blues rock"],
+        "scenes": ["austin"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [98],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 100,
+      "name": "Leon Bridges",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["soul", "retro soul"],
+        "scenes": ["fort worth"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [30, 93, 109, 112, 24],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 101,
+      "name": "Allison Russell",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["americana", "roots"],
+        "scenes": ["montreal"],
+        "era": "2020s",
+        "energy": 2,
+        "similar_artist_ids": [102],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 102,
+      "name": "Rhiannon Giddens",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["americana", "folk"],
+        "scenes": ["greensboro"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [101, 104, 109, 106],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 103,
+      "name": "Tyler Childers",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["country", "appalachian"],
+        "scenes": ["kentucky"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [104],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 104,
+      "name": "Sierra Ferrell",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["country", "folk"],
+        "scenes": ["west virginia"],
+        "era": "2020s",
+        "energy": 2,
+        "similar_artist_ids": [102, 103, 109, 106],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 105,
+      "name": "Billy Strings",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["bluegrass"],
+        "scenes": ["michigan"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 106,
+      "name": "Watchhouse",
+      "review_status": "accepted",
+      "aliases": ["Mandolin Orange"],
+      "profile": {
+        "genres": ["folk"],
+        "scenes": ["north carolina"],
+        "era": "2010s",
+        "energy": 1,
+        "similar_artist_ids": [102, 104, 109],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 107,
+      "name": "Adrianne Lenker",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie folk"],
+        "scenes": ["brooklyn"],
+        "era": "2010s",
+        "energy": 1,
+        "similar_artist_ids": [6, 9, 10, 108],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 108,
+      "name": "Bon Iver",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie folk"],
+        "scenes": ["eau claire"],
+        "era": "2000s",
+        "energy": 2,
+        "similar_artist_ids": [9, 10, 6, 107],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 109,
+      "name": "Lianne La Havas",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["soul", "folk"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [30, 93, 100, 102, 104],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 110,
+      "name": "Cautious Clay",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["r&b", "indie pop"],
+        "scenes": ["cleveland"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [27, 28, 30, 47, 49],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 111,
+      "name": "Rex Orange County",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["indie pop"],
+        "scenes": ["haslemere"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [47, 110, 8, 83, 88],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 112,
+      "name": "Joy Crookes",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["soul", "r&b"],
+        "scenes": ["london"],
+        "era": "2020s",
+        "energy": 2,
+        "similar_artist_ids": [30, 29, 27, 28, 49],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 113,
+      "name": "Raveena",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["r&b"],
+        "scenes": ["new york"],
+        "era": "2010s",
+        "energy": 1,
+        "similar_artist_ids": [29, 27, 28, 30, 49],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 114,
+      "name": "Noname",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop", "jazz rap"],
+        "scenes": ["chicago"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [3, 44, 115, 119, 2],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 115,
+      "name": "Saba",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop"],
+        "scenes": ["chicago"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [44, 114, 119, 2, 3],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 116,
+      "name": "Smino",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop"],
+        "scenes": ["st. louis"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [2, 4, 42, 45, 56],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 117,
+      "name": "Denzel Curry",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop"],
+        "scenes": ["miami"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [26, 43, 46, 118, 120],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 118,
+      "name": "JID",
+      "review_status": "accepted",
+      "aliases": ["J.I.D"],
+      "profile": {
+        "genres": ["hip-hop"],
+        "scenes": ["atlanta"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [26, 43, 46, 117, 120],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 119,
+      "name": "Rapsody",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop"],
+        "scenes": ["north carolina"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [44, 114, 115, 2, 3],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 120,
+      "name": "Megan Thee Stallion",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["hip-hop"],
+        "scenes": ["houston"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [26, 43, 46, 117, 118],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 121,
+      "name": "Lucky Daye",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["r&b"],
+        "scenes": ["new orleans"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [31, 32, 61, 27, 28],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 122,
+      "name": "Steve Lacy",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["alt r&b", "funk"],
+        "scenes": ["compton"],
+        "era": "2010s",
+        "energy": 3,
+        "similar_artist_ids": [1, 33, 38, 59, 84],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 123,
+      "name": "Omar Apollo",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["r&b", "latin pop"],
+        "scenes": ["indiana"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [61, 27, 28, 30, 49],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 124,
+      "name": "The Marías",
+      "review_status": "accepted",
+      "aliases": ["The Marias"],
+      "profile": {
+        "genres": ["dream pop", "latin"],
+        "scenes": ["los angeles"],
+        "era": "2010s",
+        "energy": 2,
+        "similar_artist_ids": [86, 87, 88],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 125,
+      "name": "Hermanos Gutiérrez",
+      "review_status": "accepted",
+      "aliases": ["Hermanos Gutierrez"],
+      "profile": {
+        "genres": ["instrumental", "cinematic"],
+        "scenes": ["zurich"],
+        "era": "2010s",
+        "energy": 1,
+        "similar_artist_ids": [],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 126,
+      "name": "Les Amazones d'Afrique",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["afropop"],
+        "scenes": ["bamako"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [54, 67, 68],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 127,
+      "name": "Sons of Kemet",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz"],
+        "scenes": ["london"],
+        "era": "2010s",
+        "energy": 5,
+        "similar_artist_ids": [70, 96, 128, 32, 33],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 128,
+      "name": "Jon Batiste",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz", "soul"],
+        "scenes": ["new orleans"],
+        "era": "2010s",
+        "energy": 4,
+        "similar_artist_ids": [2, 95, 98, 24, 25],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 129,
+      "name": "Esperanza Spalding",
+      "review_status": "accepted",
+      "aliases": [],
+      "profile": {
+        "genres": ["jazz"],
+        "scenes": ["portland"],
+        "era": "2000s",
+        "energy": 3,
+        "similar_artist_ids": [32, 33, 34, 39, 71],
+        "source": "editor"
+      }
+    },
+    {
+      "id": 130,
+      "name": "Cécile McLorin Salvant",
+      "review_status": "accepted",
+      "aliases": ["Cecile McLorin Salvant"],
+      "profile": {
+        "genres": ["jazz vocal"],
+        "scenes": ["miami"],
+        "era": "2010s",
+        "energy": 1,
+        "similar_artist_ids": [],
+        "source": "editor"
+      }
+    }
+  ],
+  "performances": [
+    {
+      "id": 1,
+      "artist_ids": [3],
+      "video_id": "K9DajaAdtdh",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mac Miller: Tiny Desk Concert",
+        "duration_s": 1126,
+        "published_at": "2025-12-08T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 2,
+      "artist_ids": [4],
+      "video_id": "GeM3MkbI_6Q",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tyler, The Creator: Tiny Desk Concert",
+        "duration_s": 1403,
+        "published_at": "2024-11-21T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 3,
+      "artist_ids": [5],
+      "video_id": "q4KlGL6Bw7g",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Billie Eilish: Tiny Desk Concert",
+        "duration_s": 1354,
+        "published_at": "2022-09-08T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 4,
+      "artist_ids": [7],
+      "video_id": "zjQJOhHpFVm",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mitski: Tiny Desk Concert",
+        "duration_s": 910,
+        "published_at": "2018-04-18T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 5,
+      "artist_ids": [8],
+      "video_id": "NV9huFGQrfw",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Japanese Breakfast: Tiny Desk Concert",
+        "duration_s": 877,
+        "published_at": "2025-12-25T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 6,
+      "artist_ids": [9],
+      "video_id": "wChjQDuiI-4",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Big Thief: Tiny Desk Concert",
+        "duration_s": 1312,
+        "published_at": "2021-11-05T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 7,
+      "artist_ids": [10],
+      "video_id": "hBrG5NdJGlU",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fleet Foxes: Tiny Desk Concert",
+        "duration_s": 1539,
+        "published_at": "2022-08-25T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 8,
+      "artist_ids": [16],
+      "video_id": "I356tNV56Vx",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bombino: Tiny Desk Concert",
+        "duration_s": 1437,
+        "published_at": "2014-04-16T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 9,
+      "artist_ids": [21],
+      "video_id": "iTnQEVln9jg",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Angel Olsen: Tiny Desk Concert",
+        "duration_s": 743,
+        "published_at": "2018-05-20T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 10,
+      "artist_ids": [26],
+      "video_id": "mQj8_5HotTz",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lizzo: Tiny Desk Concert",
+        "duration_s": 1062,
+        "published_at": "2016-10-10T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 11,
+      "artist_ids": [27],
+      "video_id": "pXcW5uJCkVx",
+      "series_id": 1,
+      "eligible": false,
+      "kind": "trailer",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "H.E.R.: Tiny Desk Concert (Trailer)",
+        "duration_s": 67,
+        "published_at": "2018-04-01T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 12,
+      "artist_ids": [30],
+      "video_id": "O1iaRwfQ75G",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Jorja Smith: Tiny Desk Concert",
+        "duration_s": 1060,
+        "published_at": "2018-01-20T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 13,
+      "artist_ids": [32],
+      "video_id": "ZsQycud1eaG",
+      "series_id": 1,
+      "eligible": false,
+      "kind": "interview",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Masego - Interview (Tiny Desk Concerts)",
+        "duration_s": 565,
+        "published_at": "2021-06-12T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 14,
+      "artist_ids": [33],
+      "video_id": "3pUmfJQtIbu",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tom Misch: Tiny Desk Concert",
+        "duration_s": 1017,
+        "published_at": "2020-05-18T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 15,
+      "artist_ids": [34],
+      "video_id": "eGAXEbyigbr",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Jacob Collier: Tiny Desk Concert",
+        "duration_s": 944,
+        "published_at": "2021-05-28T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 16,
+      "artist_ids": [35],
+      "video_id": "4L8zXbAAAeg",
+      "series_id": 1,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Snarky Puppy: Tiny Desk Concert",
+        "duration_s": 1425,
+        "published_at": "2019-08-07T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 17,
+      "artist_ids": [36],
+      "video_id": "YDXeGspdIAC",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Cory Wong: Tiny Desk Concert",
+        "duration_s": 1139,
+        "published_at": "2025-01-10T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 18,
+      "artist_ids": [37],
+      "video_id": "pkNMSSSvgbM",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Vulfpeck: Tiny Desk Concert",
+        "duration_s": 960,
+        "published_at": "2022-12-09T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 19,
+      "artist_ids": [38],
+      "video_id": "Mp8P3XoNRUP",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Thundercat: Tiny Desk Concert",
+        "duration_s": 789,
+        "published_at": "2014-11-15T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 20,
+      "artist_ids": [42],
+      "video_id": "YcTD97YsJTM",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Little Simz: Tiny Desk Concert",
+        "duration_s": 1282,
+        "published_at": "2013-11-26T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 21,
+      "artist_ids": [58],
+      "video_id": "6bfQg1NCAkX",
+      "series_id": 1,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Chronixx: Tiny Desk Concert",
+        "duration_s": 730,
+        "published_at": "2020-02-25T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 22,
+      "artist_ids": [61],
+      "video_id": "dYD29eCDmEw",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Kali Uchis: Tiny Desk Concert",
+        "duration_s": 1328,
+        "published_at": "2021-12-01T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 23,
+      "artist_ids": [62],
+      "video_id": "VnsmMBMriyV",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bad Bunny: Tiny Desk Concert",
+        "duration_s": 1139,
+        "published_at": "2014-05-14T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 24,
+      "artist_ids": [63],
+      "video_id": "erA7233ty3L",
+      "series_id": 1,
+      "eligible": false,
+      "kind": "trailer",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Natalia Lafourcade: Tiny Desk Concert (Trailer)",
+        "duration_s": 53,
+        "published_at": "2014-03-27T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 25,
+      "artist_ids": [65],
+      "video_id": "oeM-JVrtsr4",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bomba Estéreo: Tiny Desk Concert",
+        "duration_s": 1270,
+        "published_at": "2024-07-10T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 26,
+      "artist_ids": [68],
+      "video_id": "GdSXDuSyRj0",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Angélique Kidjo: Tiny Desk Concert",
+        "duration_s": 1077,
+        "published_at": "2018-07-22T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 27,
+      "artist_ids": [94],
+      "video_id": "KL7-sdUOE36",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lake Street Dive: Tiny Desk Concert",
+        "duration_s": 1152,
+        "published_at": "2021-03-10T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 28,
+      "artist_ids": [95],
+      "video_id": "USjXhmSqDU8",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tank and the Bangas: Tiny Desk Concert",
+        "duration_s": 1195,
+        "published_at": "2019-08-01T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 29,
+      "artist_ids": [96],
+      "video_id": "iHQaWMDf8Sf",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Trombone Shorty: Tiny Desk Concert",
+        "duration_s": 881,
+        "published_at": "2025-10-07T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 30,
+      "artist_ids": [97],
+      "video_id": "_tOtGBXYC1Z",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Preservation Hall Jazz Band: Tiny Desk Concert",
+        "duration_s": 1543,
+        "published_at": "2013-06-05T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 31,
+      "artist_ids": [98],
+      "video_id": "Oije0zIvfVR",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tedeschi Trucks Band: Tiny Desk Concert",
+        "duration_s": 932,
+        "published_at": "2013-02-09T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 32,
+      "artist_ids": [100],
+      "video_id": "b25eO-9CDNP",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Leon Bridges: Tiny Desk Concert",
+        "duration_s": 1271,
+        "published_at": "2021-08-01T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 33,
+      "artist_ids": [101],
+      "video_id": "d-be_OXtgcg",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Allison Russell: Tiny Desk Concert",
+        "duration_s": 846,
+        "published_at": "2022-09-26T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 34,
+      "artist_ids": [102],
+      "video_id": "gY8K1E5XmQn",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Rhiannon Giddens: Tiny Desk Concert",
+        "duration_s": 848,
+        "published_at": "2015-10-27T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 35,
+      "artist_ids": [103],
+      "video_id": "PId6-I1N5cE",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tyler Childers: Tiny Desk Concert",
+        "duration_s": 1469,
+        "published_at": "2017-01-23T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 36,
+      "artist_ids": [104],
+      "video_id": "pbXATqzrPcu",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sierra Ferrell: Tiny Desk Concert",
+        "duration_s": 916,
+        "published_at": "2021-10-03T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 37,
+      "artist_ids": [105],
+      "video_id": "5_9VRqeO6jA",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Billy Strings: Tiny Desk Concert",
+        "duration_s": 1376,
+        "published_at": "2016-04-22T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 38,
+      "artist_ids": [106],
+      "video_id": "TiS8fjmqcHK",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Watchhouse: Tiny Desk Concert",
+        "duration_s": 1038,
+        "published_at": "2017-11-21T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 39,
+      "artist_ids": [107],
+      "video_id": "Mhe0NNp8ezv",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Adrianne Lenker: Tiny Desk Concert",
+        "duration_s": 956,
+        "published_at": "2024-09-04T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 40,
+      "artist_ids": [108],
+      "video_id": "TvNTtxXrH6O",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bon Iver: Tiny Desk Concert",
+        "duration_s": 1013,
+        "published_at": "2014-11-24T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 41,
+      "artist_ids": [109],
+      "video_id": "kVnJa96F34a",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lianne La Havas: Tiny Desk Concert",
+        "duration_s": 913,
+        "published_at": "2015-07-19T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 42,
+      "artist_ids": [111],
+      "video_id": "QQcRZ2Nl_M-",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Rex Orange County: Tiny Desk Concert",
+        "duration_s": 754,
+        "published_at": "2021-10-03T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 43,
+      "artist_ids": [114],
+      "video_id": "-5EFrR7hERy",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Noname: Tiny Desk Concert",
+        "duration_s": 772,
+        "published_at": "2024-10-09T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 44,
+      "artist_ids": [115],
+      "video_id": "MwwvKjlXDpg",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Saba: Tiny Desk Concert",
+        "duration_s": 831,
+        "published_at": "2018-08-15T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 45,
+      "artist_ids": [116],
+      "video_id": "1p393IXY07w",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Smino: Tiny Desk Concert",
+        "duration_s": 1236,
+        "published_at": "2013-12-05T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 46,
+      "artist_ids": [119],
+      "video_id": "XFLlnRkCWuH",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Rapsody: Tiny Desk Concert",
+        "duration_s": 1455,
+        "published_at": "2022-12-24T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 47,
+      "artist_ids": [120],
+      "video_id": "RM87pkhSdPK",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Megan Thee Stallion: Tiny Desk Concert",
+        "duration_s": 901,
+        "published_at": "2012-07-20T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 48,
+      "artist_ids": [122],
+      "video_id": "arf4wK4tbH5",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Steve Lacy: Tiny Desk Concert",
+        "duration_s": 1104,
+        "published_at": "2018-07-11T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 49,
+      "artist_ids": [127],
+      "video_id": "GU5y0D_4l88",
+      "series_id": 1,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sons of Kemet: Tiny Desk Concert",
+        "duration_s": 1158,
+        "published_at": "2025-01-05T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 50,
+      "artist_ids": [128],
+      "video_id": "EaePPG9w275",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Jon Batiste: Tiny Desk Concert",
+        "duration_s": 869,
+        "published_at": "2022-03-10T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 51,
+      "artist_ids": [129],
+      "video_id": "XgfsHMB7W98",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Esperanza Spalding: Tiny Desk Concert",
+        "duration_s": 1078,
+        "published_at": "2022-06-08T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 52,
+      "artist_ids": [130],
+      "video_id": "lIs4qlup2cI",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Cécile McLorin Salvant: Tiny Desk Concert",
+        "duration_s": 1152,
+        "published_at": "2022-12-01T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 53,
+      "artist_ids": [37],
+      "video_id": "yA2HQssov1W",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Vulfpeck: Tiny Desk Concert",
+        "duration_s": 919,
+        "published_at": "2020-03-02T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 54,
+      "artist_ids": [24],
+      "video_id": "CuhkSSHI2fs",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Black Pumas: Tiny Desk Concert",
+        "duration_s": 1481,
+        "published_at": "2017-02-11T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 55,
+      "artist_ids": [2],
+      "video_id": "cb2UCffoLa3",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Anderson .Paak: Tiny Desk Concert",
+        "duration_s": 952,
+        "published_at": "2025-06-14T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 56,
+      "artist_ids": [2],
+      "video_id": "3wCtj8TJYkx",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Anderson .Paak: Tiny Desk Concert",
+        "duration_s": 1261,
+        "published_at": "2023-02-04T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 57,
+      "artist_ids": [123],
+      "video_id": "xyjVBacOISk",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Omar Apollo: Tiny Desk Concert",
+        "duration_s": 1138,
+        "published_at": "2013-05-23T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 58,
+      "artist_ids": [6],
+      "video_id": "kYRx3Wsokzl",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Phoebe Bridgers: Tiny Desk Concert",
+        "duration_s": 1166,
+        "published_at": "2019-12-19T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 59,
+      "artist_ids": [68],
+      "video_id": "VbKFwg9IeLm",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Angélique Kidjo: Tiny Desk Concert",
+        "duration_s": 1416,
+        "published_at": "2012-08-10T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 60,
+      "artist_ids": [111],
+      "video_id": "1IFcxUT21n2",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Rex Orange County: Tiny Desk Concert",
+        "duration_s": 884,
+        "published_at": "2016-06-18T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 61,
+      "artist_ids": [130],
+      "video_id": "RuFGVwgGmis",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Cécile McLorin Salvant: Tiny Desk Concert",
+        "duration_s": 1081,
+        "published_at": "2015-09-14T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 62,
+      "artist_ids": [127],
+      "video_id": "aV6jeVCQRo3",
+      "series_id": 1,
+      "eligible": false,
+      "kind": "interview",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sons of Kemet - Interview (Tiny Desk Concerts)",
+        "duration_s": 553,
+        "published_at": "2012-07-10T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 63,
+      "artist_ids": [29],
+      "video_id": "Pe0kFDVxi3v",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Daniel Caesar: Tiny Desk Concert",
+        "duration_s": 1505,
+        "published_at": "2014-09-07T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 64,
+      "artist_ids": [85],
+      "video_id": "IOr-thh07Vs",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mac DeMarco: Tiny Desk Concert",
+        "duration_s": 1289,
+        "published_at": "2014-08-19T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 65,
+      "artist_ids": [109],
+      "video_id": "l9BN2mIzd1v",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lianne La Havas: Tiny Desk Concert",
+        "duration_s": 867,
+        "published_at": "2016-11-22T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 66,
+      "artist_ids": [21],
+      "video_id": "74H3mtlFmPO",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Angel Olsen: Tiny Desk Concert",
+        "duration_s": 1553,
+        "published_at": "2023-06-26T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 67,
+      "artist_ids": [38],
+      "video_id": "QXa8fHZjMcQ",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Thundercat: Tiny Desk Concert",
+        "duration_s": 756,
+        "published_at": "2018-12-17T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 68,
+      "artist_ids": [29],
+      "video_id": "lefs4jPisuN",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Daniel Caesar: Tiny Desk Concert",
+        "duration_s": 988,
+        "published_at": "2013-04-27T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 69,
+      "artist_ids": [34],
+      "video_id": "UXr5SxIql5c",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Jacob Collier: Tiny Desk Concert",
+        "duration_s": 1066,
+        "published_at": "2025-07-22T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 70,
+      "artist_ids": [58],
+      "video_id": "YVPjljP73na",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Chronixx: Tiny Desk Concert",
+        "duration_s": 1182,
+        "published_at": "2021-03-18T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 71,
+      "artist_ids": [101],
+      "video_id": "75FbW2iwPnT",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Allison Russell: Tiny Desk Concert",
+        "duration_s": 1243,
+        "published_at": "2014-07-22T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 72,
+      "artist_ids": [64],
+      "video_id": "MaF1jBtRhaJ",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Ed Maverick: Tiny Desk Concert",
+        "duration_s": 1496,
+        "published_at": "2012-01-17T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 73,
+      "artist_ids": [108],
+      "video_id": "r90O-gvs29C",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bon Iver: Tiny Desk Concert",
+        "duration_s": 964,
+        "published_at": "2022-11-27T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 74,
+      "artist_ids": [122],
+      "video_id": "ow9a9AeJqsO",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Steve Lacy: Tiny Desk Concert",
+        "duration_s": 1191,
+        "published_at": "2018-01-14T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 75,
+      "artist_ids": [123],
+      "video_id": "OSWbjkawgj1",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Omar Apollo: Tiny Desk Concert",
+        "duration_s": 1306,
+        "published_at": "2013-05-20T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 76,
+      "artist_ids": [32],
+      "video_id": "fCjZ6w5fZuC",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Masego: Tiny Desk Concert",
+        "duration_s": 810,
+        "published_at": "2019-06-22T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 77,
+      "artist_ids": [33],
+      "video_id": "TMv2JlsNWRD",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tom Misch: Tiny Desk Concert",
+        "duration_s": 1342,
+        "published_at": "2023-07-10T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 78,
+      "artist_ids": [24],
+      "video_id": "3gt4Kt5WqfQ",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Black Pumas: Tiny Desk Concert",
+        "duration_s": 799,
+        "published_at": "2020-04-14T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 79,
+      "artist_ids": [96],
+      "video_id": "EUCem4Z9jwk",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Trombone Shorty: Tiny Desk Concert",
+        "duration_s": 1474,
+        "published_at": "2018-12-20T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 80,
+      "artist_ids": [9],
+      "video_id": "OPXEbG8vwiR",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Big Thief: Tiny Desk Concert",
+        "duration_s": 1103,
+        "published_at": "2012-09-19T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 81,
+      "artist_ids": [15],
+      "video_id": "Kq9KVDqodzS",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tinariwen: Tiny Desk Concert",
+        "duration_s": 1403,
+        "published_at": "2021-05-23T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 82,
+      "artist_ids": [5],
+      "video_id": "LCGDkyngqg0",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Billie Eilish: Tiny Desk Concert",
+        "duration_s": 1490,
+        "published_at": "2024-03-17T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 83,
+      "artist_ids": [6],
+      "video_id": "4AO8qDdLdSW",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Phoebe Bridgers: Tiny Desk Concert",
+        "duration_s": 1538,
+        "published_at": "2018-10-28T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 84,
+      "artist_ids": [97],
+      "video_id": "nncDFqHCOBE",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Preservation Hall Jazz Band: Tiny Desk Concert",
+        "duration_s": 784,
+        "published_at": "2024-05-23T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 85,
+      "artist_ids": [10],
+      "video_id": "ASv8AYS5Jb3",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fleet Foxes: Tiny Desk Concert",
+        "duration_s": 727,
+        "published_at": "2017-06-25T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 86,
+      "artist_ids": [50],
+      "video_id": "tMojZicLum1",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Burna Boy: Tiny Desk Concert",
+        "duration_s": 1135,
+        "published_at": "2020-12-12T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 87,
+      "artist_ids": [42],
+      "video_id": "krM0p4nDmoT",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Little Simz: Tiny Desk Concert",
+        "duration_s": 849,
+        "published_at": "2015-04-26T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 88,
+      "artist_ids": [8],
+      "video_id": "VaOYDd8HZ1p",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Japanese Breakfast: Tiny Desk Concert",
+        "duration_s": 1544,
+        "published_at": "2014-04-28T16:00:00.000Z",
+        "available": false,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 89,
+      "artist_ids": [85],
+      "video_id": "g7xayE2g90m",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mac DeMarco: Tiny Desk Concert",
+        "duration_s": 1525,
+        "published_at": "2018-01-03T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 90,
+      "artist_ids": [100],
+      "video_id": "q8zGCpn_Ycz",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Leon Bridges: Tiny Desk Concert",
+        "duration_s": 938,
+        "published_at": "2021-02-13T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 91,
+      "artist_ids": [64],
+      "video_id": "M9vA8981Llz",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Ed Maverick: Tiny Desk Concert",
+        "duration_s": 977,
+        "published_at": "2021-05-12T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 92,
+      "artist_ids": [7],
+      "video_id": "UEUzMdWZnXF",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mitski: Tiny Desk Concert",
+        "duration_s": 1552,
+        "published_at": "2016-09-17T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 93,
+      "artist_ids": [117],
+      "video_id": "dESLYCNgNXg",
+      "series_id": 1,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Denzel Curry: Tiny Desk Concert",
+        "duration_s": 1250,
+        "published_at": "2023-08-19T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 94,
+      "artist_ids": [117],
+      "video_id": "TjkW59ZIQU9",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Denzel Curry: Tiny Desk Concert",
+        "duration_s": 808,
+        "published_at": "2017-08-27T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 95,
+      "artist_ids": [95],
+      "video_id": "y_G0-nF0wZX",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tank and the Bangas: Tiny Desk Concert",
+        "duration_s": 826,
+        "published_at": "2015-04-12T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 96,
+      "artist_ids": [50],
+      "video_id": "wRoneDT3E4u",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Burna Boy: Tiny Desk Concert",
+        "duration_s": 1523,
+        "published_at": "2023-09-04T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 97,
+      "artist_ids": [99],
+      "video_id": "PMKjk9VsFlb",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Gary Clark Jr.: Tiny Desk Concert",
+        "duration_s": 1065,
+        "published_at": "2016-02-18T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 98,
+      "artist_ids": [94],
+      "video_id": "c9iB5s97m4-",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lake Street Dive: Tiny Desk Concert",
+        "duration_s": 1270,
+        "published_at": "2022-12-18T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 99,
+      "artist_ids": [19],
+      "video_id": "zYfEd88YMnK",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sharon Van Etten: Tiny Desk Concert",
+        "duration_s": 1188,
+        "published_at": "2013-03-08T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 100,
+      "artist_ids": [63],
+      "video_id": "uCPvf-vOI3c",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Natalia Lafourcade: Tiny Desk Concert",
+        "duration_s": 1553,
+        "published_at": "2012-03-24T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 101,
+      "artist_ids": [67],
+      "video_id": "6nQfaq3n2TX",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fatoumata Diawara: Tiny Desk Concert",
+        "duration_s": 1507,
+        "published_at": "2014-04-01T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 102,
+      "artist_ids": [67],
+      "video_id": "nsqwJ2U6Afj",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fatoumata Diawara: Tiny Desk Concert",
+        "duration_s": 1055,
+        "published_at": "2019-03-15T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 103,
+      "artist_ids": [47],
+      "video_id": "VvN-MbGlFEG",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Arlo Parks: Tiny Desk Concert",
+        "duration_s": 1508,
+        "published_at": "2022-05-07T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 104,
+      "artist_ids": [23],
+      "video_id": "hg5zGWnOdOY",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Soccer Mommy: Tiny Desk Concert",
+        "duration_s": 1538,
+        "published_at": "2020-11-09T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 105,
+      "artist_ids": [35],
+      "video_id": "F_eVB9NXh6W",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Snarky Puppy: Tiny Desk Concert",
+        "duration_s": 990,
+        "published_at": "2017-01-18T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 106,
+      "artist_ids": [62],
+      "video_id": "aEYV8gjjRUb",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bad Bunny: Tiny Desk Concert",
+        "duration_s": 1445,
+        "published_at": "2020-03-28T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 107,
+      "artist_ids": [61],
+      "video_id": "RxEaA5ktwjY",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Kali Uchis: Tiny Desk Concert",
+        "duration_s": 1226,
+        "published_at": "2018-10-02T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 108,
+      "artist_ids": [26],
+      "video_id": "W1iOizevuDd",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lizzo: Tiny Desk Concert",
+        "duration_s": 1225,
+        "published_at": "2019-02-06T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 109,
+      "artist_ids": [40],
+      "video_id": "dcZjtBRPX7K",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Hiatus Kaiyote: Tiny Desk Concert",
+        "duration_s": 1295,
+        "published_at": "2021-02-24T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 110,
+      "artist_ids": [47],
+      "video_id": "wnIrvHTjTER",
+      "series_id": 1,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Arlo Parks: Tiny Desk Concert",
+        "duration_s": 1415,
+        "published_at": "2025-10-13T13:00:00.000Z",
+        "available": false,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 111,
+      "artist_ids": [19],
+      "video_id": "jauBE6EUIjo",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sharon Van Etten: Tiny Desk (Home) Concert",
+        "duration_s": 1029,
+        "published_at": "2021-02-06T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 112,
+      "artist_ids": [116],
+      "video_id": "erMpucSh6FB",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Smino: Tiny Desk (Home) Concert",
+        "duration_s": 1084,
+        "published_at": "2022-09-02T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 113,
+      "artist_ids": [114],
+      "video_id": "MWB8fqFIa_g",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Noname: Tiny Desk (Home) Concert",
+        "duration_s": 1122,
+        "published_at": "2021-06-26T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 114,
+      "artist_ids": [26],
+      "video_id": "KAuxCSMZ-lp",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lizzo: Tiny Desk (Home) Concert",
+        "duration_s": 986,
+        "published_at": "2021-12-22T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 115,
+      "artist_ids": [65],
+      "video_id": "NTIbdxOk8LM",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bomba Estéreo: Tiny Desk (Home) Concert",
+        "duration_s": 926,
+        "published_at": "2020-09-18T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 116,
+      "artist_ids": [98],
+      "video_id": "fYp75Kb_v_F",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tedeschi Trucks Band: Tiny Desk (Home) Concert",
+        "duration_s": 1025,
+        "published_at": "2020-09-04T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 117,
+      "artist_ids": [100],
+      "video_id": "qqF9hlD6tsw",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Leon Bridges: Tiny Desk (Home) Concert",
+        "duration_s": 1317,
+        "published_at": "2020-08-07T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 118,
+      "artist_ids": [107, 103],
+      "video_id": "0wHkTnWRPxu",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Adrianne Lenker & Tyler Childers: Tiny Desk (Home) Concert",
+        "duration_s": 960,
+        "published_at": "2022-12-26T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 119,
+      "artist_ids": [50],
+      "video_id": "mHYj2wwM14c",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Burna Boy: Tiny Desk (Home) Concert",
+        "duration_s": 748,
+        "published_at": "2021-12-03T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 120,
+      "artist_ids": [36],
+      "video_id": "gjNPgRyiCx1",
+      "series_id": 2,
+      "eligible": false,
+      "kind": "interview",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Cory Wong - Interview (Tiny Desk Home Concerts)",
+        "duration_s": 612,
+        "published_at": "2021-10-02T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 121,
+      "artist_ids": [38],
+      "video_id": "hnpID83bHIS",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Thundercat: Tiny Desk (Home) Concert",
+        "duration_s": 744,
+        "published_at": "2022-11-10T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 122,
+      "artist_ids": [128, 47],
+      "video_id": "melX7zhJfuC",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Jon Batiste & Arlo Parks: Tiny Desk (Home) Concert",
+        "duration_s": 730,
+        "published_at": "2022-01-19T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 123,
+      "artist_ids": [111],
+      "video_id": "yVAsNJxA992",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Rex Orange County: Tiny Desk (Home) Concert",
+        "duration_s": 798,
+        "published_at": "2022-02-04T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 124,
+      "artist_ids": [101, 50],
+      "video_id": "VYj6fT1AD0x",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Allison Russell & Burna Boy: Tiny Desk (Home) Concert",
+        "duration_s": 776,
+        "published_at": "2021-07-18T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 125,
+      "artist_ids": [27],
+      "video_id": "0cb8ukQHYNC",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "H.E.R.: Tiny Desk (Home) Concert",
+        "duration_s": 1183,
+        "published_at": "2020-02-16T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 126,
+      "artist_ids": [42],
+      "video_id": "G0OwLnMvi87",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Little Simz: Tiny Desk (Home) Concert",
+        "duration_s": 775,
+        "published_at": "2021-07-06T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 127,
+      "artist_ids": [115, 97],
+      "video_id": "2rB4dTn0ejw",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Saba & Preservation Hall Jazz Band: Tiny Desk (Home) Concert",
+        "duration_s": 844,
+        "published_at": "2022-09-27T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 128,
+      "artist_ids": [30],
+      "video_id": "Ldu140rscnn",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Jorja Smith: Tiny Desk (Home) Concert",
+        "duration_s": 1225,
+        "published_at": "2020-02-26T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 129,
+      "artist_ids": [106],
+      "video_id": "tFuMjiB1zH0",
+      "series_id": 2,
+      "eligible": false,
+      "kind": "interview",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Watchhouse - Interview (Tiny Desk Home Concerts)",
+        "duration_s": 314,
+        "published_at": "2021-08-19T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 130,
+      "artist_ids": [24],
+      "video_id": "u5zKtNwLYyI",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Black Pumas: Tiny Desk (Home) Concert",
+        "duration_s": 1105,
+        "published_at": "2021-08-06T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 131,
+      "artist_ids": [95],
+      "video_id": "71PBDGQwIR3",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tank and the Bangas: Tiny Desk (Home) Concert",
+        "duration_s": 860,
+        "published_at": "2022-08-14T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 132,
+      "artist_ids": [47],
+      "video_id": "HlPxK2-Ym7z",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Arlo Parks: Tiny Desk (Home) Concert",
+        "duration_s": 1295,
+        "published_at": "2020-12-17T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 133,
+      "artist_ids": [6],
+      "video_id": "iXmSfR-RBQ0",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Phoebe Bridgers: Tiny Desk (Home) Concert",
+        "duration_s": 681,
+        "published_at": "2021-08-05T16:00:00.000Z",
+        "available": false,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 134,
+      "artist_ids": [35],
+      "video_id": "SbH3Ise9VCL",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Snarky Puppy: Tiny Desk (Home) Concert",
+        "duration_s": 1280,
+        "published_at": "2020-05-20T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 135,
+      "artist_ids": [123],
+      "video_id": "NnY3MfC5Xag",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Omar Apollo: Tiny Desk (Home) Concert",
+        "duration_s": 701,
+        "published_at": "2020-02-08T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 136,
+      "artist_ids": [103],
+      "video_id": "UhvOTQIemTy",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tyler Childers: Tiny Desk (Home) Concert",
+        "duration_s": 1196,
+        "published_at": "2020-10-12T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 137,
+      "artist_ids": [6],
+      "video_id": "Lrok5NfebOK",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Phoebe Bridgers: Tiny Desk (Home) Concert",
+        "duration_s": 611,
+        "published_at": "2021-08-04T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 138,
+      "artist_ids": [3],
+      "video_id": "tsDoz4cMosg",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mac Miller: Tiny Desk (Home) Concert",
+        "duration_s": 949,
+        "published_at": "2022-04-21T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 139,
+      "artist_ids": [32],
+      "video_id": "bonrZ97NK9K",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Masego: Tiny Desk (Home) Concert",
+        "duration_s": 870,
+        "published_at": "2021-03-25T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 140,
+      "artist_ids": [23],
+      "video_id": "77aRO714Ywp",
+      "series_id": 2,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Soccer Mommy: Tiny Desk (Home) Concert",
+        "duration_s": 601,
+        "published_at": "2022-11-11T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 141,
+      "artist_ids": [1],
+      "video_id": "Z8Gd3M7DVz4",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Khruangbin - Full Performance (Live on KEXP)",
+        "duration_s": 1837,
+        "published_at": "2017-03-09T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 142,
+      "artist_ids": [2],
+      "video_id": "t5kTYyk9lrs",
+      "series_id": 3,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Anderson .Paak - Full Performance (Live on KEXP)",
+        "duration_s": 1516,
+        "published_at": "2020-12-19T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 143,
+      "artist_ids": [6],
+      "video_id": "o7GFJ03Ae4f",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Phoebe Bridgers - Full Performance (Live on KEXP)",
+        "duration_s": 1218,
+        "published_at": "2012-10-06T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 144,
+      "artist_ids": [11],
+      "video_id": "ErLgtgGAqyj",
+      "series_id": 3,
+      "eligible": false,
+      "kind": "trailer",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Car Seat Headrest - Full Performance (Live on KEXP) (Trailer)",
+        "duration_s": 34,
+        "published_at": "2013-07-16T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 145,
+      "artist_ids": [12],
+      "video_id": "zAcbv6ugeax",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "IDLES - Full Performance (Live on KEXP)",
+        "duration_s": 990,
+        "published_at": "2024-12-23T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 146,
+      "artist_ids": [13],
+      "video_id": "bBNGxlulpjo",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fontaines D.C. - Full Performance (Live on KEXP)",
+        "duration_s": 987,
+        "published_at": "2020-04-23T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 147,
+      "artist_ids": [14],
+      "video_id": "bfWP7gGx9wa",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "King Gizzard & the Lizard Wizard - Full Performance (Live on KEXP)",
+        "duration_s": 917,
+        "published_at": "2020-05-13T15:00:00.000Z",
+        "available": false,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 148,
+      "artist_ids": [15],
+      "video_id": "ZQfFeqZ3Rku",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tinariwen - Full Performance (Live on KEXP)",
+        "duration_s": 1314,
+        "published_at": "2018-06-06T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 149,
+      "artist_ids": [17],
+      "video_id": "nDTeM2d_S77",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Altin Gün - Full Performance (Live on KEXP)",
+        "duration_s": 1323,
+        "published_at": "2014-04-08T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 150,
+      "artist_ids": [18],
+      "video_id": "nX8EfBhQjD7",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mdou Moctar - Full Performance (Live on KEXP)",
+        "duration_s": 1268,
+        "published_at": "2013-04-28T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 151,
+      "artist_ids": [19],
+      "video_id": "Q8rMrHZ4SNn",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sharon Van Etten - Full Performance (Live on KEXP)",
+        "duration_s": 1581,
+        "published_at": "2021-11-16T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 152,
+      "artist_ids": [20],
+      "video_id": "bCOiFrq4poO",
+      "series_id": 3,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Courtney Barnett - Full Performance (Live on KEXP)",
+        "duration_s": 1348,
+        "published_at": "2018-01-13T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 153,
+      "artist_ids": [22],
+      "video_id": "R9Dj5xmzn0X",
+      "series_id": 3,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Snail Mail - Full Performance (Live on KEXP)",
+        "duration_s": 971,
+        "published_at": "2026-01-05T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 154,
+      "artist_ids": [23],
+      "video_id": "r1WmAxfAds8",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Soccer Mommy - Full Performance (Live on KEXP)",
+        "duration_s": 1791,
+        "published_at": "2023-02-11T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 155,
+      "artist_ids": [24],
+      "video_id": "Z8WGdOITlow",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Black Pumas - Full Performance (Live on KEXP)",
+        "duration_s": 1305,
+        "published_at": "2022-12-20T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 156,
+      "artist_ids": [25],
+      "video_id": "zQI810ndF9q",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Durand Jones & The Indications - Full Performance (Live on KEXP)",
+        "duration_s": 1504,
+        "published_at": "2017-09-17T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 157,
+      "artist_ids": [39],
+      "video_id": "NtJUN3FscF4",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Kamasi Washington - Full Performance (Live on KEXP)",
+        "duration_s": 1290,
+        "published_at": "2019-06-15T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 158,
+      "artist_ids": [40],
+      "video_id": "D6HQMXUbWP2",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Hiatus Kaiyote - Full Performance (Live on KEXP)",
+        "duration_s": 1758,
+        "published_at": "2017-10-05T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 159,
+      "artist_ids": [56],
+      "video_id": "x6AE6GXE8aJ",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sampa the Great - Full Performance (Live on KEXP)",
+        "duration_s": 1572,
+        "published_at": "2025-07-21T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 160,
+      "artist_ids": [59],
+      "video_id": "QAlgA3f5E6R",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Nilüfer Yanya - Full Performance (Live on KEXP)",
+        "duration_s": 1405,
+        "published_at": "2017-11-17T20:00:00.000Z",
+        "available": false,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 161,
+      "artist_ids": [66],
+      "video_id": "NJd0k9p0Oto",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Ibeyi - Full Performance (Live on KEXP)",
+        "duration_s": 1485,
+        "published_at": "2025-08-07T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 162,
+      "artist_ids": [67],
+      "video_id": "zzsW3cQUqaL",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fatoumata Diawara - Full Performance (Live on KEXP)",
+        "duration_s": 968,
+        "published_at": "2014-12-07T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 163,
+      "artist_ids": [69],
+      "video_id": "MZCLRDfKGC2",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Seun Kuti & Egypt 80 - Full Performance (Live on KEXP)",
+        "duration_s": 1656,
+        "published_at": "2017-12-01T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 164,
+      "artist_ids": [71],
+      "video_id": "aHSs-jNeh2f",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Nubya Garcia - Full Performance (Live on KEXP)",
+        "duration_s": 1333,
+        "published_at": "2022-10-08T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 165,
+      "artist_ids": [73],
+      "video_id": "Ttuz3mjW0Ow",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sudan Archives - Full Performance (Live on KEXP)",
+        "duration_s": 1661,
+        "published_at": "2026-04-25T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 166,
+      "artist_ids": [75, 93],
+      "video_id": "k9RBaBcJE8N",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bonobo & Thee Sacred Souls - Full Performance (Live on KEXP)",
+        "duration_s": 1609,
+        "published_at": "2026-02-04T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 167,
+      "artist_ids": [76],
+      "video_id": "jdJ56U_y_CU",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Caribou - Full Performance (Live on KEXP)",
+        "duration_s": 1856,
+        "published_at": "2026-04-25T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 168,
+      "artist_ids": [77],
+      "video_id": "NXltWOJWC4n",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Floating Points - Full Performance (Live on KEXP)",
+        "duration_s": 1191,
+        "published_at": "2023-08-17T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 169,
+      "artist_ids": [81],
+      "video_id": "RZjfK7YJ9ku",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Jungle - Full Performance (Live on KEXP)",
+        "duration_s": 1902,
+        "published_at": "2016-06-11T15:00:00.000Z",
+        "available": false,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 170,
+      "artist_ids": [82],
+      "video_id": "_xw0c_xs32i",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Parcels - Full Performance (Live on KEXP)",
+        "duration_s": 1309,
+        "published_at": "2024-09-05T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 171,
+      "artist_ids": [83],
+      "video_id": "sPNQVXIXSXS",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Glass Animals - Full Performance (Live on KEXP)",
+        "duration_s": 1546,
+        "published_at": "2020-08-16T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 172,
+      "artist_ids": [84],
+      "video_id": "aHSy9_nlrCH",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Unknown Mortal Orchestra - Full Performance (Live on KEXP)",
+        "duration_s": 1070,
+        "published_at": "2018-04-05T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 173,
+      "artist_ids": [85],
+      "video_id": "7avu6MlUI7J",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mac DeMarco - Full Performance (Live on KEXP)",
+        "duration_s": 1340,
+        "published_at": "2013-09-21T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 174,
+      "artist_ids": [86],
+      "video_id": "LSwssVKso_t",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Men I Trust - Full Performance (Live on KEXP)",
+        "duration_s": 1482,
+        "published_at": "2024-07-12T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 175,
+      "artist_ids": [87],
+      "video_id": "NcHFa5DbguB",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Beach House - Full Performance (Live on KEXP)",
+        "duration_s": 1357,
+        "published_at": "2013-03-23T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 176,
+      "artist_ids": [88],
+      "video_id": "n7vHwUsARYo",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Alvvays - Full Performance (Live on KEXP)",
+        "duration_s": 1732,
+        "published_at": "2012-07-10T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 177,
+      "artist_ids": [89],
+      "video_id": "bWdKxmteeZK",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Wet Leg - Full Performance (Live on KEXP)",
+        "duration_s": 1637,
+        "published_at": "2021-01-07T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 178,
+      "artist_ids": [90],
+      "video_id": "bnzYHfc3nAs",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "black midi - Full Performance (Live on KEXP)",
+        "duration_s": 1062,
+        "published_at": "2021-01-22T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 179,
+      "artist_ids": [91, 23],
+      "video_id": "tBM0VAw89jj",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Shame & Soccer Mommy - Full Performance (Live on KEXP)",
+        "duration_s": 965,
+        "published_at": "2012-05-17T18:00:00.000Z",
+        "available": false,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 180,
+      "artist_ids": [92],
+      "video_id": "t-rAoaBhrDu",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Turnstile - Full Performance (Live on KEXP)",
+        "duration_s": 949,
+        "published_at": "2016-01-13T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 181,
+      "artist_ids": [93],
+      "video_id": "6UXwfrPrzSj",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Thee Sacred Souls - Full Performance (Live on KEXP)",
+        "duration_s": 1194,
+        "published_at": "2022-02-19T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 182,
+      "artist_ids": [99],
+      "video_id": "L8wGZ_s1ZzZ",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Gary Clark Jr. - Full Performance (Live on KEXP)",
+        "duration_s": 1176,
+        "published_at": "2019-04-16T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 183,
+      "artist_ids": [124],
+      "video_id": "_cEz7kGo0Cl",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "The Marías - Full Performance (Live on KEXP)",
+        "duration_s": 1772,
+        "published_at": "2024-05-13T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 184,
+      "artist_ids": [125],
+      "video_id": "kshAvqmkVNI",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Hermanos Gutiérrez - Full Performance (Live on KEXP)",
+        "duration_s": 1032,
+        "published_at": "2020-05-10T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 185,
+      "artist_ids": [126],
+      "video_id": "-SYXHBnxMQS",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Les Amazones d'Afrique - Full Performance (Live on KEXP)",
+        "duration_s": 1556,
+        "published_at": "2020-03-28T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 186,
+      "artist_ids": [24],
+      "video_id": "1XqN5p9W0Wq",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Black Pumas - Full Performance (Live on KEXP)",
+        "duration_s": 1458,
+        "published_at": "2022-07-06T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 187,
+      "artist_ids": [66],
+      "video_id": "WnYYHgV_gGl",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Ibeyi - Full Performance (Live on KEXP)",
+        "duration_s": 1338,
+        "published_at": "2023-05-23T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 188,
+      "artist_ids": [75],
+      "video_id": "rZzB5W8OM6l",
+      "series_id": 3,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bonobo - Full Performance (Live on KEXP)",
+        "duration_s": 1072,
+        "published_at": "2014-06-13T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 189,
+      "artist_ids": [56],
+      "video_id": "82SPM_V4fll",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sampa the Great - Full Performance (Live on KEXP)",
+        "duration_s": 1581,
+        "published_at": "2023-12-19T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 190,
+      "artist_ids": [88],
+      "video_id": "uETtYD2Kruk",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Alvvays - Full Performance (Live on KEXP)",
+        "duration_s": 1845,
+        "published_at": "2019-01-16T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 191,
+      "artist_ids": [23],
+      "video_id": "W3t9lscNTMk",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Soccer Mommy - Full Performance (Live on KEXP)",
+        "duration_s": 1146,
+        "published_at": "2015-10-05T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 192,
+      "artist_ids": [11],
+      "video_id": "tUaL3EAoUHY",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Car Seat Headrest - Full Performance (Live on KEXP)",
+        "duration_s": 923,
+        "published_at": "2013-09-21T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 193,
+      "artist_ids": [82],
+      "video_id": "Z7VYWuDCYZf",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Parcels - Full Performance (Live on KEXP)",
+        "duration_s": 1824,
+        "published_at": "2021-03-18T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 194,
+      "artist_ids": [93],
+      "video_id": "r_VIf_ULMqL",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Thee Sacred Souls - Full Performance (Live on KEXP)",
+        "duration_s": 1676,
+        "published_at": "2022-11-19T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 195,
+      "artist_ids": [89],
+      "video_id": "tzE8eMD7qWW",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Wet Leg - Full Performance (Live on KEXP)",
+        "duration_s": 1480,
+        "published_at": "2022-01-03T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 196,
+      "artist_ids": [1],
+      "video_id": "7SV_a11GckE",
+      "series_id": 3,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Khruangbin - Full Performance (Live on KEXP)",
+        "duration_s": 1337,
+        "published_at": "2020-10-26T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 197,
+      "artist_ids": [94],
+      "video_id": "5stDmWT16zI",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lake Street Dive - Full Performance (Live on KEXP)",
+        "duration_s": 1483,
+        "published_at": "2019-07-05T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 198,
+      "artist_ids": [109],
+      "video_id": "OGElkJRBBw4",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lianne La Havas - Full Performance (Live on KEXP)",
+        "duration_s": 1308,
+        "published_at": "2012-09-22T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 199,
+      "artist_ids": [10],
+      "video_id": "BA_o-_Ezxnb",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fleet Foxes - Full Performance (Live on KEXP)",
+        "duration_s": 1884,
+        "published_at": "2021-05-03T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 200,
+      "artist_ids": [68],
+      "video_id": "5bxEveknlph",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Angélique Kidjo - Full Performance (Live on KEXP)",
+        "duration_s": 1727,
+        "published_at": "2013-08-06T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 201,
+      "artist_ids": [67],
+      "video_id": "oeHr9rFg1vB",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fatoumata Diawara - Full Performance (Live on KEXP)",
+        "duration_s": 1677,
+        "published_at": "2019-03-11T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 202,
+      "artist_ids": [8],
+      "video_id": "farQc6Kbcvy",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Japanese Breakfast - Full Performance (Live on KEXP)",
+        "duration_s": 1536,
+        "published_at": "2023-03-27T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 203,
+      "artist_ids": [72],
+      "video_id": "eqiyVKE9UnE",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Moses Sumney - Full Performance (Live on KEXP)",
+        "duration_s": 977,
+        "published_at": "2015-09-14T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 204,
+      "artist_ids": [65],
+      "video_id": "YzsOFtd37LD",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bomba Estéreo - Full Performance (Live on KEXP)",
+        "duration_s": 1379,
+        "published_at": "2015-07-02T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 205,
+      "artist_ids": [16],
+      "video_id": "2uL1y3grYq-",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bombino - Full Performance (Live on KEXP)",
+        "duration_s": 1685,
+        "published_at": "2014-08-27T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 206,
+      "artist_ids": [90],
+      "video_id": "ilGmzeLE4M-",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "black midi - Full Performance (Live on KEXP)",
+        "duration_s": 1426,
+        "published_at": "2019-08-20T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 207,
+      "artist_ids": [2],
+      "video_id": "jSQ9uUiMf96",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Anderson .Paak - Full Performance (Live on KEXP)",
+        "duration_s": 1685,
+        "published_at": "2023-12-03T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 208,
+      "artist_ids": [17],
+      "video_id": "4OIjzugJ_kz",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Altin Gün - Full Performance (Live on KEXP)",
+        "duration_s": 1604,
+        "published_at": "2024-01-27T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 209,
+      "artist_ids": [12],
+      "video_id": "GfI8eJUkqri",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "IDLES - Full Performance (Live on KEXP)",
+        "duration_s": 1875,
+        "published_at": "2023-06-06T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 210,
+      "artist_ids": [13],
+      "video_id": "t_K9GQpZhVO",
+      "series_id": 3,
+      "eligible": false,
+      "kind": "clip",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fontaines D.C. - Slow Road (Live on KEXP)",
+        "duration_s": 274,
+        "published_at": "2022-04-27T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 211,
+      "artist_ids": [99],
+      "video_id": "H4w9Zvi5V05",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Gary Clark Jr. - Full Performance (Live on KEXP)",
+        "duration_s": 1162,
+        "published_at": "2019-07-17T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 212,
+      "artist_ids": [109],
+      "video_id": "at9aBeUXKCu",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lianne La Havas - Full Performance (Live on KEXP)",
+        "duration_s": 1549,
+        "published_at": "2019-06-23T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 213,
+      "artist_ids": [68],
+      "video_id": "y__LVKZI5Um",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Angélique Kidjo - Full Performance (Live on KEXP)",
+        "duration_s": 1285,
+        "published_at": "2012-01-07T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 214,
+      "artist_ids": [81],
+      "video_id": "sQwGruiT9NU",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Jungle - Full Performance (Live on KEXP)",
+        "duration_s": 1233,
+        "published_at": "2025-07-12T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 215,
+      "artist_ids": [83],
+      "video_id": "77FR02sUCOd",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Glass Animals - Full Performance (Live on KEXP)",
+        "duration_s": 1536,
+        "published_at": "2015-07-06T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 216,
+      "artist_ids": [127],
+      "video_id": "cl1_O1cuKFY",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sons of Kemet - Full Performance (Live on KEXP)",
+        "duration_s": 1480,
+        "published_at": "2023-10-04T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 217,
+      "artist_ids": [92],
+      "video_id": "XZfzMpGsOmW",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Turnstile - Full Performance (Live on KEXP)",
+        "duration_s": 1710,
+        "published_at": "2020-03-25T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 218,
+      "artist_ids": [104],
+      "video_id": "eagLbt8Vkf8",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sierra Ferrell - Full Performance (Live on KEXP)",
+        "duration_s": 1880,
+        "published_at": "2022-10-16T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 219,
+      "artist_ids": [69],
+      "video_id": "fsB43W8_77w",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Seun Kuti & Egypt 80 - Full Performance (Live on KEXP)",
+        "duration_s": 1417,
+        "published_at": "2013-10-04T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 220,
+      "artist_ids": [19],
+      "video_id": "b3nQHjBv4WX",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sharon Van Etten - Full Performance (Live on KEXP)",
+        "duration_s": 1135,
+        "published_at": "2023-03-25T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 221,
+      "artist_ids": [124, 21],
+      "video_id": "Ve0flsQlP53",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "The Marías & Angel Olsen - Full Performance (Live on KEXP)",
+        "duration_s": 1422,
+        "published_at": "2015-10-10T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 222,
+      "artist_ids": [107],
+      "video_id": "y-KB-6d2MSL",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Adrianne Lenker - Full Performance (Live on KEXP)",
+        "duration_s": 1182,
+        "published_at": "2014-07-05T18:00:00.000Z",
+        "available": false,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 223,
+      "artist_ids": [10],
+      "video_id": "iimDC7cj6O7",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fleet Foxes - Full Performance (Live on KEXP)",
+        "duration_s": 1225,
+        "published_at": "2024-01-20T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 224,
+      "artist_ids": [85],
+      "video_id": "MnQZS9hFzPT",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mac DeMarco - Full Performance (Live on KEXP)",
+        "duration_s": 1148,
+        "published_at": "2023-08-15T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 225,
+      "artist_ids": [65],
+      "video_id": "6vS-NzipckA",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bomba Estéreo - Full Performance (Live on KEXP)",
+        "duration_s": 978,
+        "published_at": "2021-04-17T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 226,
+      "artist_ids": [74],
+      "video_id": "KL_3lss6d53",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Yaeji - Full Performance (Live on KEXP)",
+        "duration_s": 1694,
+        "published_at": "2016-11-06T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 227,
+      "artist_ids": [40],
+      "video_id": "XFOG4zLKprD",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Hiatus Kaiyote - Full Performance (Live on KEXP)",
+        "duration_s": 943,
+        "published_at": "2020-11-04T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 228,
+      "artist_ids": [77],
+      "video_id": "qTMDXbFtU2M",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Floating Points - Full Performance (Live on KEXP)",
+        "duration_s": 1856,
+        "published_at": "2017-01-18T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 229,
+      "artist_ids": [16],
+      "video_id": "XlvFmCy_5Jt",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Bombino - Full Performance (Live on KEXP)",
+        "duration_s": 1546,
+        "published_at": "2019-08-12T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 230,
+      "artist_ids": [96],
+      "video_id": "R3FsF65ZMRn",
+      "series_id": 3,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Trombone Shorty - Full Performance (Live on KEXP)",
+        "duration_s": 1720,
+        "published_at": "2026-03-10T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 231,
+      "artist_ids": [18],
+      "video_id": "-dj1xm5tAyy",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mdou Moctar - Full Performance (Live on KEXP at Home)",
+        "duration_s": 1236,
+        "published_at": "2021-03-10T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 232,
+      "artist_ids": [59],
+      "video_id": "Z57-fCM_u1R",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Nilüfer Yanya - Full Performance (Live on KEXP at Home)",
+        "duration_s": 873,
+        "published_at": "2020-05-24T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 233,
+      "artist_ids": [1],
+      "video_id": "KYOcKApuKFP",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Khruangbin - Full Performance (Live on KEXP at Home)",
+        "duration_s": 958,
+        "published_at": "2021-12-03T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 234,
+      "artist_ids": [87],
+      "video_id": "WA6mwcki2gG",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Beach House - Full Performance (Live on KEXP at Home)",
+        "duration_s": 967,
+        "published_at": "2021-02-12T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 235,
+      "artist_ids": [23],
+      "video_id": "mz6onSTu2uY",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Soccer Mommy - Full Performance (Live on KEXP at Home)",
+        "duration_s": 1047,
+        "published_at": "2021-04-05T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 236,
+      "artist_ids": [15, 65],
+      "video_id": "9l3dFgs6QI4",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tinariwen & Bomba Estéreo - Full Performance (Live on KEXP at Home)",
+        "duration_s": 994,
+        "published_at": "2020-09-12T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 237,
+      "artist_ids": [87],
+      "video_id": "JKpYUe67C6i",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Beach House - Full Performance (Live on KEXP at Home)",
+        "duration_s": 1048,
+        "published_at": "2020-09-12T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 238,
+      "artist_ids": [88],
+      "video_id": "aRWD-2agrnD",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Alvvays - Full Performance (Live on KEXP at Home)",
+        "duration_s": 968,
+        "published_at": "2021-01-01T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 239,
+      "artist_ids": [22],
+      "video_id": "UFjhMuJ68qV",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Snail Mail - Full Performance (Live on KEXP at Home)",
+        "duration_s": 1104,
+        "published_at": "2021-03-02T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 240,
+      "artist_ids": [71],
+      "video_id": "haOoPIXULmD",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Nubya Garcia - Full Performance (Live on KEXP at Home)",
+        "duration_s": 880,
+        "published_at": "2021-08-12T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 241,
+      "artist_ids": [85],
+      "video_id": "VKR8XQicYDo",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mac DeMarco - Full Performance (Live on KEXP at Home)",
+        "duration_s": 1311,
+        "published_at": "2021-07-14T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 242,
+      "artist_ids": [94],
+      "video_id": "3N_g3GsLCrB",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lake Street Dive - Full Performance (Live on KEXP at Home)",
+        "duration_s": 917,
+        "published_at": "2020-12-25T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 243,
+      "artist_ids": [104],
+      "video_id": "0iVh8jWvIzx",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Sierra Ferrell - Full Performance (Live on KEXP at Home)",
+        "duration_s": 1039,
+        "published_at": "2021-12-05T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 244,
+      "artist_ids": [81],
+      "video_id": "urKGfprKpYT",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Jungle - Full Performance (Live on KEXP at Home)",
+        "duration_s": 1065,
+        "published_at": "2020-06-07T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 245,
+      "artist_ids": [67],
+      "video_id": "gpUPOXkuWQv",
+      "series_id": 4,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fatoumata Diawara - Full Performance (Live on KEXP at Home)",
+        "duration_s": 1338,
+        "published_at": "2020-08-21T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 246,
+      "artist_ids": [28],
+      "video_id": "4QUlhmwuBxs",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "SZA - Wild Fever | A COLORS SHOW",
+        "duration_s": 237,
+        "published_at": "2026-03-22T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 247,
+      "artist_ids": [29],
+      "video_id": "4UdTYbQ0b9T",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Daniel Caesar - Golden Light | A COLORS SHOW",
+        "duration_s": 189,
+        "published_at": "2026-07-07T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 248,
+      "artist_ids": [31],
+      "video_id": "WtXz195p7Jn",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Kehlani - Late Season | A COLORS SHOW",
+        "duration_s": 229,
+        "published_at": "2020-04-17T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 249,
+      "artist_ids": [41],
+      "video_id": "fdhjBUfjpOa",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Cleo Sol - Glass Garden | A COLORS SHOW",
+        "duration_s": 292,
+        "published_at": "2023-06-09T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 250,
+      "artist_ids": [43],
+      "video_id": "inb6caLj3Yk",
+      "series_id": 5,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Stormzy - Late Hour | A COLORS SHOW",
+        "duration_s": 178,
+        "published_at": "2026-07-21T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 251,
+      "artist_ids": [44],
+      "video_id": "kUy3Iy-uaEV",
+      "series_id": 5,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Dave - Quiet Season | A COLORS SHOW",
+        "duration_s": 288,
+        "published_at": "2018-03-23T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 252,
+      "artist_ids": [45],
+      "video_id": "if_WU5Q8Ost",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Kojey Radical - Wild Motion | A COLORS SHOW",
+        "duration_s": 283,
+        "published_at": "2025-02-06T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 253,
+      "artist_ids": [46],
+      "video_id": "lKAvbyOoYUE",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "slowthai - Golden Water | A COLORS SHOW",
+        "duration_s": 214,
+        "published_at": "2021-08-26T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 254,
+      "artist_ids": [47],
+      "video_id": "CYQ7qhiUzDj",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Arlo Parks - Glass Light | A COLORS SHOW",
+        "duration_s": 281,
+        "published_at": "2023-11-04T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 255,
+      "artist_ids": [48],
+      "video_id": "c-n8KPwfSRB",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Celeste - Glass Fever | A COLORS SHOW",
+        "duration_s": 269,
+        "published_at": "2024-11-13T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 256,
+      "artist_ids": [49],
+      "video_id": "Pt04ZzvQGrp",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mahalia - Wild Motion | A COLORS SHOW",
+        "duration_s": 152,
+        "published_at": "2025-02-11T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 257,
+      "artist_ids": [50],
+      "video_id": "nzZHmx8S8Rl",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Burna Boy - Paper Hour | A COLORS SHOW",
+        "duration_s": 232,
+        "published_at": "2018-12-10T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 258,
+      "artist_ids": [51],
+      "video_id": "tvDSKn-jiZb",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tems - Quiet Water | A COLORS SHOW",
+        "duration_s": 241,
+        "published_at": "2017-09-25T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 259,
+      "artist_ids": [52],
+      "video_id": "x6WWM7kx77J",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Wizkid - Blue Fever | A COLORS SHOW",
+        "duration_s": 184,
+        "published_at": "2017-12-08T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 260,
+      "artist_ids": [53],
+      "video_id": "My8nLtmA-_s",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Rema - Blue Fever | A COLORS SHOW",
+        "duration_s": 222,
+        "published_at": "2023-04-20T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 261,
+      "artist_ids": [54],
+      "video_id": "Au8KStHYFPg",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Ayra Starr - Blue Hour | A COLORS SHOW",
+        "duration_s": 174,
+        "published_at": "2021-01-12T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 262,
+      "artist_ids": [55],
+      "video_id": "yO_s09PhtFX",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tiwa Savage - Low Motion | A COLORS SHOW",
+        "duration_s": 214,
+        "published_at": "2025-01-21T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 263,
+      "artist_ids": [57],
+      "video_id": "SwAeCeTjNkI",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Koffee - Golden Motion | A COLORS SHOW",
+        "duration_s": 258,
+        "published_at": "2026-07-13T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 264,
+      "artist_ids": [60],
+      "video_id": "d75exhx6XSQ",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Rina Sawayama - Paper Hour | A COLORS SHOW",
+        "duration_s": 171,
+        "published_at": "2020-01-11T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 265,
+      "artist_ids": [64, 109],
+      "video_id": "7868JFy389B",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Ed Maverick & Lianne La Havas - Golden Light | A COLORS SHOW",
+        "duration_s": 242,
+        "published_at": "2022-10-08T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 266,
+      "artist_ids": [70],
+      "video_id": "pX0Y3EzSPvN",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Ezra Collective - Slow Light | A COLORS SHOW",
+        "duration_s": 252,
+        "published_at": "2019-12-10T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 267,
+      "artist_ids": [72],
+      "video_id": "0UuDav4vDBn",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Moses Sumney - Slow Motion | A COLORS SHOW",
+        "duration_s": 249,
+        "published_at": "2021-08-12T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 268,
+      "artist_ids": [74],
+      "video_id": "pCQro7kPJ81",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Yaeji - Wild Garden | A COLORS SHOW",
+        "duration_s": 153,
+        "published_at": "2024-07-07T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 269,
+      "artist_ids": [78],
+      "video_id": "lT_v6udySTz",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Kaytranada - Golden Water | A COLORS SHOW",
+        "duration_s": 229,
+        "published_at": "2023-02-03T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 270,
+      "artist_ids": [79],
+      "video_id": "BQ4S1KedcDI",
+      "series_id": 5,
+      "eligible": false,
+      "kind": "performance",
+      "review_status": "flagged",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Channel Tres - Paper Motion | A COLORS SHOW",
+        "duration_s": 242,
+        "published_at": "2023-11-19T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 271,
+      "artist_ids": [80],
+      "video_id": "2GFJNvx74hN",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Fred again.. - Golden Hour | A COLORS SHOW",
+        "duration_s": 293,
+        "published_at": "2023-06-20T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 272,
+      "artist_ids": [110],
+      "video_id": "5w2Bk23hMw2",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Cautious Clay - Late Garden | A COLORS SHOW",
+        "duration_s": 297,
+        "published_at": "2022-01-05T14:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 273,
+      "artist_ids": [112],
+      "video_id": "5S5ITc1HL5_",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Joy Crookes - Paper Light | A COLORS SHOW",
+        "duration_s": 215,
+        "published_at": "2025-11-21T18:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 274,
+      "artist_ids": [113],
+      "video_id": "wt82ZaHP_73",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Raveena - Slow Road | A COLORS SHOW",
+        "duration_s": 267,
+        "published_at": "2026-06-04T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 275,
+      "artist_ids": [117],
+      "video_id": "-Wo-FBLt4CJ",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Denzel Curry - Quiet Room | A COLORS SHOW",
+        "duration_s": 217,
+        "published_at": "2023-04-20T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 276,
+      "artist_ids": [118],
+      "video_id": "9triuGnKOnI",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "JID - Low Water | A COLORS SHOW",
+        "duration_s": 183,
+        "published_at": "2019-07-04T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 277,
+      "artist_ids": [121],
+      "video_id": "AAz2Xg5R481",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Lucky Daye - Glass Room | A COLORS SHOW",
+        "duration_s": 257,
+        "published_at": "2025-11-24T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 278,
+      "artist_ids": [123],
+      "video_id": "tb2ENxQ8gzU",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Omar Apollo - Wild Season | A COLORS SHOW",
+        "duration_s": 232,
+        "published_at": "2018-09-27T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 279,
+      "artist_ids": [49],
+      "video_id": "WHLvO6Gb9d2",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mahalia - Paper Fever | A COLORS SHOW",
+        "duration_s": 170,
+        "published_at": "2026-11-11T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 280,
+      "artist_ids": [30],
+      "video_id": "E-IE5KMd0XC",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Jorja Smith - Low Hour | A COLORS SHOW",
+        "duration_s": 193,
+        "published_at": "2022-02-15T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 281,
+      "artist_ids": [46],
+      "video_id": "Wh-ik-uHXDf",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "slowthai - Golden Road | A COLORS SHOW",
+        "duration_s": 292,
+        "published_at": "2017-06-09T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 282,
+      "artist_ids": [31],
+      "video_id": "biWQ7-MWOYn",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Kehlani - Blue Hour | A COLORS SHOW",
+        "duration_s": 262,
+        "published_at": "2018-09-04T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 283,
+      "artist_ids": [5],
+      "video_id": "AgOeh0Ssr9H",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Billie Eilish - Honey Light | A COLORS SHOW",
+        "duration_s": 159,
+        "published_at": "2019-07-08T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 284,
+      "artist_ids": [28],
+      "video_id": "Bet0TUr0LuP",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "SZA - Wild Road | A COLORS SHOW",
+        "duration_s": 292,
+        "published_at": "2021-05-27T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 285,
+      "artist_ids": [123, 118],
+      "video_id": "GblYndbRnaI",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Omar Apollo & JID - Low Light | A COLORS SHOW",
+        "duration_s": 239,
+        "published_at": "2024-12-08T20:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 286,
+      "artist_ids": [47, 117],
+      "video_id": "VzFHWqXSW8E",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Arlo Parks & Denzel Curry - Wild Water | A COLORS SHOW",
+        "duration_s": 269,
+        "published_at": "2025-08-10T15:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 287,
+      "artist_ids": [48],
+      "video_id": "GXLqGftIe0j",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Celeste - Low Water | A COLORS SHOW",
+        "duration_s": 296,
+        "published_at": "2021-11-17T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 288,
+      "artist_ids": [51],
+      "video_id": "rV-6MfoOcMw",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tems - Slow Hour | A COLORS SHOW",
+        "duration_s": 279,
+        "published_at": "2024-09-04T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 289,
+      "artist_ids": [53],
+      "video_id": "9gGIoJZxrrr",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Rema - Late Fever | A COLORS SHOW",
+        "duration_s": 163,
+        "published_at": "2018-12-24T16:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 290,
+      "artist_ids": [66],
+      "video_id": "7uG1_-Zajcb",
+      "series_id": 5,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Ibeyi - Slow Hour | A COLORS SHOW",
+        "duration_s": 266,
+        "published_at": "2022-02-05T14:00:00.000Z",
+        "available": false,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 291,
+      "artist_ids": [72],
+      "video_id": "KPNu68ZP-X4",
+      "series_id": 6,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Moses Sumney - Slow Garden | A COLORS ENCORE",
+        "duration_s": 222,
+        "published_at": "2022-01-24T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 292,
+      "artist_ids": [82],
+      "video_id": "gO98rNwIvq0",
+      "series_id": 6,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Parcels - Slow Season | A COLORS ENCORE",
+        "duration_s": 285,
+        "published_at": "2026-05-26T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 293,
+      "artist_ids": [79],
+      "video_id": "SozKPIaNFEe",
+      "series_id": 6,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Channel Tres - Blue Water | A COLORS ENCORE",
+        "duration_s": 280,
+        "published_at": "2021-09-27T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 294,
+      "artist_ids": [82],
+      "video_id": "cMIquzFZ7bi",
+      "series_id": 6,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Parcels - Wild Season | A COLORS ENCORE",
+        "duration_s": 261,
+        "published_at": "2026-11-12T17:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 295,
+      "artist_ids": [111],
+      "video_id": "v_4I0YkaeeV",
+      "series_id": 6,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Rex Orange County - Paper Room | A COLORS ENCORE",
+        "duration_s": 282,
+        "published_at": "2025-02-24T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 296,
+      "artist_ids": [49],
+      "video_id": "42JAauqAWrf",
+      "series_id": 6,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Mahalia - Quiet Fever | A COLORS ENCORE",
+        "duration_s": 185,
+        "published_at": "2026-10-01T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 297,
+      "artist_ids": [45],
+      "video_id": "5iaRsko6aGE",
+      "series_id": 6,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Kojey Radical - Slow Water | A COLORS ENCORE",
+        "duration_s": 271,
+        "published_at": "2024-09-05T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 298,
+      "artist_ids": [122],
+      "video_id": "zVl9fLjB2LS",
+      "series_id": 6,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Steve Lacy - Late Season | A COLORS ENCORE",
+        "duration_s": 178,
+        "published_at": "2021-11-28T19:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 299,
+      "artist_ids": [55],
+      "video_id": "7ToGQ-lL9nC",
+      "series_id": 6,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Tiwa Savage - Blue Fever | A COLORS ENCORE",
+        "duration_s": 235,
+        "published_at": "2020-12-01T13:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 300,
+      "artist_ids": [72],
+      "video_id": "KwwrpEvUAw5",
+      "series_id": 6,
+      "eligible": true,
+      "kind": "performance",
+      "review_status": "accepted",
+      "last_verified_at": "2026-11-01T00:00:00Z",
+      "yt": {
+        "title": "Moses Sumney - Glass Room | A COLORS ENCORE",
+        "duration_s": 231,
+        "published_at": "2026-02-27T12:00:00.000Z",
+        "available": true,
+        "fetched_at": "2026-11-01T00:00:00Z"
+      }
+    }
+  ]
+}
