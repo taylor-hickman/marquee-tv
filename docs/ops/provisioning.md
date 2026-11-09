@@ -53,11 +53,16 @@ These are the steps the wizard walks you through by hand:
 
 ## Still to do
 
-Status on Nov 8, 2026, when this card was built:
+Status on Nov 9, 2026:
 
-- [x] GitHub Actions environments `preview` and `production` exist.
-- [x] `vercel`, `stripe`, `sentry-cli` and `gcloud` are installed on Taylor's machine. `gh` and `supabase` were already logged in.
-- [ ] Log in to `vercel` and `gcloud`, then run the remaining stages: `scripts/provision/wizard.sh`. The `github` stage runs again harmlessly.
+- [x] `clis`: `gh`, `vercel`, `supabase` and `gcloud` logged in; `stripe` and `sentry-cli` installed.
+- [x] `github`: Actions environments `preview` and `production`.
+- [x] `vercel`: project `marquee-tv` under team `marquee-tv-projects` (Pro), connected to `taylor-hickman/marquee-tv`. The CLI's current team is that team, so `VERCEL_SCOPE` stays unset.
+- [x] `supabase`: `marquee-staging` (`itfepuvscjqlfyfjzocb`) and `marquee-production` (`hmidxvvaiuwvukkodasu`) in `us-east-1`, org `marquee-tv`. URL, keys and `DATABASE_URL` set; each connection string was tested with `supabase migration list --db-url` before it was stored. Staging's database password was reset once, after an early wizard run stopped before setting `DATABASE_URL`.
+- [x] `google-cloud`: project `marquee-tv-71b10a`, YouTube Data API on, `YOUTUBE_API_KEY` set.
+- [x] `google-oauth`: consent screen External, in Testing, authorized domains `getmarquee.tv` and `supabase.co`. Web client "Supabase Auth" with both projects' callback URLs. Google sign-in is on in both Supabase projects.
+- [ ] Run `scripts/provision/wizard.sh --only stripe`, then `--only sentry`, then `--only llm`. `verify.sh` lists 20 gaps, all from these three.
+- [ ] **Supabase Auth URLs.** Both projects still have site URL `http://localhost:3000` and no extra redirect URLs. Production needs `https://getmarquee.tv`, and staging needs the stable preview URL below. This belongs with sign-in (card D1), once the domains exist.
 - [ ] **Preview Stripe webhook.** Vercel previews change URL per PR and sit behind Vercel's login wall, so Stripe can't reach them. The `stripe` stage asks for one stable preview URL (for example `staging.getmarquee.tv` assigned to a branch in Vercel) and skips the preview webhook without one. Until then, `verify.sh` reports `STRIPE_WEBHOOK_SECRET` missing for preview.
 - [ ] **Domain.** The production webhook points at `https://getmarquee.tv/api/webhooks/stripe`. Add `getmarquee.tv` to the Vercel project before the first real checkout.
 - [ ] **Google consent screen.** Stays in Testing until `/privacy` and `/terms` ship (card D3); then publish it. Basic profile scopes need no Google review.
