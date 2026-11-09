@@ -52,6 +52,8 @@ jobs:
     env:
       LLM_ADAPTER: fake
       STRIPE_API_BASE: http://localhost:12111
+      # The local stack's fixed development credentials, not a secret.
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
@@ -60,6 +62,12 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.113.0
+      # What e2e touches: Postgres, the API gateway, PostgREST, Auth and mail.
+      # Playwright's global setup (e2e/support/db.ts) empties and seeds it.
+      - run: supabase start -x studio,imgproxy,realtime,storage-api,postgres-meta,edge-runtime,logflare,vector,supavisor
       - name: Playwright version
         id: playwright
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
@@ -81,6 +89,20 @@ jobs:
             playwright-report/
             test-results/
           retention-days: 14
+
+  # Not a required check until Taylor agrees (build plan 4.1).
+  migrations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - run: db/check-migrations.sh "origin/${GITHUB_BASE_REF:-main}"
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.113.0
+      # An empty Postgres, then every file in supabase/migrations, in order.
+      - run: supabase db start
 
   actionlint:
     runs-on: ubuntu-latest
