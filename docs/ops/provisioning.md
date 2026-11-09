@@ -51,22 +51,35 @@ These are the steps the wizard walks you through by hand:
 - **Anthropic workspaces and keys.**
 - **A lost database password.** Supabase shows the password only at creation. If `DATABASE_URL` goes missing later, the `supabase` stage opens the reset page and takes the new password.
 
+## Status
+
+On Nov 9, 2026 `verify.sh` passes: all 14 variables exist in every target and environment.
+
+| Stage | What exists |
+| --- | --- |
+| `clis` | `gh`, `vercel`, `supabase`, `gcloud` logged in; `stripe`, `sentry-cli` installed |
+| `github` | Actions environments `preview` and `production` |
+| `vercel` | Project `marquee-tv` under team `marquee-tv-projects` (Pro), connected to `taylor-hickman/marquee-tv`. The CLI's current team is that team, so `VERCEL_SCOPE` stays unset |
+| `supabase` | `marquee-staging` (`itfepuvscjqlfyfjzocb`) and `marquee-production` (`hmidxvvaiuwvukkodasu`), `us-east-1`, org `marquee-tv`. Each `DATABASE_URL` was tested with `supabase migration list --db-url` before it was stored. Staging's password was reset once, after an early wizard run stopped before setting `DATABASE_URL` |
+| `google-cloud` | Project `marquee-tv-71b10a`, YouTube Data API on, key `marquee-ingest` |
+| `google-oauth` | Consent screen External, in Testing, authorized domains `getmarquee.tv` and `supabase.co`. Web client "Supabase Auth" with both callback URLs. Google sign-in on in both Supabase projects |
+| `stripe` | Sandbox "Marquee TV sandbox" (`acct_1UZsUPCL0MHWeXeo`, owner ops@getmarquee.tv). Prices `marquee_session_pass` $2.99 and `marquee_monthly` $4.99/month. Webhooks for the four events at `https://getmarquee.tv/api/webhooks/stripe` (production) and `https://staging.getmarquee.tv/api/webhooks/stripe` (preview). Standard account, no Connect, no Stripe Tax, no Managed Payments |
+| `sentry` | Org `marquee-tv` (US region), project `marquee-tv` (Next.js), team `marquee-tv` |
+| `llm` | Anthropic workspaces `marquee-preview` (about $10 a month cap) and `marquee-production`, one key each; both answered `GET /v1/models` before they were stored |
+
+The `supabase`, `google-oauth`, `stripe`, `sentry` and `llm` stages were run by hand with the same commands and API calls the wizard makes, after the early wizard bugs fixed in this card's PR.
+
 ## Still to do
 
-Status on Nov 9, 2026:
+None of these blocks `verify.sh`.
 
-- [x] `clis`: `gh`, `vercel`, `supabase` and `gcloud` logged in; `stripe` and `sentry-cli` installed.
-- [x] `github`: Actions environments `preview` and `production`.
-- [x] `vercel`: project `marquee-tv` under team `marquee-tv-projects` (Pro), connected to `taylor-hickman/marquee-tv`. The CLI's current team is that team, so `VERCEL_SCOPE` stays unset.
-- [x] `supabase`: `marquee-staging` (`itfepuvscjqlfyfjzocb`) and `marquee-production` (`hmidxvvaiuwvukkodasu`) in `us-east-1`, org `marquee-tv`. URL, keys and `DATABASE_URL` set; each connection string was tested with `supabase migration list --db-url` before it was stored. Staging's database password was reset once, after an early wizard run stopped before setting `DATABASE_URL`.
-- [x] `google-cloud`: project `marquee-tv-71b10a`, YouTube Data API on, `YOUTUBE_API_KEY` set.
-- [x] `google-oauth`: consent screen External, in Testing, authorized domains `getmarquee.tv` and `supabase.co`. Web client "Supabase Auth" with both projects' callback URLs. Google sign-in is on in both Supabase projects.
-- [ ] Run `scripts/provision/wizard.sh --only stripe`, then `--only sentry`, then `--only llm`. `verify.sh` lists 20 gaps, all from these three.
-- [ ] **Supabase Auth URLs.** Both projects still have site URL `http://localhost:3000` and no extra redirect URLs. Production needs `https://getmarquee.tv`, and staging needs the stable preview URL below. This belongs with sign-in (card D1), once the domains exist.
-- [ ] **Preview Stripe webhook.** Vercel previews change URL per PR and sit behind Vercel's login wall, so Stripe can't reach them. The `stripe` stage asks for one stable preview URL (for example `staging.getmarquee.tv` assigned to a branch in Vercel) and skips the preview webhook without one. Until then, `verify.sh` reports `STRIPE_WEBHOOK_SECRET` missing for preview.
-- [ ] **Domain.** The production webhook points at `https://getmarquee.tv/api/webhooks/stripe`. Add `getmarquee.tv` to the Vercel project before the first real checkout.
+- [ ] **Domains.** Add `getmarquee.tv` and `staging.getmarquee.tv` to the Vercel project and assign staging to a branch. Until then neither webhook URL reaches the app.
+- [ ] **Preview webhook through Vercel's login wall.** Create a Protection Bypass for Automation secret in Vercel and add `?x-vercel-protection-bypass=<secret>` to the preview webhook URL with `stripe webhook_endpoints update`, which keeps the signing secret.
+- [ ] **Supabase Auth URLs.** Both projects still have site URL `http://localhost:3000` and no extra redirect URLs. Production needs `https://getmarquee.tv` and staging `https://staging.getmarquee.tv`. Belongs with sign-in (card D1).
+- [ ] **Merchant of record or Stripe Tax.** Decide before or during card D2, since the beta takes real payments.
 - [ ] **Google consent screen.** Stays in Testing until `/privacy` and `/terms` ship (card D3); then publish it. Basic profile scopes need no Google review.
-- [ ] **Stripe live mode.** Production uses test-mode keys until launch. Going live needs account activation in the Stripe dashboard, a live secret key, live prices and a live webhook: re-run the `stripe` stage with a live key and the `sk_test_` check removed.
+- [ ] **Stripe live mode.** Production uses sandbox keys until launch. Going live needs account activation, a live secret key, live prices and a live webhook: re-run the `stripe` stage with a live key and the `sk_test_` check removed.
+- [ ] **Worker auth without a stored LLM key.** Anthropic supports identity federation for GitHub Actions OIDC but not for Vercel, so the app keeps an API key. The ingestion worker could move to OIDC after launch.
 
 ## Choices made here
 

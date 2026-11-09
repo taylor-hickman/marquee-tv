@@ -440,9 +440,9 @@ stage_google_oauth() {
 stripe_price() {
   local id recurring=()
   [[ -n "${4:-}" ]] && recurring=(-d "recurring[interval]=$4")
-  id=$(show stripe prices list --api-key "$STRIPE_SECRET_KEY" --lookup-keys "$1" | jq -r '.data[0].id // empty')
+  id=$(show stripe prices list --lookup-keys "$1" | jq -r '.data[0].id // empty')
   if [[ -z "$id" ]]; then
-    id=$(show stripe prices create --api-key "$STRIPE_SECRET_KEY" --currency usd --unit-amount "$3" \
+    id=$(show stripe prices create --currency usd --unit-amount "$3" \
       -d "lookup_key=$1" -d "product_data[name]=$2" ${recurring[@]+"${recurring[@]}"} | jq -r .id)
   fi
   echo "$id"
@@ -456,14 +456,14 @@ stripe_webhook() {
   for event in checkout.session.completed invoice.paid customer.subscription.updated customer.subscription.deleted; do
     args+=(--enabled-events "$event")
   done
-  existing=$(show stripe webhook_endpoints list --api-key "$STRIPE_SECRET_KEY" --limit 100 |
+  existing=$(show stripe webhook_endpoints list --limit 100 |
     jq -r --arg u "$url" '.data[] | select(.url == $u) | .id')
   if [[ -n "$existing" ]]; then
     [[ -z "$(missing STRIPE_WEBHOOK_SECRET | awk -v e="$env" '$3 == e')" ]] && { note "webhook for $env exists"; return; }
     confirm "The $env webhook exists but its secret isn't in Vercel. Replace the endpoint?" || return
-    show stripe webhook_endpoints delete "$existing" --api-key "$STRIPE_SECRET_KEY" --confirm >/dev/null
+    show stripe webhook_endpoints delete "$existing" --confirm >/dev/null
   fi
-  put STRIPE_WEBHOOK_SECRET "$env" "$(show stripe webhook_endpoints create --api-key "$STRIPE_SECRET_KEY" \
+  put STRIPE_WEBHOOK_SECRET "$env" "$(show stripe webhook_endpoints create \
     --url "$url" "${args[@]}" | jq -r .secret)"
 }
 
@@ -476,6 +476,8 @@ stage_stripe() {
   ask_secret STRIPE_SECRET_KEY "Paste the test secret key:"
   [[ "$STRIPE_SECRET_KEY" == sk_test_* ]] || { warn "that isn't a test-mode secret key"; exit 1; }
   put_both STRIPE_SECRET_KEY "$STRIPE_SECRET_KEY"
+  # The CLI reads the key from here, which keeps it out of the process list.
+  export STRIPE_API_KEY="$STRIPE_SECRET_KEY"
 
   put_both STRIPE_PRICE_PASS "$(stripe_price marquee_session_pass "Session pass" 299)"
   put_both STRIPE_PRICE_MONTHLY "$(stripe_price marquee_monthly "Monthly" 499 month)"

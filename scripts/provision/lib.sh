@@ -112,7 +112,7 @@ logged_in() {
     gh) gh auth status >/dev/null 2>&1 ;;
     vercel) vc whoami >/dev/null 2>&1 ;;
     supabase) sb orgs list -o json >/dev/null 2>&1 ;;
-    stripe) return 0 ;; # every Stripe call passes --api-key; no login needed
+    stripe) return 0 ;; # the stripe stage sets STRIPE_API_KEY; no login needed
     gcloud) [[ -n "$(gcloud auth list --filter=status:ACTIVE --format='value(account)' 2>/dev/null)" ]] ;;
     sentry-cli) return 0 ;; # every Sentry call passes the auth token
   esac
