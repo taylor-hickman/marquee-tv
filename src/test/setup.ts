@@ -1,26 +1,44 @@
-import { syncBuiltinESMExports } from "node:module";
-import { setupServer } from "msw/node";
-import { afterAll, afterEach } from "vitest";
+import dns from "node:dns";
+import { isIP, Socket } from "node:net";
 
-// The PR gate reaches no third party (build plan 6.1). Requests to localhost,
-// such as the local Supabase stack, pass through; any other request fails
-// unless a test mocks it with server.use().
-const localHosts = new Set(["localhost", "127.0.0.1", "[::1]"]);
+// The PR gate reaches no third party (build plan 6.1). Every TCP connection
+// (fetch, http, https, Postgres) resolves its host with dns.lookup, unless the
+// host is an IP. Names other than localhost don't resolve and IPs other than
+// loopback refuse to connect, so a third-party host fails as if offline.
+// Localhost, such as the local Supabase stack, is untouched, and so is an MSW
+// mock, which never resolves the name.
+const localNames = new Set(["localhost", "127.0.0.1", "::1"]);
+const blocked = (host: string) =>
+  Object.assign(
+    new Error(`Blocked ${host}: tests reach only localhost. Mock it with MSW.`),
+    { code: "ENOTFOUND", hostname: host },
+  );
 
-export const server = setupServer();
+const lookup = dns.lookup;
+dns.lookup = function (hostname: string, ...rest: unknown[]) {
+  if (localNames.has(hostname)) {
+    return (lookup as (...a: unknown[]) => void)(hostname, ...rest);
+  }
+  const callback = rest.at(-1) as (error: Error) => void;
+  process.nextTick(() => callback(blocked(hostname)));
+} as typeof dns.lookup;
 
-server.listen({
-  async onUnhandledFrame({ frame, defaults }) {
-    if (frame.protocol === "http") {
-      const { request } = frame.data as { request: Request };
-      if (localHosts.has(new URL(request.url).hostname)) return;
-    }
-    await defaults.error();
-    // A thrown network error makes fetch reject, as an offline host would.
-    throw Response.error();
-  },
-});
-// Carry the patched http and https functions into named ESM imports too.
-syncBuiltinESMExports();
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+// Socket#connect takes (options), (port, host?) or (path), and Node's own
+// callers pass those arguments pre-packed in an array.
+function hostOf(args: unknown[]): string | undefined {
+  const first = Array.isArray(args[0]) ? args[0][0] : args[0];
+  if (typeof first === "object" && first !== null) {
+    return (first as { host?: string }).host;
+  }
+  return typeof args[1] === "string" ? args[1] : undefined;
+}
+
+const connect = Socket.prototype.connect;
+Socket.prototype.connect = function (this: Socket, ...args: unknown[]) {
+  const host = hostOf(args)?.replace(/^\[(.*)\]$/, "$1");
+  if (host && isIP(host) && !localNames.has(host)) {
+    process.nextTick(() => this.destroy(blocked(host)));
+    return this;
+  }
+  return (connect as (...a: unknown[]) => Socket).apply(this, args);
+} as typeof connect;
