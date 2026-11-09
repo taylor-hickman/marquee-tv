@@ -1,6 +1,6 @@
 # Handoff tests
 
-Phase 0 deliverable (PRD 7.5, 14; build plan R1; journeys J5, J9). Last run Nov 8, 2026.
+Phase 0 deliverable (PRD 7.5, 14; build plan R1; journeys J5, J9). Desktop run Nov 8, 2026. Phone, TV and Instagram rows reported by Taylor Nov 9, 2026.
 
 The probe is `scripts/probe/handoff-page/`: a page with three controls and a server that answers `/r` with a `302`. The page uses five NPR Music Tiny Desk concerts (Mac Miller, Anderson .Paak, Jungle, Noah Kahan, Billy Strings).
 
@@ -12,19 +12,21 @@ The probe is `scripts/probe/handoff-page/`: a page with three controls and a ser
 
 ## Results
 
-Pass means every check in the column held. Unverified rows give the exact steps to run.
+Pass means every check in the column held. Taylor ran steps A to D below and reported "all work", with no notes per cell. Those cells say "user-reported, no detail": they don't record which app opened or how the queue looked.
 
 | Surface | `watch_videos` opens and plays | Play from here starts at the chosen track | `302` lands in YouTube (the app, on a phone) |
 | --- | --- | --- | --- |
 | Desktop Chrome 156 | Pass | Pass | Pass (lands on the queue; desktop has no app) |
 | Desktop WebKit 26 (Safari's engine) | Pass | Pass | Pass (lands on the queue) |
 | Desktop Firefox 142 | Pass | Pass | Pass (lands on the queue) |
-| iOS Safari, YouTube app installed | Unverified, steps A | Unverified, steps A | Unverified, steps A |
-| Android Chrome, YouTube app installed | Unverified, steps B | Unverified, steps B | Unverified, steps B |
-| Cast to TV | Unverified, steps C | Unverified, steps C | n/a: casting starts from the app the `302` lands in |
-| Instagram in-app browser | Unverified, steps D | Unverified, steps D | Unverified, steps D |
+| iOS Safari, YouTube app installed | Pass (user-reported, no detail) | Pass (user-reported, no detail) | Pass (user-reported, no detail) |
+| Android Chrome, YouTube app installed | Pass (user-reported, no detail) | Pass (user-reported, no detail) | Pass (user-reported, no detail) |
+| Cast to TV | Pass (user-reported, no detail) | Pass (user-reported, no detail), including replacing the TV's queue mid-cast | n/a: casting starts from the app the `302` lands in |
+| Instagram in-app browser | Pass (user-reported, no detail) | Pass (user-reported, no detail) | Pass (user-reported, no detail) |
 
-The `302` column decides C3. The rule from the build plan: redirect only when iOS and Android both pass, and show the tap-to-open page otherwise, including when either is unverified. **Today C3 builds the tap-to-open page.**
+The `302` column decides C3. The rule from the build plan: redirect only when iOS and Android both pass, and show the tap-to-open page otherwise, including when either is unverified. Both pass, so **C3 builds the `302` redirect.**
+
+Not confirmed run: step A5 (Safari with the YouTube app deleted, J5's fallback) and step C3 (cast from desktop Chrome). Both are optional, and neither changes C3.
 
 ### Desktop: what was checked
 
