@@ -1,6 +1,8 @@
 # Marquee TV: build plan
 
-Nov 8, 2026 · Taylor Hickman · Version 0.2 · Status: Draft · Built from PRD v1.1, user journeys v0.2, architecture v0.2
+Nov 9, 2026 · Taylor Hickman · Version 0.3 · Status: Draft · Built from PRD v1.1, user journeys v0.2, architecture v0.2
+
+**Changes in 0.3.** Added card T1b for the test tooling that 0.2 added to T1 after T1 merged under 0.1. T2 now waits on T1b. Section 4 shows each card's status at `11bb638` and the orchestrator's merge rules.
 
 **Changes in 0.2.** Added section 6, testing and CI: test layers, shared test helpers and their owners, and the workflows that run them. T1 and T2 now build the full PR gate, the production deploy and migrations in CI. Every E card owns an `e2e/` folder. B3 and C3 add property tests, B5 owns the evals workflow, I1 owns the nightly journeys. A1 checks index use instead of wall-clock time. Open items moved to section 7.
 
@@ -50,7 +52,7 @@ flowchart TD
   T0[T0 decide and write ADRs] --> T1
   T0 --> B1
 
-  T1[T1 scaffold and CI] --> T2[T2 database and fixtures] --> T3[T3 contracts and module stubs] --> T4[T4 guest auth, rate limit, flags, events]
+  T1[T1 scaffold and CI] --> T1b[T1b v0.2 test tooling] --> T2[T2 database and fixtures] --> T3[T3 contracts and module stubs] --> T4[T4 guest auth, rate limit, flags, events]
   T4 --> A1 & B1 & C1 & D1 & E1
 
   subgraph Catalog
@@ -96,19 +98,22 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 
 ## 4. Status
 
+At `11bb638`, Nov 9, 2026. `done #N` means merged in pull request N.
+
 | ID | Card | Milestone | Depends on | Status |
 | --- | --- | --- | --- | --- |
-| R1 | Handoff device matrix | M0 | | open |
-| R2 | Compliance memo | M0 | | open |
-| R3 | Quota extension application | M0 | R4 | open |
-| R4 | Provision accounts and secrets | M0 | | open |
-| R5 | Duration control decision | M0 | | open |
-| T0 | Decide and write ADRs | M0 | | open |
-| T1 | Scaffold and CI | M1 | T0, R4 | open |
-| T2 | Database and fixtures | M1 | T1 | open |
+| R1 | Handoff device matrix | M0 | | done #3; the test page is not on a preview URL |
+| R2 | Compliance memo | M0 | | done #3 |
+| R3 | Quota extension application | M0 | R4 | drafted #3; submitted after D3, when a live app exists |
+| R4 | Provision accounts and secrets | M0 | | done #6, #7; the Vercel bypass secret is not created |
+| R5 | Duration control decision | M0 | | done #4 |
+| T0 | Decide and write ADRs | M0 | | done #5 |
+| T1 | Scaffold and CI | M1 | T0, R4 | done #2 against card 0.1; the 0.2 additions moved to T1b |
+| T1b | v0.2 test tooling | M1 | T1 | open |
+| T2 | Database and fixtures | M1 | T1b | held; draft #9 |
 | T3 | Contracts and module stubs | M1 | T2 | open |
 | T4 | Guest auth, rate limit, flags, events | M1 | T3 | open |
-| A0 | `watch_videos` probe | M2 | T1 | open |
+| A0 | `watch_videos` probe | M2 | T1 | done #8 |
 | A1 | Catalog queries and retrieval | M2 | M1 | open |
 | A2 | Ingest, refresh, expire | M2 | A1 | open |
 | A3 | Classify and artist parse | M2 | A2, B1, soft R2 | open |
@@ -145,6 +150,15 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 | K2 | Catalog audit | M4 | K1 | open |
 | K3 | Eval rating | M4 | I5 | open |
 | K4 | Beta cohort and metrics | M4 | I5 | open |
+
+### 4.1 Merge rules
+
+The orchestrator merges by these rules until this section changes. Section 6.3 describes the ruleset `main` will end up with. These rules describe the one it has now.
+
+- `pnpm check` stays the gate on every card. A card runs it before handback, and the `check` job in `ci.yml` runs it in CI. New jobs run alongside it and never replace it, and `check` keeps its name, because the ruleset requires that name.
+- A pull request merges only after the required `check` job has passed on its latest commit. A pending, skipped or failed `check` blocks the merge, and so does a red `main` (6.3).
+- The `main` ruleset requires `check` and refuses deletion and force pushes. Nothing else is required. A card that would add a required check (`e2e`, `migrations`) or change another rule (pull requests only, up to date with `main`, merge method) asks Taylor first and changes the ruleset only after a yes. Until then its job runs on every pull request without being required.
+- T2 is held. Pull request #9 stays a draft until T1b merges, then rebases onto `main`. Both cards edit `ci.yml`, `package.json` and the ESLint config. T3 and every card after it wait with T2.
 
 ## 5. Cards
 
@@ -205,9 +219,31 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 - Done when: `pnpm check` and `pnpm test:e2e` pass locally and in CI on the PR; a test that fetches `https://example.com` fails; importing `src/lib/db` from a file under `src/modules/curator/` fails lint; `preview-smoke.yml` passes against the Vercel preview; a direct push to `main` is refused.
 - Out of scope: any product code, database, or UI beyond the placeholder. The database steps in CI (T2).
 
-#### T2 · Database and fixtures
+#### T1b · v0.2 test tooling
+
+T1 merged as pull request #2 against this plan's 0.1 card. Version 0.2 then widened T1's deliverable. This card builds what 0.2 added and #2 did not.
 
 - Depends on: T1
+- Owns: T1's paths except `src/app/**`, plus `.nvmrc` and, in `.env.example`, the test-only variables and the bypass secret's name. Not the database steps or the `migrations` job in `ci.yml`, which are T2's.
+- Reads: architecture 3, 10; this plan, sections 4.1 and 6; `docs/ops/provisioning.md`
+- Deliverable, measured against `main` at `11bb638`:
+  - `.nvmrc` pinning Node 24.
+  - The test dependencies 6.1 lists that are not installed: `@vitest/coverage-v8`, `@axe-core/playwright`, MSW, fast-check.
+  - `src/test/setup.ts`, loaded by `vitest.config.mts`, which fails any request to a host other than localhost. Coverage reported on every run, with 6.1's four branch thresholds on their paths. None of those paths exist yet, so each threshold starts to apply when its files land.
+  - `playwright.config.ts` serving `next build && next start` instead of `pnpm dev`, two retries in CI with a trace on the first retry, a base URL that can be overridden from the environment, and a `live` project. An axe helper in `e2e/support/`. `e2e/smoke/` with one spec that loads `/` and finds zero axe violations. A `pnpm test:live` script.
+  - ESLint `no-restricted-imports` holding architecture 3's boundaries: modules import each other only through `index.ts`, and nothing under `src/modules/curator/**` imports `src/lib/db`.
+  - In `ci.yml`: an `e2e` job (build, Playwright, report and traces uploaded on failure, `stripe-mock` as a service, `LLM_ADAPTER=fake` and `STRIPE_API_BASE` set), an `actionlint` job when `.github/**` changes, `concurrency` cancelling superseded runs, and caches for the pnpm store and Playwright browsers. The `check` job keeps its name and still runs `pnpm check`.
+  - `preview-smoke.yml`, triggered by a successful Vercel `deployment_status` on a pull request, running `e2e/smoke` against the preview URL with the protection bypass header.
+  - `dependabot.yml` per 6.3.
+  - The Vercel Protection Bypass for Automation secret, which R4 did not create (`docs/ops/provisioning.md` lists it as a remaining step), stored as a GitHub Actions repository secret. If the Vercel or GitHub CLI is not authenticated, the card stops and asks.
+  - `LLM_ADAPTER` and `STRIPE_API_BASE` in `.env.example` as test-only variables.
+  - A proposal to add `e2e` to the `main` ruleset's required checks. Per 4.1 the card asks Taylor and changes the ruleset only after a yes. The handback says which way it went.
+- Done when: `pnpm check` and `pnpm test:e2e` pass locally and in CI on the PR; a test that fetches `https://example.com` fails; importing `src/lib/db` from a file under `src/modules/curator/` fails lint; `preview-smoke.yml` passes against the PR's Vercel preview; `actionlint` passes; a direct push to `main` is refused.
+- Out of scope: the database steps, the `migrations` job, `deploy.yml` and `vercel.json` (T2). B1's fake adapter (this card sets the variable, and B1 writes the adapter). Ruleset changes Taylor has not agreed to. 6.3's squash-only rule in particular stays off until Taylor decides, because Hydra merges this repo with merge commits.
+
+#### T2 · Database and fixtures
+
+- Depends on: T1, T1b
 - Owns: `db/**`, `src/lib/db/**`, `supabase/**`, `scripts/seed/**`, `src/test/db.ts`, `src/test/factories/**`, `e2e/support/db.ts`, `.github/workflows/ci.yml` (database steps and the `migrations` job), `.github/workflows/deploy.yml`, `vercel.json`
 - Reads: architecture 4, 5 (all of it), 9.2 (first bullet), 9.4; ADR 0006; this plan, section 6
 - Deliverable: Supabase CLI local stack configured. Migrations for every table in architecture 5.1, 5.2 and 5.4 with the constraints the text names: exactly one owner on `playlist_draft`, at most one `free` draft per owner, `(draft_id, number)` primary key on revisions, unique `video_id`, hashed `guest.token_hash`. `performance_tag` created empty. Full-text and `pg_trgm` indexes from 5.1. Row-level security on with no policies. A server-only db client in `src/lib/db`. A fixture of about 300 performances across three publishers and six series with synthetic video IDs and plausible artists, loaded by `pnpm seed`. The test database from 6.1, isolated per Vitest worker and per worktree and built from the migrations in the checkout. A factory per table that returns a valid row and takes overrides. `e2e/support/db.ts` resetting and seeding the stack before a Playwright run. In CI, `check` and `e2e` start the local stack with only the services tests use (Postgres, Auth, REST, mail), and the `migrations` job runs and joins the required checks. `deploy.yml` and `vercel.json` per 6.3.
