@@ -2,3 +2,4 @@ docs/
 *.md
 pnpm-lock.yaml
 .next/
+scripts/probe/
