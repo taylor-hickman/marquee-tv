@@ -90,7 +90,7 @@ jobs:
             test-results/
           retention-days: 14
 
-  # Not a required check until Taylor agrees (build plan 4.1).
+  # Joins the required checks once it has run on main (build plan 4.1).
   migrations:
     runs-on: ubuntu-latest
     steps:
