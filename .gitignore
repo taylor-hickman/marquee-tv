@@ -5,3 +5,21 @@
 node_modules/
 .vscode/
 .idea/
+
+# next.js
+/.next/
+/out/
+/build
+next-env.d.ts
+*.tsbuildinfo
+.vercel
+
+# testing
+/coverage
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# debug
+*.log
+*.pem
