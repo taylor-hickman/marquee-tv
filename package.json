@@ -10,8 +10,9 @@
     "lint": "eslint && prettier --check .",
     "format": "prettier --write .",
     "test": "vitest run --passWithNoTests",
-    "test:e2e": "playwright test",
-    "check": "pnpm typecheck && pnpm lint && pnpm test"
+    "test:e2e": "playwright test --project=chromium",
+    "check": "pnpm typecheck && pnpm lint && pnpm test",
+    "test:live": "playwright test --project=live"
   },
   "engines": {
     "node": ">=24"
