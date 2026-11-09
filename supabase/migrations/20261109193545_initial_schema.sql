@@ -191,11 +191,14 @@ create table curator_run (
   tokens_out integer,
   latency_ms integer,
   error text,
+  -- per-IP rate limit on model-backed runs (architecture 9.2); guest and user counts join through draft_id
+  ip_hash bytea,
   created_at timestamptz not null default now()
 );
 
 create index curator_run_draft_id_idx on curator_run (draft_id);
 create index curator_run_created_at_idx on curator_run (created_at);
+create index curator_run_ip_hash_created_at_idx on curator_run (ip_hash, created_at);
 
 -- Immutable snapshots: the only store of playlist items.
 create table playlist_revision (
