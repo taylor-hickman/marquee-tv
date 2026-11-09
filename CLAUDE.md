@@ -47,7 +47,8 @@ Write only inside the paths your card owns. Read anything.
 Your card's "Done when" is the goal. Loop until it holds.
 
 - Write the test first when the card names a behaviour: invented IDs dropped, pins restored, `402` on the second model-backed draft.
-- `pnpm check` (typecheck, lint, tests) green before the handback. If it is red for a reason outside your paths, say so and stop.
+- `pnpm check` (format, typecheck, lint, unit and integration tests) green before the handback, plus `pnpm test:e2e` when your card has Playwright specs. If it is red for a reason outside your paths, say so and stop.
+- Tests follow `docs/build-plan.md` section 6: where each kind lives, what it may touch, which shared helpers to use.
 - The handback lists: assumptions made, departures from the docs, anything in the card you did not finish and why.
 
 ## Rules the code enforces, never the prompt

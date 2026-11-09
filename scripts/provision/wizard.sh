@@ -295,6 +295,9 @@ stage_vercel() {
     show vc project create "$VERCEL_PROJECT" >/dev/null
     printf '  %s✓%s created project %s\n' "$GREEN" "$RESET" "$VERCEL_PROJECT"
   fi
+  # `project create` has no framework option, so set it here; this also fixes an existing project.
+  show vc project update "$VERCEL_PROJECT" --framework nextjs --yes >/dev/null
+  printf '  %s✓%s %s uses the Next.js preset\n' "$GREEN" "$RESET" "$VERCEL_PROJECT"
   local out
   # The CLI exits 1 with "already connected" when there's nothing to do.
   until out=$(vc git connect "https://github.com/$GITHUB_REPO" --project "$VERCEL_PROJECT" --yes 2>&1) ||
