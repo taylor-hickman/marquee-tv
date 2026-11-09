@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  smoke:
+  preview-smoke:
     if: >-
       github.event.deployment_status.state == 'success' &&
       startsWith(github.event.deployment.environment, 'Preview')
