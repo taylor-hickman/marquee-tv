@@ -125,6 +125,14 @@ describe("summarize", () => {
     const s = summarize(runs);
     expect(s.latencyMs).toEqual({ p50: 5000, p90: 9000, max: 10000 });
     expect(s.tokens).toEqual({ in: 30000, out: 4000 });
+    expect(s.candidates).toEqual({ min: 4, p50: 4 });
+  });
+
+  it("reports an empty candidate set", () => {
+    const r = { ...clean(), candidateIds: [], pins: [], items: [] };
+    expect(report(summarize([r]))).toContain(
+      "Candidates per run: fewest 0, median 0.",
+    );
   });
 
   it("reports each violation by prompt and run", () => {

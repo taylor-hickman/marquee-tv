@@ -125,16 +125,13 @@ export type Summary = {
   latencyMs: { p50: number; p90: number; max: number };
   tokens: { in: number; out: number };
   droppedIds: number;
+  // Candidates retrieval returned, fewest and median; zero means an empty catalog.
+  candidates: { min: number; p50: number };
 };
 
 export function summarize(results: RunResult[]): Summary {
-  const latencies = results.map((r) => r.latencyMs).sort((a, b) => a - b);
-  const at = (q: number) =>
-    latencies.length === 0
-      ? 0
-      : latencies[
-          Math.min(latencies.length - 1, Math.ceil(q * latencies.length) - 1)
-        ];
+  const latencies = sorted(results.map((r) => r.latencyMs));
+  const candidates = sorted(results.map((r) => r.candidateIds.length));
   return {
     runs: results.length,
     errors: results.flatMap((r) =>
@@ -143,14 +140,25 @@ export function summarize(results: RunResult[]): Summary {
         : [{ prompt: r.prompt, run: r.run, error: r.error }],
     ),
     violations: check(results),
-    latencyMs: { p50: at(0.5), p90: at(0.9), max: latencies.at(-1) ?? 0 },
+    latencyMs: {
+      p50: at(latencies, 0.5),
+      p90: at(latencies, 0.9),
+      max: latencies.at(-1) ?? 0,
+    },
     tokens: {
       in: results.reduce((s, r) => s + r.tokensIn, 0),
       out: results.reduce((s, r) => s + r.tokensOut, 0),
     },
     droppedIds: results.reduce((s, r) => s + r.droppedIds.length, 0),
+    candidates: { min: candidates[0] ?? 0, p50: at(candidates, 0.5) },
   };
 }
+
+const sorted = (xs: number[]) => [...xs].sort((a, b) => a - b);
+const at = (xs: number[], q: number) =>
+  xs.length === 0
+    ? 0
+    : xs[Math.min(xs.length - 1, Math.ceil(q * xs.length) - 1)];
 
 export const passed = (s: Summary) =>
   s.runs > 0 && s.errors.length === 0 && s.violations.length === 0;
@@ -167,7 +175,7 @@ export function report(s: Summary): string {
   const lines = [
     `### Evals: ${passed(s) ? "pass" : "fail"}`,
     "",
-    `${s.runs} runs, ${s.errors.length} failed to finish. p50 ${s.latencyMs.p50} ms, p90 ${s.latencyMs.p90} ms, max ${s.latencyMs.max} ms. ${s.tokens.in} tokens in, ${s.tokens.out} out. Repair dropped ${s.droppedIds} invented ids.`,
+    `${s.runs} runs, ${s.errors.length} failed to finish. p50 ${s.latencyMs.p50} ms, p90 ${s.latencyMs.p90} ms, max ${s.latencyMs.max} ms. ${s.tokens.in} tokens in, ${s.tokens.out} out. Candidates per run: fewest ${s.candidates.min}, median ${s.candidates.p50}. Repair dropped ${s.droppedIds} invented ids.`,
     "",
     "| Invariant | Violations |",
     "| --- | --- |",
