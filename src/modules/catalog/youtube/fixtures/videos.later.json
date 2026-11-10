@@ -1,0 +1,229 @@
+{
+  "kind": "youtube#videoListResponse",
+  "etag": "etag-videos",
+  "items": [
+    {
+      "kind": "youtube#video",
+      "etag": "etag-A2fixture01",
+      "id": "A2fixture01",
+      "snippet": {
+        "publishedAt": "2026-11-07T16:00:00Z",
+        "channelId": "UCa2fixtureChannel000000",
+        "title": "Ada Fixture: Tiny Desk Concert",
+        "description": "",
+        "thumbnails": {},
+        "channelTitle": "Fixture Music",
+        "categoryId": "10",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "Ada Fixture: Tiny Desk Concert",
+          "description": ""
+        }
+      },
+      "contentDetails": {
+        "duration": "PT18M30S",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true,
+        "contentRating": {},
+        "projection": "rectangular"
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "private",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true,
+        "madeForKids": false
+      }
+    },
+    {
+      "kind": "youtube#video",
+      "etag": "etag-A2fixture03",
+      "id": "A2fixture03",
+      "snippet": {
+        "publishedAt": "2026-11-05T16:00:00Z",
+        "channelId": "UCa2fixtureChannel000000",
+        "title": "Cleo Fixture: Tiny Desk (Home) Concert (Encore)",
+        "description": "",
+        "thumbnails": {},
+        "channelTitle": "Fixture Music",
+        "categoryId": "10",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "Cleo Fixture: Tiny Desk (Home) Concert (Encore)",
+          "description": ""
+        }
+      },
+      "contentDetails": {
+        "duration": "PT22M",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true,
+        "contentRating": {},
+        "projection": "rectangular"
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "public",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true,
+        "madeForKids": false
+      }
+    },
+    {
+      "kind": "youtube#video",
+      "etag": "etag-A2fixture04",
+      "id": "A2fixture04",
+      "snippet": {
+        "publishedAt": "2026-11-04T16:00:00Z",
+        "channelId": "UCa2fixtureChannel000000",
+        "title": "Dax Fixture: Tiny Desk Concert",
+        "description": "",
+        "thumbnails": {},
+        "channelTitle": "Fixture Music",
+        "categoryId": "10",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "Dax Fixture: Tiny Desk Concert",
+          "description": ""
+        }
+      },
+      "contentDetails": {
+        "duration": "PT16M12S",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true,
+        "contentRating": {},
+        "projection": "rectangular"
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "public",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true,
+        "madeForKids": false
+      }
+    },
+    {
+      "kind": "youtube#video",
+      "etag": "etag-A2fixture08",
+      "id": "A2fixture08",
+      "snippet": {
+        "publishedAt": "2026-10-31T16:00:00Z",
+        "channelId": "UCa2fixtureChannel000000",
+        "title": "Hal Fixture: Tiny Desk Concert",
+        "description": "",
+        "thumbnails": {},
+        "channelTitle": "Fixture Music",
+        "categoryId": "10",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "Hal Fixture: Tiny Desk Concert",
+          "description": ""
+        }
+      },
+      "contentDetails": {
+        "duration": "PT12M",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true,
+        "contentRating": {},
+        "projection": "rectangular",
+        "regionRestriction": {
+          "allowed": ["GB"]
+        }
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "public",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true,
+        "madeForKids": false
+      }
+    },
+    {
+      "kind": "youtube#video",
+      "etag": "etag-A2fixture09",
+      "id": "A2fixture09",
+      "snippet": {
+        "publishedAt": "2026-10-30T16:00:00Z",
+        "channelId": "UCa2fixtureChannel000000",
+        "title": "Ivy Fixture: Tiny Desk Concert",
+        "description": "",
+        "thumbnails": {},
+        "channelTitle": "Fixture Music",
+        "categoryId": "10",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "Ivy Fixture: Tiny Desk Concert",
+          "description": ""
+        }
+      },
+      "contentDetails": {
+        "duration": "PT14M",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true,
+        "contentRating": {},
+        "projection": "rectangular"
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "public",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true,
+        "madeForKids": false
+      }
+    },
+    {
+      "kind": "youtube#video",
+      "etag": "etag-A2fixture10",
+      "id": "A2fixture10",
+      "snippet": {
+        "publishedAt": "2026-10-29T16:00:00Z",
+        "channelId": "UCa2fixtureChannel000000",
+        "title": "Jo Fixture talks to the desk",
+        "description": "",
+        "thumbnails": {},
+        "channelTitle": "Fixture Music",
+        "categoryId": "10",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "Jo Fixture talks to the desk",
+          "description": ""
+        }
+      },
+      "contentDetails": {
+        "duration": "PT9M",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true,
+        "contentRating": {},
+        "projection": "rectangular"
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "public",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true,
+        "madeForKids": false
+      }
+    }
+  ],
+  "pageInfo": {
+    "totalResults": 6,
+    "resultsPerPage": 6
+  }
+}
