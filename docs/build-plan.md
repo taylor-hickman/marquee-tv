@@ -2,7 +2,7 @@
 
 Nov 9, 2026 · Taylor Hickman · Version 0.3 · Status: Draft · Built from PRD v1.1, user journeys v0.2, architecture v0.2
 
-**Changes in 0.3.** Added card T1b for the test tooling that 0.2 added to T1 after T1 merged under 0.1. T2 now waits on T1b. Section 4 shows each card's status at `5649651` and the orchestrator's merge rules.
+**Changes in 0.3.** Added card T1b for the test tooling that 0.2 added to T1 after T1 merged under 0.1. T2 now waits on T1b. Section 4 shows each card's status at `ef28c02` and the orchestrator's merge rules.
 
 **Changes in 0.2.** Added section 6, testing and CI: test layers, shared test helpers and their owners, and the workflows that run them. T1 and T2 now build the full PR gate, the production deploy and migrations in CI. Every E card owns an `e2e/` folder. B3 and C3 add property tests, B5 owns the evals workflow, I1 owns the nightly journeys. A1 checks index use instead of wall-clock time. Open items moved to section 7.
 
@@ -98,7 +98,7 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 
 ## 4. Status
 
-At `5649651`, Nov 9, 2026. `done #N` means merged in pull request N.
+At `ef28c02`, Nov 9, 2026. `done #N` means merged in pull request N.
 
 | ID | Card | Milestone | Depends on | Status |
 | --- | --- | --- | --- | --- |
@@ -111,34 +111,34 @@ At `5649651`, Nov 9, 2026. `done #N` means merged in pull request N.
 | T1 | Scaffold and CI | M1 | T0, R4 | done #2 against card 0.1; the 0.2 additions moved to T1b |
 | T1b | v0.2 test tooling | M1 | T1 | done #12 |
 | T2 | Database and fixtures | M1 | T1b | done #9; its 0.2 test tooling done as T2b, #14 |
-| T3 | Contracts and module stubs | M1 | T2 | in progress #13 |
-| T4 | Guest auth, rate limit, flags, events | M1 | T3 | open |
+| T3 | Contracts and module stubs | M1 | T2 | done #13 |
+| T4 | Guest auth, rate limit, flags, events | M1 | T3 | done #20 |
 | A0 | `watch_videos` probe | M2 | T1 | done #8 |
-| A1 | Catalog queries and retrieval | M2 | M1 | open |
+| A1 | Catalog queries and retrieval | M2 | M1 | done #25 |
 | A2 | Ingest, refresh, expire | M2 | A1 | open |
 | A3 | Classify and artist parse | M2 | A2, B1, soft R2 | open |
 | A4 | Artist profiles | M2 | A3, soft R2 | open |
 | A5 | Review queue | M2 | A4 | open |
 | A6 | Scheduled jobs | M2 | A5, A0 | open |
-| B1 | LLM adapter | M2 | M1, T0 | open |
-| B2 | Brief extraction | M2 | B1 | open |
+| B1 | LLM adapter | M2 | M1, T0 | done #22 |
+| B2 | Brief extraction | M2 | B1 | done #33 |
 | B3 | Compose, validate, repair | M2 | B2, A1 | open |
 | B4 | Refine, regenerate, fill the rest | M2 | B3 | open |
 | B5 | Eval runner | M2 | B4 | open |
-| C1 | Drafts, revisions, ops, undo | M2 | M1 | open |
+| C1 | Drafts, revisions, ops, undo | M2 | M1 | done #23 |
 | C2 | Generate and refine routes | M2 | C1, B4, D2 | open |
-| C3 | Share links, redirect, handoff events | M2 | C1, A1, R1 | open |
-| C4 | Library, claim, retention | M2 | C3, D1 | open |
-| D1 | Auth and claim codes | M2 | M1 | open |
-| D2 | Stripe and entitlements | M2 | D1 | open |
+| C3 | Share links, redirect, handoff events | M2 | C1, A1, R1 | done #35 |
+| C4 | Library, claim, retention | M2 | C3, D1 | in progress |
+| D1 | Auth and claim codes | M2 | M1 | done #24 |
+| D2 | Stripe and entitlements | M2 | D1 | in progress; draft #37 |
 | D3 | Account deletion and legal pages | M2 | D2 | open |
-| E1 | App shell and primitives | M2 | M1 | open |
-| E2 | Landing and returning guest card | M2 | E1, R5 | open |
+| E1 | App shell and primitives | M2 | M1 | done #26 |
+| E2 | Landing and returning guest card | M2 | E1, R5 | done #32 |
 | E3 | Editor | M2 | E2, C1 | open |
 | E4 | Refine input and diff | M2 | E3, C2 | open |
 | E5 | Handoff | M2 | E4, C3 | open |
-| E6 | Artist seed entry | M2 | E1, A1 | open |
-| E7 | Performance browser and drawer | M2 | E1, A1 | open |
+| E6 | Artist seed entry | M2 | E1, A1 | done #30 |
+| E7 | Performance browser and drawer | M2 | E1, A1 | done #31 |
 | E8 | Sign-up, pay, library, account | M2 | E3, D2, C4 | open |
 | E9 | Error states and accessibility | M2 | E5, E6, E7, E8 | open |
 | I1 | End-to-end journeys | M3 | M2 | open |
@@ -157,7 +157,7 @@ The orchestrator merges by these rules until this section changes. Section 6.3 d
 
 - `pnpm check` stays the gate on every card. A card runs it before handback, and the `check` job in `ci.yml` runs it in CI. New jobs run alongside it and never replace it, and `check` keeps its name, because the ruleset requires that name.
 - A pull request merges only after the required `check` job has passed on its latest commit. A pending, skipped or failed `check` blocks the merge, and so does a red `main` (6.3).
-- The `main` ruleset requires `check` and `e2e` and refuses deletion and force pushes. Taylor has agreed that `migrations` joins the required checks once it has run on `main`. A card that would add any other required check or change another rule (pull requests only, up to date with `main`, merge method) asks Taylor first and changes the ruleset only after a yes. Until then its job runs on every pull request without being required.
+- The `main` ruleset requires `check`, `e2e` and `migrations` and refuses deletion and force pushes. A card that would add any other required check or change another rule (pull requests only, up to date with `main`, merge method) asks Taylor first and changes the ruleset only after a yes. Until then its job runs on every pull request without being required.
 - The hold on T2 is over. T2 merged as #9, T1b as #12 and T2b as #14, so T3 and the cards after it run.
 
 ## 5. Cards
