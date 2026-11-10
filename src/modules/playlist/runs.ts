@@ -1,5 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
+import { after } from "next/server";
 import type { TransactionSql } from "postgres";
 import {
   briefInput,
@@ -295,7 +296,8 @@ export const startRun: StartRun = async (context, draftId, request) => {
       clearTimeout(timer);
     }
   })();
-  context.waitUntil(done);
+  // The response may end first; the run still writes what it finds.
+  after(done);
   return { ok: true, value: stream };
 };
 

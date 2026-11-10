@@ -1,4 +1,3 @@
-import { after } from "next/server";
 import { refineRequest } from "@/contracts";
 import { ipHash } from "@/lib/rate-limit";
 import * as playlist from "@/modules/playlist";
@@ -22,7 +21,6 @@ export async function POST(
       ipHash: ipHash(request),
       now: new Date(),
       ceilingMs: playlist.RUN_CEILING_MS,
-      waitUntil: after,
     },
     id,
     { kind: "refine", body: body.value },

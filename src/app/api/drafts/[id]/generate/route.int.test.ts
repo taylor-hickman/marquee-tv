@@ -14,7 +14,7 @@ import { aiItem, catalogIds, draftAt } from "@/modules/playlist/testing";
 import * as factories from "@/test/factories";
 import { POST as postOps } from "../ops/route";
 import { POST } from "./route";
-import { background, heldBrief, llm, resetLlm, settle } from "./testing";
+import { heldBrief, llm, resetLlm, settle } from "./testing";
 
 vi.mock("server-only", () => ({}));
 vi.mock("@/modules/curator/llm", async (importOriginal) =>
@@ -418,7 +418,6 @@ describe("POST /api/drafts/:id/generate", () => {
         ipHash: Buffer.from(randomUUID()),
         now: new Date(),
         ceilingMs: 50,
-        waitUntil: (p) => background.push(p),
       },
       id,
       { kind: "generate", body: { baseRevision: 1, mode: "regenerate" } },

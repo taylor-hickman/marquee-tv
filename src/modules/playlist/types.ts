@@ -50,9 +50,6 @@ export type RunContext = {
   now: Date;
   // 20 s in production; tests set milliseconds.
   ceilingMs: number;
-  // Keeps the run alive after the response ends (next/server's `after`), so a
-  // client that disconnects still gets its revision written.
-  waitUntil: (run: Promise<unknown>) => void;
 };
 
 export type RunRequest =
