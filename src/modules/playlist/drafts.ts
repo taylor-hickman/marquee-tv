@@ -6,7 +6,6 @@ import {
   type Brief,
   type DraftId,
   type DraftView,
-  type EntitlementState,
   type ErrorBody,
   type Owner,
   type PerformanceId,
@@ -15,8 +14,8 @@ import {
 import { requireOwner } from "@/lib/auth";
 import { sql } from "@/lib/db";
 import { getFlag } from "@/lib/flags";
-import { expirePasses } from "@/modules/billing";
-import { performanceCards } from "./cards";
+import { canRunCurator, expirePasses } from "@/modules/billing";
+import { performanceCards } from "@/modules/catalog";
 import { edit } from "./ops";
 import type { ApplyOps, CreateDraft, GetDraft, Undo } from "./types";
 
@@ -32,6 +31,7 @@ type DraftRow = {
   title: string | null;
   description: string | null;
   duration_target_s: number | null;
+  entitlement_id: string | null;
 };
 
 type RevisionRow = {
@@ -69,37 +69,30 @@ export async function authorize(
   });
 }
 
-// Whether the curator may run here, by architecture 7.3's table. A local
-// stand-in for billing.canRunCurator until D2 fills it in.
-async function entitlement(draft: DraftRow): Promise<DraftView["entitlement"]> {
-  const [row] = await sql<
-    { pass: boolean; subscription: boolean; freeLeft: boolean; runs: number }[]
-  >`
-    select
-      exists (select 1 from entitlement e where e.id = d.entitlement_id
-        and e.kind = 'session_pass' and e.status = 'active'
-        and (e.period_end is null or e.period_end > now())) as pass,
-      exists (select 1 from entitlement e where e.user_id = d.owner_user_id
-        and e.kind = 'subscription' and e.status = 'active') as subscription,
-      not exists (select 1 from playlist_draft o where o.free
-        and (o.owner_guest_id = d.owner_guest_id
-          or o.owner_user_id = d.owner_user_id)) as "freeLeft",
-      (select count(*) from curator_run r where r.draft_id = d.id)::int as runs
-    from playlist_draft d where d.id = ${draft.id}`;
-  const state: EntitlementState =
-    draft.status === "read_only"
-      ? "read_only"
-      : draft.free || row.freeLeft
-        ? "free"
-        : row.pass
-          ? "pass"
-          : row.subscription
-            ? "subscription"
-            : "payment_required";
-  return { state, runsLeft: Math.max(0, RUN_CAP - row.runs) };
+// The entitlement state is billing's (architecture 7.3); runs left count
+// toward the per-draft cap.
+async function entitlement(
+  owner: Owner,
+  draft: DraftRow,
+): Promise<DraftView["entitlement"]> {
+  const [state, [{ runs }]] = await Promise.all([
+    canRunCurator(
+      owner,
+      {
+        id: draft.id,
+        free: draft.free,
+        status: draft.status,
+        entitlementId: draft.entitlement_id,
+      },
+      new Date(),
+    ),
+    sql<{ runs: number }[]>`
+      select count(*)::int as runs from curator_run where draft_id = ${draft.id}`,
+  ]);
+  return { state, runsLeft: Math.max(0, RUN_CAP - runs) };
 }
 
-async function view(draft: DraftRow): Promise<DraftView> {
+async function view(owner: Owner, draft: DraftRow): Promise<DraftView> {
   const [revision] =
     draft.current_revision === null
       ? []
@@ -109,7 +102,7 @@ async function view(draft: DraftRow): Promise<DraftView> {
   const [performances, handoffMode, entitled] = await Promise.all([
     performanceCards(revision?.items.map((i) => i.performance_id) ?? []),
     getFlag("handoff_mode"),
-    entitlement(draft),
+    entitlement(owner, draft),
   ]);
   return {
     draft: {
@@ -162,7 +155,7 @@ export const createDraft: CreateDraft = async (owner, body) => {
     values (${guestId}, ${userId}, ${body.creationMethod},
       ${body.input?.durationS ?? null})
     returning *`;
-  return view(draft);
+  return view(owner, draft);
 };
 
 // A pass draft past period_end turns read_only before it is read or written
@@ -176,7 +169,7 @@ const lapsePass = (draftId: DraftId) =>
 export const getDraft: GetDraft = async (owner, draftId) => {
   await lapsePass(draftId);
   const draft = await ownedDraft(sql, owner, draftId);
-  return draft ? { ok: true, value: await view(draft) } : notFound;
+  return draft ? { ok: true, value: await view(owner, draft) } : notFound;
 };
 
 type Snapshot = {
@@ -258,11 +251,11 @@ async function writeRevision(
   if (outcome.error === "conflict") {
     return {
       ok: false,
-      error: { error: "conflict", current: await view(outcome.draft) },
+      error: { error: "conflict", current: await view(owner, outcome.draft) },
     };
   }
   if (outcome.error) return { ok: false, error: outcome.error };
-  return { ok: true, value: await view(outcome.draft) };
+  return { ok: true, value: await view(owner, outcome.draft) };
 }
 
 export const applyOps: ApplyOps = (owner, draftId, body) =>
