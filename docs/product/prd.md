@@ -289,7 +289,7 @@ Mitigations for Path A's risk: a daily automated check that the URL still resolv
 
 ### 10.2 Path B — Data API export (P1)
 
-Apply for a quota extension during Phase 0 with real usage projections. Build OAuth with the minimum scope, store refresh tokens server-side only, verify every insert via the API response, and prevent duplicate exports with an idempotency key per playlist revision. Expose as "Save to my YouTube" beside "Play on YouTube" once quota is approved.
+Apply for a quota extension with real usage projections once the export runs on staging, since the application is an audit of a working flow (submitted Nov 10, 2026; `docs/architecture/quota-application.md`). Build OAuth with the minimum scope, store refresh tokens server-side only, verify every insert via the API response, and prevent duplicate exports with an idempotency key per playlist revision. Expose as "Save to my YouTube" beside "Play on YouTube" once quota is approved.
 
 ### 10.3 Preview (P1)
 
@@ -366,7 +366,7 @@ Paid access (section 16) covers our curation, editor and library, never YouTube 
 
 ## 14. Development phases
 
-Five phases, each with a hard exit gate. Phase 0 is short because the URL handoff needs no OAuth or quota to validate; what remains is confirming it works on every surface, checking compliance, and starting the quota clock for P1.
+Five phases, each with a hard exit gate. Phase 0 is short because the URL handoff needs no OAuth or quota to validate; what remains is confirming it works on every surface, checking compliance, and drafting the quota application for P1.
 
 | Phase | Objective | Key deliverables | Exit gate |
 | --- | --- | --- | --- |
@@ -447,7 +447,7 @@ Annual billing, crediting a session pass toward a subscription bought within the
 
 | Risk | Likelihood | Impact | Mitigation |
 | --- | --- | --- | --- |
-| YouTube retires the `watch_videos` URL | Medium | High | Daily automated check; copy-list fallback behind a runtime flag; P1 API export behind the same flag; quota application filed in Phase 0; runbook written before launch |
+| YouTube retires the `watch_videos` URL | Medium | High | Daily automated check; copy-list fallback behind a runtime flag; P1 API export behind the same flag; quota application filed from staging in Phase 3; runbook written before launch |
 | Quota extension denied or slow | Medium | Medium | P0 does not need it; P1 waits; usage projections in the application |
 | Arc feels generic without performance-level tags | Medium | Medium | Publisher conventions as proxy; P1 feedback buttons; editorial tags for the 100 most-played performances |
 | Catalog dead ends on niche requests | Medium | Medium | Depth-first catalog; honest "nothing here, try these" responses; log unmet requests to drive expansion |
