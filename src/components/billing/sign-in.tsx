@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { startSignIn } from "@/app/auth/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { LegalLinks } from "@/components/ui/legal-links";
 import { useToast } from "@/components/ui/toast";
 import { getGuestToken } from "@/lib/client/storage";
 
@@ -65,6 +66,7 @@ export function SignIn({ next }: { next: string }) {
           Send link
         </Button>
       </form>
+      <LegalLinks />
     </div>
   );
 }
