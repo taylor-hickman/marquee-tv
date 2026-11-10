@@ -185,6 +185,7 @@ Fixes and wiring the orchestrator ran between cards, after M1. Pull requests tha
 | #47 | Point playlist's draft view at `catalog.performanceCards` and `billing.canRunCurator` | done |
 | #48 | Catalog `briefContext()` and wire `curator.generate` | in progress |
 | #51 | Artist entry saves its seeds as the pending brief | in progress |
+| #62 | PRD 9.1 rules the Tiny Desk Meets festival sets out of the catalog | in progress |
 
 ## 5. Cards
 
