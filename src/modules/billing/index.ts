@@ -3,6 +3,7 @@ import { notImplemented } from "@/contracts";
 import type { CancelSubscriptions } from "./types";
 
 export type * from "./types";
+export { getAccount } from "./account";
 export { createCheckout, createPortal } from "./checkout";
 export { canRunCurator, expirePasses } from "./entitlements";
 export { consumeClaimCode, ensureAppUser, mintClaimCode } from "./users";

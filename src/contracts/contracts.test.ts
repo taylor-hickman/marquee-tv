@@ -69,6 +69,7 @@ const invalid: Record<keyof typeof schemas, unknown> = {
   libraryResponse: {
     drafts: [{ ...examples.libraryResponse.drafts[0], videoIds: ["x"] }],
   },
+  accountResponse: { ...examples.accountResponse, defaultPlan: "annual" },
   deleteAccountResponse: { deleted: false },
   staticPageResponse: "",
 };
@@ -132,6 +133,7 @@ describe("contracts", () => {
       "POST /api/billing/portal",
       "POST /api/webhooks/stripe",
       "GET /api/library",
+      "GET /api/account",
       "DELETE /api/account",
       "GET /privacy",
       "GET /terms",

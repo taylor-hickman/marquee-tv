@@ -72,6 +72,7 @@ export const schemas = {
   stripeWebhookRequest: api.stripeWebhookRequest,
   stripeWebhookResponse: api.stripeWebhookResponse,
   libraryResponse: api.libraryResponse,
+  accountResponse: api.accountResponse,
   deleteAccountResponse: api.deleteAccountResponse,
   staticPageResponse: api.staticPageResponse,
 };

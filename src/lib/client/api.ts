@@ -1,5 +1,7 @@
 import type { z } from "zod";
+import { auth } from "@/app/auth/supabase";
 import {
+  accountResponse,
   catalogArtistsResponse,
   catalogSearchResponse,
   createDraftResponse,
@@ -40,19 +42,30 @@ export type ApiClientOptions = {
   getAccessToken?: () => Promise<string | null>;
 };
 
+// The browser's Supabase session, when someone is signed in. Every screen
+// sends it, so a claimed or paid draft opens for its user (J7, J8).
+export async function accessToken(): Promise<string | null> {
+  try {
+    const { data } = await auth().getSession();
+    return data.session?.access_token ?? null;
+  } catch {
+    return null;
+  }
+}
+
 type Method = "GET" | "POST" | "DELETE";
 
 export function createApiClient({
   fetch: send = (...args) => fetch(...args),
-  getAccessToken,
+  getAccessToken = accessToken,
 }: ApiClientOptions = {}) {
   async function call(method: Method, path: string, body?: unknown) {
     const headers: Record<string, string> = {};
     if (body !== undefined) headers["content-type"] = "application/json";
     const guestToken = getGuestToken();
     if (guestToken) headers[GUEST_TOKEN_HEADER] = guestToken;
-    const accessToken = await getAccessToken?.();
-    if (accessToken) headers.authorization = `Bearer ${accessToken}`;
+    const token = await getAccessToken();
+    if (token) headers.authorization = `Bearer ${token}`;
     return send(path, {
       method,
       headers,
@@ -134,6 +147,7 @@ export function createApiClient({
       json(urlResponse, "POST", "/api/billing/checkout", body),
     billingPortal: () => json(urlResponse, "POST", "/api/billing/portal", {}),
     library: () => json(libraryResponse, "GET", "/api/library"),
+    account: () => json(accountResponse, "GET", "/api/account"),
     deleteAccount: () => json(deleteAccountResponse, "DELETE", "/api/account"),
   };
 }

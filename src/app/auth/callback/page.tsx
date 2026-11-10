@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { SessionRequest } from "@/contracts";
 import { auth } from "../supabase";
@@ -9,9 +10,13 @@ import { auth } from "../supabase";
 // from the fragment; the server creates the user on their first sign-in and
 // claims the guest's drafts with the code the redirect carried.
 export default function Callback() {
+  const router = useRouter();
   const [state, setState] = useState<"pending" | "done" | "failed">("pending");
   useEffect(() => {
-    const claim = new URLSearchParams(window.location.search).get("claim");
+    const params = new URLSearchParams(window.location.search);
+    const claim = params.get("claim");
+    // Only a path on this site, so the link can't send anyone elsewhere.
+    const next = new URL(params.get("next") ?? "/", window.location.origin);
     (async () => {
       const { data } = await auth().getSession();
       const response = data.session
@@ -24,9 +29,12 @@ export default function Callback() {
           })
         : null;
       if (!response?.ok) return setState("failed");
+      if (next.origin === window.location.origin && next.pathname !== "/") {
+        return router.replace(next.pathname + next.search);
+      }
       setState("done");
     })();
-  }, []);
+  }, [router]);
 
   if (state === "pending") return <main aria-busy="true" />;
   return (
