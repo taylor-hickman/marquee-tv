@@ -111,6 +111,13 @@ export const guest = (o: Overrides = {}) =>
     ...o,
   });
 
+export const claimCode = async (o: Overrides = {}) =>
+  insert("claim_code", {
+    code_hash: randomBytes(32),
+    guest_id: o.guest_id ?? (await guest()).id,
+    ...o,
+  });
+
 export const entitlement = async (o: Overrides = {}) =>
   insert("entitlement", {
     user_id: o.user_id ?? (await appUser()).id,

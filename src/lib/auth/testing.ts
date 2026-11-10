@@ -19,13 +19,16 @@ export async function asGuest(): Promise<{
 }
 
 // The local stack's Auth, which also verifies sessions in @/lib/auth.
-const stack: { API_URL: string; PUBLISHABLE_KEY: string; SECRET_KEY: string } =
-  JSON.parse(
-    execFileSync("supabase", ["status", "-o", "json"], {
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }),
-  );
+export const stack: {
+  API_URL: string;
+  PUBLISHABLE_KEY: string;
+  SECRET_KEY: string;
+} = JSON.parse(
+  execFileSync("supabase", ["status", "-o", "json"], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "ignore"],
+  }),
+);
 process.env.NEXT_PUBLIC_SUPABASE_URL = stack.API_URL;
 process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = stack.PUBLISHABLE_KEY;
 
