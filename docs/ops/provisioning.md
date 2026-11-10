@@ -2,7 +2,7 @@
 
 Nov 8, 2026 · Build plan card R4 · Reads architecture 9.2, 9.4
 
-Marquee TV runs on six outside accounts. `scripts/provision/wizard.sh` sets them up and writes every secret straight into Vercel and GitHub Actions, the only places secrets live (architecture 9.2). Nothing is written to disk. `scripts/provision/verify.sh` checks the result.
+Marquee TV runs on a handful of outside accounts. `scripts/provision/wizard.sh` sets them up and writes every secret straight into Vercel and GitHub Actions, the only places secrets live (architecture 9.2). Nothing is written to disk. `scripts/provision/verify.sh` checks the result.
 
 ```sh
 scripts/provision/wizard.sh                 # every stage, in order
@@ -35,6 +35,7 @@ Local development runs on the seeded local stack (architecture 9.4) and needs no
 | `stripe` | You paste the test secret key; `stripe prices create`, `stripe webhook_endpoints create` | Prices `marquee_session_pass` ($2.99 one-off) and `marquee_monthly` ($4.99 a month); a webhook endpoint per environment for the four events in architecture 7.3 | Stripe key, both price IDs, webhook secrets |
 | `sentry` | You paste a token; `sentry-cli info` checks it; Sentry API creates the project | Project `marquee-tv` (Next.js) | DSN, org, project, auth token |
 | `llm` | By hand in the Anthropic console | Workspaces `marquee-preview` (low spend cap) and `marquee-production` | `ANTHROPIC_API_KEY`, one per environment |
+| `email` | You paste a Resend key and a Cloudflare token; Resend and Cloudflare APIs, then the Supabase Management API | Domain `getmarquee.tv` in Resend team "Marquee TV", its DKIM, SPF and bounce MX records plus a `p=none` DMARC record in Cloudflare, a sending-only key per environment | Resend SMTP, sender `noreply@getmarquee.tv`, 30 emails an hour, site URL and redirect URL in both Supabase projects |
 | `verify` | `verify.sh` | none | none |
 
 `.env.example` lists every variable. The `# @stage targets` line above each group says which stage sets it and whether it belongs in Vercel, GitHub Actions or both. `verify.sh` reads those lines.
@@ -49,6 +50,8 @@ These are the steps the wizard walks you through by hand:
 - **Stripe secret key.** The Stripe CLI's own login key is restricted and can't stand in for the app's key.
 - **Sentry token.** `sentry-cli` can't create projects or tokens, so the wizard creates the project through the Sentry API with your token.
 - **Anthropic workspaces and keys.**
+- **Resend team and key.** Resend's free plan allows one domain per team, so Marquee TV has its own team. The full-access key you paste creates the domain and one sending-only key per environment; Resend shows a key's token only at creation, so a re-run replaces both.
+- **Cloudflare token.** `getmarquee.tv`'s DNS is on Cloudflare. A token from the Edit zone DNS template, limited to that zone, lets the stage write the records Resend asks for.
 - **A lost database password.** Supabase shows the password only at creation. If `DATABASE_URL` goes missing later, the `supabase` stage opens the reset page and takes the new password.
 
 ## Status
@@ -66,6 +69,7 @@ On Nov 9, 2026 `verify.sh` passes: all 14 variables exist in every target and en
 | `stripe` | Sandbox "Marquee TV sandbox" (`acct_1UZsUPCL0MHWeXeo`, owner ops@getmarquee.tv). Prices `marquee_session_pass` $2.99 and `marquee_monthly` $4.99/month. Webhooks for the four events at `https://getmarquee.tv/api/webhooks/stripe` (production) and `https://staging.getmarquee.tv/api/webhooks/stripe?x-vercel-protection-bypass=<secret>` (preview, see [Preview webhook](#preview-webhook)). Standard account, no Connect, no Stripe Tax, no Managed Payments |
 | `sentry` | Org `marquee-tv` (US region), project `marquee-tv` (Next.js), team `marquee-tv` |
 | `llm` | Anthropic workspaces `marquee-preview` (about $10 a month cap) and `marquee-production`, one key each; both answered `GET /v1/models` before they were stored. On Nov 9 the stored Vercel values each answered a one-token messages call with 200 from inside a deployment ([Checking a stored secret](#checking-a-stored-secret)): Preview `sk-ant-usr-1Cq...6AAA`, Production `sk-ant-usr-1Ho...EAAA` |
+| `email` | Resend team "Marquee TV", domain `getmarquee.tv` verified, with DKIM on `resend._domainkey`, SPF and the bounce MX on `send`, and DMARC `p=none` in Cloudflare. Sending-only keys `supabase-auth-preview` and `supabase-auth-production`. Both Supabase projects send through Resend SMTP as Marquee TV <noreply@getmarquee.tv>. On Nov 10 a non-team address got a link from that sender on https://getmarquee.tv and on https://staging.getmarquee.tv, and each link signed it in. Resend's free plan caps both projects together at 100 emails a day |
 
 The `supabase`, `google-oauth`, `stripe`, `sentry` and `llm` stages were run by hand with the same commands and API calls the wizard makes, after the early wizard bugs fixed in this card's PR.
 
@@ -111,7 +115,6 @@ None of these blocks `verify.sh`.
 
 - [x] **Domains.** `getmarquee.tv` serves production; `staging.getmarquee.tv` is assigned to the `staging` branch, which the Deploy workflow keeps on main.
 - [x] **Preview webhook through Vercel's login wall.** See [Preview webhook](#preview-webhook).
-- [ ] **Supabase Auth URLs.** Both projects still have site URL `http://localhost:3000` and no extra redirect URLs. Production needs `https://getmarquee.tv` and staging `https://staging.getmarquee.tv`. Belongs with sign-in (card D1).
 - [ ] **Merchant of record or Stripe Tax.** Decide before or during card D2, since the beta takes real payments.
 - [ ] **Google consent screen.** Stays in Testing until `/privacy` and `/terms` ship (card D3); then publish it. Basic profile scopes need no Google review.
 - [ ] **Stripe live mode.** Production uses sandbox keys until launch. Going live needs account activation, a live secret key, live prices and a live webhook: re-run the `stripe` stage with a live key and the `sk_test_` check removed.
