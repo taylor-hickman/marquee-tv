@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens from docs/design/mockups.html (Foundations board).
+ *
+ * The mockups are dark only: ink background, paper text, one amber accent.
+ * Light swaps ink and paper. Amber fails 3:1 on paper, so in light the marks
+ * that sit on the background (focus ring, pin bar, arc) use a darker amber,
+ * and amber stays a fill under ink text. Grey darkens to hold 4.5:1.
+ *
+ * The page follows the system setting; data-theme="light" or "dark" on any
+ * element forces one theme for that subtree.
+ */
+
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #111111; /* Ink. 16.4:1 against paper. */
+  --fg: #f2efe8; /* Paper. Text, rules, selection. */
+  --muted: #9a9a9a; /* Grey. Meta. 6.7:1. */
+  --subtle: #2a2a2a; /* Thumbnail placeholder, disabled fill, skeleton. */
+  --accent: #ffb300; /* Marquee Amber. Action fill. */
+  --on-accent: #111111; /* 10.5:1 on amber. */
+  --mark: #ffb300; /* Focus, pin bar, arc. */
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f2efe8;
+  --fg: #111111;
+  --muted: #5e5e5e; /* 5.6:1 on paper. */
+  --subtle: #dcd8ce;
+  --accent: #ffb300;
+  --on-accent: #111111;
+  --mark: #8a5a00; /* 5.2:1 on paper. */
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f2efe8;
+    --fg: #111111;
+    --muted: #5e5e5e;
+    --subtle: #dcd8ce;
+    --accent: #ffb300;
+    --on-accent: #111111;
+    --mark: #8a5a00;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-mark: var(--mark);
+
+  --font-sans: var(--font-archivo), system-ui, sans-serif;
+}
+
+@theme {
+  /* Behind a sheet or dialog, in both themes. */
+  --color-scrim: rgb(17 17 17 / 0.76);
+
+  /* Type scale: size, line height, tracking. */
+  --text-display: 64px;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.035em;
+  --text-display-phone: 44px;
+  --text-display-phone--line-height: 1.05;
+  --text-display-phone--letter-spacing: -0.035em;
+  --text-heading: 28px;
+  --text-heading--line-height: 1.05;
+  --text-heading--letter-spacing: -0.02em;
+  --text-title: 20px;
+  --text-title--line-height: 1.2;
+  --text-body: 18px;
+  --text-body--line-height: 1.4;
+  --text-secondary: 16px;
+  --text-secondary--line-height: 1.3;
+  --text-meta: 14px;
+  --text-meta--line-height: 1.3;
+  --text-meta--letter-spacing: 0.06em;
+
+  /* Spacing is Tailwind's 4 px step; the mockups use 4 to 48. Control heights: */
+  --spacing-control-sm: 44px;
+  --spacing-control: 56px;
+  --spacing-control-lg: 64px;
+}
+
+@layer base {
+  html {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+  }
+
+  /* On body, not html, so rem stays 16 px and Tailwind's spacing stays 4 px. */
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
+
+  /* Themed subtrees paint their own ground. */
+  [data-theme] {
+    background: var(--bg);
+    color: var(--fg);
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: default;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--mark);
+    outline-offset: 3px;
+  }
+
+  ::placeholder {
+    color: var(--muted);
+    opacity: 1;
+  }
+
+  a {
+    color: inherit;
+  }
+}
+
+@utility meta {
+  font-size: var(--text-meta);
+  font-weight: 500;
+  letter-spacing: var(--text-meta--letter-spacing);
+  line-height: var(--text-meta--line-height);
+  text-transform: uppercase;
+  color: var(--muted);
+}
