@@ -15,6 +15,7 @@ import {
 import { requireOwner } from "@/lib/auth";
 import { sql } from "@/lib/db";
 import { getFlag } from "@/lib/flags";
+import { expirePasses } from "@/modules/billing";
 import { performanceCards } from "./cards";
 import { edit } from "./ops";
 import type { ApplyOps, CreateDraft, GetDraft, Undo } from "./types";
@@ -164,7 +165,16 @@ export const createDraft: CreateDraft = async (owner, body) => {
   return view(draft);
 };
 
+// A pass draft past period_end turns read_only before it is read or written
+// (architecture 7.3), so a lapsed pass holder sees the set as it was without
+// waiting for a job.
+const lapsePass = (draftId: DraftId) =>
+  draftIdSchema.safeParse(draftId).success
+    ? expirePasses(new Date(), draftId)
+    : undefined;
+
 export const getDraft: GetDraft = async (owner, draftId) => {
+  await lapsePass(draftId);
   const draft = await ownedDraft(sql, owner, draftId);
   return draft ? { ok: true, value: await view(draft) } : notFound;
 };
@@ -194,6 +204,7 @@ async function writeRevision(
     current: Snapshot | null,
   ) => Promise<ApiResult<Write>>,
 ): Promise<ApiResult<DraftView>> {
+  await lapsePass(draftId);
   const outcome = await sql.begin(
     async (
       tx,

@@ -27,12 +27,23 @@ export type CanRunCurator = (
   now: Date,
 ) => Promise<EntitlementState>;
 
+// `origin` is where Checkout and the portal send the person back to. A draft the
+// user doesn't own, or a user with no Stripe customer for the portal, is
+// `not_found`.
 export type CreateCheckout = (
   userId: UserId,
   body: CheckoutRequest,
-) => Promise<UrlResponse>;
+  origin: string,
+) => Promise<ApiResult<UrlResponse>>;
 
-export type CreatePortal = (userId: UserId) => Promise<UrlResponse>;
+export type CreatePortal = (
+  userId: UserId,
+  origin: string,
+) => Promise<ApiResult<UrlResponse>>;
+
+// Flips pass drafts past period_end to read_only, all of them or one, and
+// returns the ids flipped.
+export type ExpirePasses = (now: Date, draftId?: DraftId) => Promise<DraftId[]>;
 
 // The only writer of entitlements. A bad signature is `invalid_request`.
 export type HandleStripeWebhook = (
