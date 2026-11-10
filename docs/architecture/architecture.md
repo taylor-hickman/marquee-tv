@@ -331,6 +331,7 @@ Only `eligible AND available` performances reach the curator. A new upload becom
 | `POST /api/auth/session` | Finishes sign-in with the session as `Authorization: Bearer`; creates `app_user` on the first |
 | `POST /api/billing/checkout`, `POST /api/billing/portal`, `POST /api/webhooks/stripe` | Payments and billing management |
 | `GET /api/library` | Drafts for the signed-in user |
+| `GET /api/account` | Email, current plan and its period end, and the cohort's default plan (J10) |
 | `DELETE /api/account` | Delete my data (J10) |
 | `GET /privacy`, `GET /terms` | Static pages required before the first sign-in |
 

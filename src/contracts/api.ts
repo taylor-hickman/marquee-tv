@@ -214,6 +214,22 @@ export const libraryResponse = z.object({
   ),
 });
 
+// GET /api/account. `plan` is the user's current subscription, else their latest
+// pass, else null; a pass's periodEnd is when its edits end. `defaultPlan`
+// follows the cohort claimed from the guest (PRD 16.4).
+export const accountResponse = z.object({
+  email: z.string().min(1),
+  defaultPlan: plan,
+  plan: z
+    .object({
+      kind: plan,
+      // Stripe's subscription status; a pass is always "active".
+      status: z.string().min(1),
+      periodEnd: z.iso.datetime({ offset: true }).nullable(),
+    })
+    .nullable(),
+});
+
 // DELETE /api/account
 export const deleteAccountResponse = z.object({ deleted: z.literal(true) });
 
@@ -273,6 +289,7 @@ export const routes = {
     response: stripeWebhookResponse,
   },
   "GET /api/library": { request: emptyRequest, response: libraryResponse },
+  "GET /api/account": { request: emptyRequest, response: accountResponse },
   "DELETE /api/account": {
     request: emptyRequest,
     response: deleteAccountResponse,
@@ -298,5 +315,6 @@ export type SessionResponse = z.infer<typeof sessionResponse>;
 export type CheckoutRequest = z.infer<typeof checkoutRequest>;
 export type UrlResponse = z.infer<typeof urlResponse>;
 export type LibraryResponse = z.infer<typeof libraryResponse>;
+export type AccountResponse = z.infer<typeof accountResponse>;
 export type ReplaceOptionsResponse = z.infer<typeof replaceOptionsResponse>;
 export type StripeWebhookResponse = z.infer<typeof stripeWebhookResponse>;
