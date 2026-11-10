@@ -97,9 +97,11 @@ async function toBrief(
   held: HeldConstraints,
 ): Promise<Brief> {
   const durationS = typedDuration(model.stated_length_min) ?? input.durationS;
+  // A held source include never carries over: a new request starts from every series.
   const narrowed = await constraints(model, context, {
     series_include: [],
-    ...held,
+    series_exclude: held.series_exclude,
+    exclusions: held.exclusions,
   });
   return {
     curve: fitCurve(model.curve, durationS / 60),

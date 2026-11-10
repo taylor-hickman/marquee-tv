@@ -49,7 +49,16 @@ export function createGenerate(deps: GenerateDeps): Generate {
       const result = await extractBrief(
         state.input,
         await deps.briefContext(),
-        { llm: deps.llm, signal, held: state.brief ?? undefined },
+        {
+          llm: deps.llm,
+          signal,
+          held: state.brief
+            ? {
+                series_exclude: state.brief.series_exclude,
+                exclusions: state.brief.exclusions,
+              }
+            : undefined,
+        },
       );
       calls.push(...result.calls);
       if (!result.ok) return failed(result.error);

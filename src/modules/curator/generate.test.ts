@@ -259,6 +259,14 @@ describe("generate", () => {
     expect(proposal(outcome).brief.series_exclude).toContain(2);
   });
 
+  test("a held source include does not carry into a generate whose input names none", async () => {
+    const { outcome } = await run({
+      held: { ...proposalBrief, series_include: [1] },
+      composed: [1, 2, 3, 4, 5, 6],
+    });
+    expect(proposal(outcome).brief.series_include).toEqual([]);
+  });
+
   test("rule 2: a pin whose artist a held exclusion covers stays when the text only mentions it", async () => {
     const { outcome } = await run({
       ...pinnedKhruangbin,
