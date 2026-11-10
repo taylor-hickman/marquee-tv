@@ -8,7 +8,9 @@
 //   page1: 01 desk concert, 02 not in either series, 03 home concert
 //   page2: 04 blocked in the US, 05 private (videos.list leaves it out),
 //          06 an upcoming premiere with no duration yet
-//   page3: 07, 08 desk concerts
+//   page3: 07, 08 desk concerts; 11, 12 single-act Tiny Desk Meets festival
+//          sets in both title shapes, 13 a multi-act one (PRD 9.1 keeps all
+//          three out)
 // `videos.later.json` is the same channel a week on: 01 went private, 03 was
 // retitled, 04's block lifted, 06 has aired, 07 was deleted, 08 is no longer
 // allowed in the US, and 09 and 10 are back for performances whose cache rows

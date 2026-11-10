@@ -103,8 +103,9 @@ async function newUploads(
 // An upload belongs to the series whose title rule's fixed text its title
 // carries, ignoring case: "{artist}: Tiny Desk Concert" takes any title with
 // "Tiny Desk Concert" in it. When several series match, the one with the most
-// fixed text wins. Uploads that match no series are left out; A3 decides kind
-// and artists for the rest.
+// fixed text wins. Uploads that match no series are left out, which is how the
+// Tiny Desk Meets festival sets stay out of the catalog (PRD 9.1); A3 decides
+// kind and artists for the rest.
 function seriesFor(title: string, members: Series[]) {
   const lower = title.toLowerCase();
   let best: Series | undefined;

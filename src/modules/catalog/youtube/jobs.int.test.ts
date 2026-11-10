@@ -92,6 +92,16 @@ describe("ingest:new", () => {
     expect(youtube.units).toBe(4);
   });
 
+  test("leaves out the Tiny Desk Meets festival sets, single-act or not (PRD 9.1)", async () => {
+    const { ids } = await fixtureSeries();
+    await ingestNew(api("now").youtube, now, ids);
+
+    const festival = ["A2fixture11", "A2fixture12", "A2fixture13"];
+    expect(
+      await sql`select video_id from performance where video_id in ${sql(festival)}`,
+    ).toEqual([]);
+  });
+
   test("stops paging once every series has reached its own newest upload in the catalog", async () => {
     const { desk, home, ids } = await fixtureSeries();
     await factories.performance({

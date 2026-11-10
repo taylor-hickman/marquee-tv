@@ -2,6 +2,7 @@
 // it so e2e runs need no key; tests script it to drive the curator's repair rules.
 import type { z } from "zod";
 import { examples } from "@/contracts/examples";
+import type { ModelBrief, ModelRefine } from "../brief/prompt";
 import type { LlmFunction, LlmInput, Transport } from "./index";
 
 // What the model "wrote": any value, serialized and parsed against the caller's
@@ -12,8 +13,43 @@ export type FakeScript = Partial<
   Record<LlmFunction, (input: LlmInput, schema: z.ZodType) => FakeReply>
 >;
 
+// The brief step asks for the model's shapes (../brief/prompt.ts), not the contract's.
+const none = {
+  sources_include: [],
+  sources_exclude: [],
+  format_include: [],
+  format_exclude: [],
+  exclude_artists: [],
+};
+
+const modelBrief: ModelBrief = {
+  stated_length_min: null,
+  curve: examples.brief.curve,
+  genres: examples.brief.genres,
+  scenes: examples.brief.scenes,
+  ...none,
+  influences: examples.brief.influences,
+  novelty: "default",
+  surprise: false,
+};
+
+const modelRefine: ModelRefine = {
+  scope: null,
+  stated_length_min: null,
+  curve: examples.refineBrief.delta.curve,
+  ...none,
+  genres: null,
+  scenes: null,
+  novelty: null,
+};
+
 const canned: Record<LlmFunction, unknown[]> = {
-  extractBrief: [examples.brief, { delta: examples.brief, scope: null }],
+  extractBrief: [
+    examples.brief,
+    { delta: examples.brief, scope: null },
+    modelBrief,
+    modelRefine,
+  ],
   compose: [examples.composeOutput, examples.refineOutput],
 };
 

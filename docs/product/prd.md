@@ -235,6 +235,8 @@ The catalog is the AI's only source of truth and, over time, the moat. At launch
 
 Three publishers at full depth is well over 2,000 performances, and cheap to ingest because each channel's uploads playlist is paged at 1 quota unit per 50 videos.
 
+**Tiny Desk Meets is out.** NPR's "Tiny Desk Meets" festival sets (SXSW, AFROPUNK, globalFEST) are not Tiny Desk Concerts and are not in the catalog, as their own series or under Tiny Desk. The Phase 0 run found 28 single-act sets and 11 videos with several acts each. They're filmed on festival stages, not at the desk, and NPR brands them as a separate strand. Format reaches the curator through the series convention (8.1), so under Tiny Desk's "stripped-down" they would answer a stripped-down brief with a festival set. The 28 are under 2% of the series. The 11 multi-act videos would stay out even if the sets came in, since each holds several separate sets. The single-act sets can come back under 9.4 as their own series with their own convention.
+
 ### 9.2 Data model (per performance)
 
 | Field | Source | Notes |
