@@ -207,7 +207,7 @@ describe("code holds what the model may not decide", () => {
     expect(result.ok && result.output.duration_s).toBe(7200);
   });
 
-  test("a source name fits every series and publisher it names, and an unknown one fits nothing", async () => {
+  test("a source name fits every series it names, and an unknown one fits nothing", async () => {
     const result = await extractBrief(input, context, {
       llm: replay({
         ...model,
@@ -219,7 +219,33 @@ describe("code holds what the model may not decide", () => {
     expect(result.ok && result.output).toMatchObject({
       series_include: [1, 2],
       series_exclude: [3, 4],
-      exclusions: { artist_ids: [1], publisher_ids: [2] },
+      exclusions: { artist_ids: [1], publisher_ids: [] },
+    });
+  });
+
+  test("one series of a publisher stays one series", async () => {
+    const result = await extractBrief(input, context, {
+      llm: replay({
+        ...model,
+        sources_include: ["Live on KEXP"],
+        sources_exclude: ["COLORS ENCORE"],
+      }),
+    });
+    expect(result.ok && result.output).toMatchObject({
+      series_include: [3],
+      series_exclude: [6],
+      exclusions: { publisher_ids: [] },
+    });
+  });
+
+  test("a name that fits no series fits the publisher whose name contains it", async () => {
+    const result = await extractBrief(input, context, {
+      llm: replay({ ...model, sources_exclude: ["NPR"] }),
+    });
+    expect(result.ok && result.output).toMatchObject({
+      series_include: [],
+      series_exclude: [],
+      exclusions: { publisher_ids: [1] },
     });
   });
 
@@ -267,6 +293,25 @@ describe("code holds what the model may not decide", () => {
     );
     expect(result.ok && result.output).toEqual({
       delta: { exclusions: { artist_ids: [12, 7], publisher_ids: [] } },
+      scope: null,
+    });
+  });
+
+  test("an empty genre or scene list in a refine leaves the current ones alone", async () => {
+    const result = await extractRefineBrief(
+      { instruction: "calmer", brief: current, list },
+      context,
+      {
+        llm: replay({
+          ...unchanged,
+          genres: [],
+          scenes: [],
+          novelty: "default",
+        }),
+      },
+    );
+    expect(result.ok && result.output).toEqual({
+      delta: { novelty: "default" },
       scope: null,
     });
   });

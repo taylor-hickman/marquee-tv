@@ -126,8 +126,9 @@ async function toRefine(
   const curve =
     model.curve && clipCurve(model.curve, (durationS ?? brief.duration_s) / 60);
   if (curve?.length) delta.curve = curve;
-  if (model.genres) delta.genres = terms(model.genres);
-  if (model.scenes) delta.scenes = terms(model.scenes);
+  // An empty list means unchanged, as null does: never a wipe of the current terms.
+  if (model.genres?.length) delta.genres = terms(model.genres);
+  if (model.scenes?.length) delta.scenes = terms(model.scenes);
   if (model.novelty) delta.novelty = model.novelty;
 
   const narrowed = await constraints(model, context, brief);
@@ -290,18 +291,28 @@ async function constraints(
   };
 }
 
-// Publishers and series a source name fits: either name contains the other.
-// A source the catalog doesn't have fits nothing, so it can't become an id.
+// The series a source name fits, where either name contains the other ("Tiny
+// Desk", "Live on KEXP sessions"). A name that fits no series fits the
+// publishers whose name contains it ("NPR"); a longer name never widens to its
+// publisher, so "Live on KEXP" is one series, not KEXP. A source the catalog
+// doesn't have fits nothing, so it can't become an id.
 function sources(names: string[], catalog: BriefCatalog) {
-  const keys = terms(names);
-  const fits = (name: string) =>
-    keys.some(
-      (k) => name.toLowerCase().includes(k) || k.includes(name.toLowerCase()),
-    );
-  return {
-    publishers: catalog.publishers.filter((p) => fits(p.name)).map((p) => p.id),
-    series: catalog.series.filter((s) => fits(s.name)).map((s) => s.id),
-  };
+  const publishers: number[] = [];
+  const series: number[] = [];
+  for (const key of terms(names)) {
+    const fits = catalog.series.filter((s) => {
+      const name = s.name.toLowerCase();
+      return name.includes(key) || key.includes(name);
+    });
+    if (fits.length > 0) series.push(...fits.map((s) => s.id));
+    else
+      publishers.push(
+        ...catalog.publishers
+          .filter((p) => p.name.toLowerCase().includes(key))
+          .map((p) => p.id),
+      );
+  }
+  return { publishers: unique(publishers), series: unique(series) };
 }
 
 function same(a: number[], b: number[]) {
