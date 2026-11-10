@@ -25,6 +25,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^1.6.0",
     "@supabase/supabase-js": "^2.119.0",
+    "marked": "^18.1.2",
     "next": "16.4.5",
     "postgres": "^4.1.0",
     "react": "19.3.1",
