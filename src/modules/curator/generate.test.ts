@@ -12,7 +12,7 @@ import type {
 import type { Candidate } from "@/modules/catalog";
 import type { BriefContext } from "./brief";
 import type { ModelBrief } from "./brief/prompt";
-import { createGenerate, echo, keepExclusions } from "./generate";
+import { createGenerate, echo } from "./generate";
 import { createFakeAdapter } from "./llm";
 import type { FakeReply } from "./llm/fake";
 import type { CuratorState } from "./types";
@@ -65,6 +65,7 @@ const context: BriefContext = {
       name: "Live on KEXP",
       convention: "full band in studio",
     },
+    { id: 2, publisher_id: 1, name: "Tiny Desk", convention: "stripped back" },
   ],
   artistIdFor: async (name) =>
     name.toLowerCase() === "khruangbin" ? KHRUANGBIN : null,
@@ -245,6 +246,52 @@ describe("generate", () => {
     expect(ids(p)).toEqual([1, 2, 4, 5, 6, 7]);
     expect(p.brief.exclusions).toEqual({ artist_ids: [3], publisher_ids: [9] });
     expect(p.brief.series_exclude).toEqual([2]);
+    expect(p.warnings).toEqual([]);
+  });
+
+  test("rule 2: a format the new input asks for never lifts a held series exclusion", async () => {
+    const { outcome } = await run({
+      held: { ...proposalBrief, series_exclude: [2] },
+      input: { text: "stripped back, acoustic" },
+      brief: { format_include: [2] },
+      composed: [1, 2, 3, 4, 5, 6],
+    });
+    expect(proposal(outcome).brief.series_exclude).toContain(2);
+  });
+
+  test("rule 2: a pin whose artist a held exclusion covers stays when the text only mentions it", async () => {
+    const { outcome } = await run({
+      ...pinnedKhruangbin,
+      held: {
+        ...proposalBrief,
+        exclusions: { artist_ids: [KHRUANGBIN], publisher_ids: [] },
+      },
+      input: { text: "warm soul like Khruangbin" },
+      composed: [1, 2, 3, 4, 5],
+    });
+    const p = proposal(outcome);
+    expect(ids(p)).toEqual([40, 1, 2, 3, 4, 5]);
+    expect(p.removedIds).toEqual([]);
+    expect(p.brief.exclusions.artist_ids).toEqual([KHRUANGBIN]);
+  });
+
+  test("a must-include seed the composer placed off the curve survives the length fix", async () => {
+    // Ten ten-minute items for a mellow hour; the seed is the worst energy fit.
+    const candidates = [
+      ...Array.from({ length: 9 }, (_, i) =>
+        candidate(i + 1, i + 1, { energy: 2 }),
+      ),
+      candidate(20, 9, { energy: 5 }),
+    ];
+    const { outcome } = await run({
+      input: { seeds: [{ artistId: 9, name: "Artist 9", mustInclude: true }] },
+      brief: { curve: [{ from_min: 0, to_min: 60, energy: 2 }] },
+      candidates,
+      composed: [1, 2, 3, 4, 20, 5, 6, 7, 8, 9],
+    });
+    const p = proposal(outcome);
+    expect(ids(p)).toContain(20);
+    expect(ids(p)).toHaveLength(6);
     expect(p.warnings).toEqual([]);
   });
 
@@ -432,12 +479,6 @@ describe("generate", () => {
     expect(outcome).toMatchObject({ ok: false, error: "timeout" });
     expect(retrieveCandidates).not.toHaveBeenCalled();
   });
-});
-
-test("a series the new input names as its source lifts its held exclusion", () => {
-  const held = { ...proposalBrief, series_exclude: [2, 4] };
-  const next = { ...proposalBrief, series_include: [2], series_exclude: [5] };
-  expect(keepExclusions(next, held).series_exclude).toEqual([4, 5]);
 });
 
 describe("echo", () => {

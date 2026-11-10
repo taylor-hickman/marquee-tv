@@ -31,8 +31,11 @@ export type RepairInput = {
   pins: Map<PerformanceId, PinFacts>;
   removedIds: PerformanceId[];
   brief: Brief;
-  // The person's words this run. A pin is let go only when they name its artist.
+  // The person's words this run. A pin is let go only when they name its artist
+  // and this run's brief step excluded it.
   instruction: string | null;
+  // Artists this run's brief step newly excluded; a held exclusion never lets a pin go.
+  newExclusions: ArtistId[];
 };
 
 export type RepairResult = {
@@ -72,10 +75,12 @@ export function repair(input: RepairInput): RepairResult {
       durationS: null,
     };
     // "drop Khruangbin" on a pinned Khruangbin: the newer instruction wins, and
-    // only when it names the artist (architecture 6.3). An exclusion alone, or a
-    // composer that leaves the pin out, never moves it.
+    // only when this run excluded the artist and the text names it (architecture
+    // 6.3). An exclusion from an earlier run, or a composer that leaves the pin
+    // out, never moves it.
     const named = facts.artists.some(
-      (a) => excludedArtists.has(a.id) && names(input.instruction, a.name),
+      (a) =>
+        input.newExclusions.includes(a.id) && names(input.instruction, a.name),
     );
     if (named) {
       released.push(item.performance_id);
@@ -154,8 +159,12 @@ export function repair(input: RepairInput): RepairResult {
   const warnings: CuratorWarning[] = [];
   for (const seed of brief.seeds) {
     if (!seed.must_include) continue;
-    const present = layout().some((e) => e.artistIds.includes(seed.artist_id));
-    if (present) continue;
+    const present = layout().find((e) => e.artistIds.includes(seed.artist_id));
+    if (present) {
+      // The composer placed it: the length fix may not drop it.
+      present.kept = true;
+      continue;
+    }
     const pick = candidates.find(
       (c) => c.artistIds.includes(seed.artist_id) && open(c),
     );

@@ -30,6 +30,10 @@ export type BriefOptions = CallOptions & {
   llm?: Pick<LlmAdapter, "extractBrief">;
 };
 
+// The exclusions a draft's held brief already carries; a new brief only adds to
+// them (CLAUDE.md rule 2).
+export type HeldConstraints = Pick<Brief, "series_exclude" | "exclusions">;
+
 const defaultLlm = { extractBrief: llm.extractBrief };
 
 const MAX_MIN = 6 * 60;
@@ -37,7 +41,14 @@ const MAX_MIN = 6 * 60;
 export async function extractBrief(
   input: BriefInput,
   context: BriefContext,
-  { llm = defaultLlm, ...options }: BriefOptions = {},
+  {
+    llm = defaultLlm,
+    held = {
+      series_exclude: [],
+      exclusions: { artist_ids: [], publisher_ids: [] },
+    },
+    ...options
+  }: BriefOptions & { held?: HeldConstraints } = {},
 ): Promise<LlmResult<Brief>> {
   const result = await llm.extractBrief(
     { system: generateSystem(context), user: generateUser(input) },
@@ -47,7 +58,7 @@ export async function extractBrief(
   if (!result.ok) return result;
   return {
     ok: true,
-    output: await toBrief(result.output, input, context),
+    output: await toBrief(result.output, input, context, held),
     calls: result.calls,
   };
 }
@@ -83,12 +94,12 @@ async function toBrief(
   model: ModelBrief,
   input: BriefInput,
   context: BriefContext,
+  held: HeldConstraints,
 ): Promise<Brief> {
   const durationS = typedDuration(model.stated_length_min) ?? input.durationS;
   const narrowed = await constraints(model, context, {
     series_include: [],
-    series_exclude: [],
-    exclusions: { artist_ids: [], publisher_ids: [] },
+    ...held,
   });
   return {
     curve: fitCurve(model.curve, durationS / 60),

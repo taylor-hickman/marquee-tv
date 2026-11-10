@@ -49,16 +49,11 @@ export function createGenerate(deps: GenerateDeps): Generate {
       const result = await extractBrief(
         state.input,
         await deps.briefContext(),
-        {
-          llm: deps.llm,
-          signal,
-        },
+        { llm: deps.llm, signal, held: state.brief ?? undefined },
       );
       calls.push(...result.calls);
       if (!result.ok) return failed(result.error);
-      brief = state.brief
-        ? keepExclusions(result.output, state.brief)
-        : result.output;
+      brief = result.output;
     }
     if (!brief) throw new Error("generate needs an input or a held brief");
     emit({ type: "brief", brief, echo: echo(brief) });
@@ -111,6 +106,9 @@ export function createGenerate(deps: GenerateDeps): Generate {
       removedIds: state.removedIds,
       brief,
       instruction: state.input?.text ?? null,
+      newExclusions: brief.exclusions.artist_ids.filter(
+        (id) => !state.brief?.exclusions.artist_ids.includes(id),
+      ),
     });
     return {
       ok: true,
@@ -129,27 +127,6 @@ export function createGenerate(deps: GenerateDeps): Generate {
         }),
       },
     };
-  };
-}
-
-// Exclusions survive every run (CLAUDE.md rule 2): the new brief keeps the held
-// brief's excluded artists, publishers and series. A series the new input names
-// as a source lifts its own exclusion, as a refine does (brief/index.ts).
-export function keepExclusions(next: Brief, held: Brief): Brief {
-  const union = (a: number[], b: number[]) => [...new Set([...a, ...b])];
-  return {
-    ...next,
-    series_exclude: union(
-      held.series_exclude.filter((id) => !next.series_include.includes(id)),
-      next.series_exclude,
-    ),
-    exclusions: {
-      artist_ids: union(held.exclusions.artist_ids, next.exclusions.artist_ids),
-      publisher_ids: union(
-        held.exclusions.publisher_ids,
-        next.exclusions.publisher_ids,
-      ),
-    },
   };
 }
 

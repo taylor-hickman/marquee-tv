@@ -129,6 +129,7 @@ const scenario = fc
         })),
       },
       instruction: s.instruction,
+      newExclusions: s.excludedArtists,
     };
   });
 
@@ -184,6 +185,16 @@ describe("repair", () => {
         expect(result.droppedIds.every((id) => !candidateIds.has(id))).toBe(
           true,
         );
+
+        // A must-include seed is in the set, or the gap is a warning.
+        for (const seed of input.brief.seeds) {
+          const present = out.some((id) => artistOf.get(id) === seed.artist_id);
+          const warned = result.warnings.some(
+            (w) =>
+              w.code === "seed_unavailable" && w.artist_id === seed.artist_id,
+          );
+          expect(present || warned).toBe(true);
+        }
       }),
       { numRuns: 500 },
     );
@@ -209,6 +220,7 @@ describe("repair", () => {
         exclusions: { artist_ids: [1], publisher_ids: [7] },
       },
       instruction: null,
+      newExclusions: [],
     });
     expect(result.items.map((i) => i.performance_id)).toEqual([4]);
   });
@@ -232,6 +244,7 @@ describe("repair", () => {
       removedIds: [],
       brief: { ...brief, duration_s: 1800 },
       instruction: null,
+      newExclusions: [],
     });
     expect(result.items.map((i) => i.performance_id)).toEqual([3, 1, 2, 4]);
     expect(result.items[0]).toEqual(pick(3));
@@ -246,6 +259,7 @@ describe("repair", () => {
       removedIds: [],
       brief: { ...brief, duration_s: 600 },
       instruction: "drop everything",
+      newExclusions: [],
     });
     expect(result.items.map((i) => i.performance_id)).toEqual([50, 1]);
   });
@@ -265,6 +279,7 @@ describe("repair", () => {
       removedIds: [],
       brief: { ...brief, duration_s: 600 },
       instruction: null,
+      newExclusions: [],
     });
     expect(result.items.map((i) => i.performance_id)).toEqual([3]);
   });
