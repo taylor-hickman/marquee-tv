@@ -1,50 +1,22 @@
-// Runs against the local Supabase stack after `pnpm db:reset && pnpm seed`.
-// Skipped when no stack is running, except in CI, where a missing stack fails.
-
-import { execFileSync } from "node:child_process";
+import { sql as testSql } from "@/test/db";
 import { randomUUID } from "node:crypto";
-import { createClient } from "@supabase/supabase-js";
-import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
+import { beforeAll, describe, expect, test, vi } from "vitest";
+import { sql } from "@/lib/db";
 
 vi.mock("server-only", () => ({}));
 
-type Stack = {
-  DB_URL: string;
-  API_URL: string;
-  PUBLISHABLE_KEY: string;
-  ANON_KEY: string;
-};
-
-function localStack(): Stack | null {
-  try {
-    const out = execFileSync("supabase", ["status", "-o", "json"], {
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    });
-    return JSON.parse(out);
-  } catch (error) {
-    if (process.env.CI) throw error;
-    return null;
-  }
-}
-
-const stack = localStack();
-
-describe.skipIf(!stack)("database", () => {
-  let sql: typeof import("@/lib/db").sql;
+describe("database", () => {
   let tables: string[];
   const userId = randomUUID();
 
   beforeAll(async () => {
-    process.env.DATABASE_URL = stack!.DB_URL;
-    ({ sql } = await import("@/lib/db"));
     tables = (
-      await sql<{ tablename: string }[]>`
+      await testSql<{ tablename: string }[]>`
         select tablename from pg_tables where schemaname = 'public' order by tablename`
     ).map((r) => r.tablename);
 
     // Put a row in every table pnpm seed leaves empty, so "anon reads zero rows" means something.
-    await sql.begin(async (tx) => {
+    await testSql.begin(async (tx) => {
       await tx`insert into auth.users (id, email, aud, role)
                values (${userId}, ${`${userId}@example.test`}, 'authenticated', 'authenticated')`;
       await tx`insert into app_user (id, email) values (${userId}, ${`${userId}@example.test`})`;
@@ -71,32 +43,15 @@ describe.skipIf(!stack)("database", () => {
     });
   });
 
-  afterAll(async () => {
-    if (!sql) return;
-    await sql.begin(async (tx) => {
-      await tx`delete from curator_run where draft_id in (
-                 select d.id from playlist_draft d join guest g on g.id = d.owner_guest_id
-                 where g.token_hash = sha256(convert_to(${userId}, 'utf8')))`;
-      await tx`delete from handoff_event where draft_id in (
-                 select draft_id from share_link where code = ${userId})`;
-      await tx`delete from event where name = ${userId}`;
-      await tx`delete from guest where token_hash = sha256(convert_to(${userId}, 'utf8'))`;
-      await tx`delete from auth.users where id = ${userId}`;
-      await tx`delete from app_flag where key = ${userId}`;
-      await tx`delete from performance_tag where value = ${userId}`;
-    });
-    await sql.end();
-  });
-
   test("seed leaves 300 performances, each with a YouTube cache row", async () => {
-    const [counts] = await sql`
+    const [counts] = await testSql`
       select (select count(*) from performance) as performances,
              (select count(*) from performance p join performance_yt_cache c on c.performance_id = p.id) as cached`;
     expect(counts).toEqual({ performances: 300, cached: 300 });
   });
 
   test("every table has row-level security on and no policies", async () => {
-    const rows = await sql`
+    const rows = await testSql`
       select c.relname as table, c.relrowsecurity as rls,
              (select count(*) from pg_policies p where p.schemaname = 'public' and p.tablename = c.relname) as policies
       from pg_class c join pg_namespace n on n.oid = c.relnamespace
@@ -113,18 +68,17 @@ describe.skipIf(!stack)("database", () => {
     }
   });
 
-  test.each(["PUBLISHABLE_KEY", "ANON_KEY"] as const)(
-    "the %s reads zero rows from every table",
-    async (key) => {
-      const anon = createClient(stack!.API_URL, stack![key], {
-        auth: { persistSession: false },
+  // The publishable and anon keys both reach Postgres as the anon role, which
+  // PostgREST assumes with set local role. Granting anon select first leaves
+  // row-level security as the only thing between it and the rows.
+  test("the anon role reads zero rows from every table, even with select granted", async () => {
+    await testSql`grant select on all tables in schema public to anon`;
+    for (const table of tables) {
+      const rows = await testSql.begin(async (tx) => {
+        await tx`set local role anon`;
+        return tx`select * from ${tx(table)}`;
       });
-      for (const table of tables) {
-        const { data, error } = await anon.from(table).select("*");
-        if (error)
-          expect(error.code, `${table}: ${error.message}`).toBe("42501");
-        else expect(data, table).toEqual([]);
-      }
-    },
-  );
+      expect(rows, table).toEqual([]);
+    }
+  });
 });
