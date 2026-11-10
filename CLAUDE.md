@@ -68,3 +68,5 @@ Brutalist and minimal. Controls explain themselves; there is no helper text. Cop
 ## Delivery
 
 One task, one branch, one PR. Title the PR with the card ID and name. Commit messages say what changed and why in one line.
+
+Card review: once CI is green on a PR that changes anything outside `docs/`, run the card review in `docs/build-plan.md` 4.1 before `hydra done`.

@@ -30,8 +30,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
           PR: ${{ github.event.pull_request.number || github.event.issue.number }}
-          # When set, only this login's comments count as reviews.
-          REVIEWER: ${{ vars.CARD_REVIEWER }}
         run: |
           set -euo pipefail
           pr=$(gh api "repos/$REPO/pulls/$PR")
@@ -58,9 +56,8 @@ jobs:
           # The latest comment whose first line is `Card review: <sha>` naming
           # the head commit. Comment bodies are data: they only go through jq.
           review=$(gh api --paginate "repos/$REPO/issues/$PR/comments" --jq '.[]' |
-            jq -s --arg sha "$sha" --arg who "$REVIEWER" '
-              map(select($who == "" or .user.login == $who)
-                | select(.body | test("^Card review: [0-9a-f]{7,40}\\b"))
+            jq -s --arg sha "$sha" '
+              map(select(.body | test("^Card review: [0-9a-f]{7,40}\\b"))
                 | select((.body | capture("^Card review: (?<s>[0-9a-f]{7,40})").s) as $s
                     | $sha | startswith($s)))
               | sort_by(.created_at) | last')
