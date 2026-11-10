@@ -2,11 +2,12 @@ import { sql } from "@/test/db";
 import { randomUUID } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 import { describe, expect, test, vi } from "vitest";
-import { sessionResponse, signInResponse } from "@/contracts";
+import { libraryResponse, sessionResponse, signInResponse } from "@/contracts";
 import { requireOwner } from "@/lib/auth";
 import { asGuest, stack } from "@/lib/auth/testing";
 import { consumeClaimCode } from "@/modules/billing";
 import * as factories from "@/test/factories";
+import { GET as library } from "../library/route";
 import { POST as session } from "./session/route";
 import { POST as signIn } from "./sign-in/route";
 
@@ -23,13 +24,24 @@ const startSignIn = async (headers: Record<string, string> = {}) => {
   return new URL(signInResponse.parse(await response.json()).redirectTo);
 };
 
-const completeSignIn = (accessToken?: string) =>
+const completeSignIn = (accessToken?: string, claim?: string) =>
   session(
     new Request(`${origin}/api/auth/session`, {
       method: "POST",
       headers: accessToken ? { authorization: `Bearer ${accessToken}` } : {},
+      body: claim === undefined ? undefined : JSON.stringify({ claim }),
     }),
   );
+
+const libraryOf = async (accessToken: string) => {
+  const response = await library(
+    new Request(`${origin}/api/library`, {
+      headers: { authorization: `Bearer ${accessToken}` },
+    }),
+  );
+  expect(response.status).toBe(200);
+  return libraryResponse.parse(await response.json()).drafts.map((d) => d.id);
+};
 
 // Opens a magic link the way the browser does, possibly a different browser
 // from the one that started sign-in: Auth redirects to `redirectTo` with the
@@ -103,6 +115,42 @@ describe("POST /api/auth/session", () => {
     ).toEqual([{ email: user.email }]);
   });
 
+  test("claims the guest's drafts with the code the link carried", async () => {
+    const guest = await asGuest();
+    const drafts = await Promise.all([
+      factories.playlistDraft({ owner_guest_id: guest.guestId }),
+      factories.playlistDraft({ owner_guest_id: guest.guestId }),
+    ]);
+    const redirectTo = await startSignIn(guest.headers);
+    const claim = redirectTo.searchParams.get("claim")!;
+    const user = await followMagicLink(redirectTo);
+
+    const response = await completeSignIn(user.accessToken, claim);
+    expect(response.status).toBe(200);
+    expect((await libraryOf(user.accessToken)).sort()).toEqual(
+      drafts.map((d) => d.id).sort(),
+    );
+
+    // The same link opened again, or by someone else, still signs in.
+    const other = await followMagicLink(redirectTo);
+    const reused = await completeSignIn(other.accessToken, claim);
+    expect(reused.status).toBe(200);
+    expect(sessionResponse.parse(await reused.json())).toEqual({
+      userId: other.userId,
+    });
+    expect(await libraryOf(other.accessToken)).toEqual([]);
+    expect(await libraryOf(user.accessToken)).toHaveLength(2);
+  });
+
+  test("ignores a code that was never minted", async () => {
+    const user = await followMagicLink(await startSignIn());
+    for (const claim of ["not-a-code", ""]) {
+      const response = await completeSignIn(user.accessToken, claim);
+      expect(response.status).toBe(200);
+    }
+    expect(await libraryOf(user.accessToken)).toEqual([]);
+  });
+
   test("is unauthorized without a valid session", async () => {
     for (const token of [undefined, "not-a-jwt"]) {
       const response = await completeSignIn(token);
@@ -119,15 +167,13 @@ test("a session passes requireOwner on a draft claimed from its guest", async ()
   });
   const redirectTo = await startSignIn(guest.headers);
   const user = await followMagicLink(redirectTo);
-  await completeSignIn(user.accessToken);
-
-  // C4's claimGuestDrafts consumes the code and moves the drafts like this.
-  const claimed = await consumeClaimCode(redirectTo.searchParams.get("claim")!);
-  expect(claimed).toBe(guest.guestId);
-  const [moved] = await sql`
-    update playlist_draft set owner_user_id = ${user.userId}, owner_guest_id = null
-    where owner_guest_id = ${claimed} returning *`;
-  expect(moved.id).toBe(draft.id);
+  expect(
+    await completeSignIn(
+      user.accessToken,
+      redirectTo.searchParams.get("claim")!,
+    ),
+  ).toHaveProperty("status", 200);
+  expect(await libraryOf(user.accessToken)).toEqual([draft.id]);
 
   const owned = { ownerGuestId: null, ownerUserId: user.userId };
   const request = (headers: Record<string, string>) =>

@@ -66,7 +66,7 @@ On Nov 9, 2026 `verify.sh` passes: all 14 variables exist in every target and en
 | `supabase` | `marquee-staging` (`itfepuvscjqlfyfjzocb`) and `marquee-production` (`hmidxvvaiuwvukkodasu`), `us-east-1`, org `marquee-tv`. Each `DATABASE_URL` was tested with `supabase migration list --db-url` before it was stored. Staging's password was reset once, after an early wizard run stopped before setting `DATABASE_URL` |
 | `google-cloud` | Project `marquee-tv-71b10a`, YouTube Data API on, key `marquee-ingest` |
 | `google-oauth` | Consent screen External, in Testing, authorized domains `getmarquee.tv` and `supabase.co`. Web client "Supabase Auth" with both callback URLs. Google sign-in on in both Supabase projects |
-| `stripe` | Sandbox "Marquee TV sandbox" (`acct_1UZsUPCL0MHWeXeo`, owner ops@getmarquee.tv). Prices `marquee_session_pass` $2.99 and `marquee_monthly` $4.99/month. Webhooks for the four events at `https://getmarquee.tv/api/webhooks/stripe` (production) and `https://staging.getmarquee.tv/api/webhooks/stripe` (preview). Standard account, no Connect, no Stripe Tax, no Managed Payments |
+| `stripe` | Sandbox "Marquee TV sandbox" (`acct_1UZsUPCL0MHWeXeo`, owner ops@getmarquee.tv). Prices `marquee_session_pass` $2.99 and `marquee_monthly` $4.99/month. Webhooks for the four events at `https://getmarquee.tv/api/webhooks/stripe` (production) and `https://staging.getmarquee.tv/api/webhooks/stripe?x-vercel-protection-bypass=<secret>` (preview, see [Preview webhook](#preview-webhook)). Standard account, no Connect, no Stripe Tax, no Managed Payments |
 | `sentry` | Org `marquee-tv` (US region), project `marquee-tv` (Next.js), team `marquee-tv` |
 | `llm` | Anthropic workspaces `marquee-preview` (about $10 a month cap) and `marquee-production`, one key each; both answered `GET /v1/models` before they were stored. On Nov 9 the stored Vercel values each answered a one-token messages call with 200 from inside a deployment ([Checking a stored secret](#checking-a-stored-secret)): Preview `sk-ant-usr-1Cq...6AAA`, Production `sk-ant-usr-1Ho...EAAA` |
 | `email` | Resend team "Marquee TV", domain `getmarquee.tv` verified, with DKIM on `resend._domainkey`, SPF and the bounce MX on `send`, and DMARC `p=none` in Cloudflare. Sending-only keys `supabase-auth-preview` and `supabase-auth-production`. Both Supabase projects send through Resend SMTP as Marquee TV <noreply@getmarquee.tv>. On Nov 10 a non-team address got a link from that sender on https://getmarquee.tv and on https://staging.getmarquee.tv, and each link signed it in. Resend's free plan caps both projects together at 100 emails a day |
@@ -102,12 +102,19 @@ vercel rm <url> --yes
 
 The hint matches the key list in the Anthropic console, which shows the workspace that owns it.
 
+## Preview webhook
+
+Stripe posts each environment's events to one fixed URL, and Vercel gives every pull request its own preview URL. The preview endpoint therefore posts to `staging.getmarquee.tv`, which shares the staging database with every preview, so a test-mode checkout on any preview gets its entitlement row from staging's webhook handler.
+
+- **Current code.** Vercel serves `staging.getmarquee.tv` from the `staging` branch. After the Deploy workflow migrates staging, its `staging` job moves that branch to the merged commit, and Vercel's Git integration builds it with the Preview variables, `STRIPE_WEBHOOK_SECRET` included.
+- **The login wall.** Standard Deployment Protection covers preview domains, so a plain POST gets a 302 to `vercel.com/sso-api`. The endpoint URL carries the project's Protection Bypass for Automation secret as `?x-vercel-protection-bypass=<secret>`. The `stripe` stage reads the secret from the Vercel project and updates the existing endpoint's URL in place, which keeps its signing secret. Anyone who can see the Stripe sandbox's webhooks can read the bypass secret.
+
 ## Still to do
 
 None of these blocks `verify.sh`.
 
-- [ ] **Domains.** Add `getmarquee.tv` and `staging.getmarquee.tv` to the Vercel project and assign staging to a branch. Until then neither webhook URL reaches the app.
-- [ ] **Preview webhook through Vercel's login wall.** Create a Protection Bypass for Automation secret in Vercel and add `?x-vercel-protection-bypass=<secret>` to the preview webhook URL with `stripe webhook_endpoints update`, which keeps the signing secret.
+- [x] **Domains.** `getmarquee.tv` serves production; `staging.getmarquee.tv` is assigned to the `staging` branch, which the Deploy workflow keeps on main.
+- [x] **Preview webhook through Vercel's login wall.** See [Preview webhook](#preview-webhook).
 - [ ] **Merchant of record or Stripe Tax.** Decide before or during card D2, since the beta takes real payments.
 - [ ] **Google consent screen.** Stays in Testing until `/privacy` and `/terms` ship (card D3); then publish it. Basic profile scopes need no Google review.
 - [ ] **Stripe live mode.** Production uses sandbox keys until launch. Going live needs account activation, a live secret key, live prices and a live webhook: re-run the `stripe` stage with a live key and the `sk_test_` check removed.

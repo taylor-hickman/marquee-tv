@@ -1,0 +1,1327 @@
+{
+  "model": "claude-haiku-5-5",
+  "recordedAt": "2026-11-10T00:56:30.178Z",
+  "outputs": {
+    "chip-dinner-party": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 60,
+          "energy": 2
+        },
+        {
+          "from_min": 60,
+          "to_min": 105,
+          "energy": 3
+        },
+        {
+          "from_min": 105,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "chip-friends-over": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 2
+        },
+        {
+          "from_min": 30,
+          "to_min": 90,
+          "energy": 3
+        },
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 4
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "chip-sunday-morning": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": ["acoustic", "folk"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "chip-after-hours": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 2
+        },
+        {
+          "from_min": 30,
+          "to_min": 90,
+          "energy": 3
+        },
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": ["dream pop", "trip hop", "ambient"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "chip-high-energy": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 10,
+          "energy": 4
+        },
+        {
+          "from_min": 10,
+          "to_min": 50,
+          "energy": 5
+        },
+        {
+          "from_min": 50,
+          "to_min": 60,
+          "energy": 4
+        },
+        {
+          "from_min": 60,
+          "to_min": 110,
+          "energy": 5
+        },
+        {
+          "from_min": 110,
+          "to_min": 120,
+          "energy": 4
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "chip-surprise-me": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 2
+        },
+        {
+          "from_min": 30,
+          "to_min": 70,
+          "energy": 3
+        },
+        {
+          "from_min": 70,
+          "to_min": 100,
+          "energy": 4
+        },
+        {
+          "from_min": 100,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": [
+        "eclectic",
+        "experimental",
+        "world",
+        "jazz",
+        "electronic",
+        "folk"
+      ],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": true
+    },
+    "chip-dinner-with-text": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 60,
+          "energy": 2
+        },
+        {
+          "from_min": 60,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": ["soul", "jazz", "folk", "indie"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "energy-mellow-then-groovy": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 60,
+          "energy": 2
+        },
+        {
+          "from_min": 60,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "energy-wind-down": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 5
+        },
+        {
+          "from_min": 30,
+          "to_min": 90,
+          "energy": 4
+        },
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "energy-calm-throughout": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "energy-peak-middle": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 2
+        },
+        {
+          "from_min": 30,
+          "to_min": 60,
+          "energy": 4
+        },
+        {
+          "from_min": 60,
+          "to_min": 90,
+          "energy": 5
+        },
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "structure-loud-then-chill": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 60,
+          "energy": 4
+        },
+        {
+          "from_min": 60,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "structure-last-30-upbeat": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 90,
+          "energy": 2
+        },
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 4
+        }
+      ],
+      "genres": ["soul"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "structure-part-length-not-total": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 20,
+          "energy": 5
+        },
+        {
+          "from_min": 20,
+          "to_min": 60,
+          "energy": 3
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "source-only-kexp": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": ["KEXP"],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "source-no-colors": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 2
+        },
+        {
+          "from_min": 30,
+          "to_min": 90,
+          "energy": 3
+        },
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": ["indie rock"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": ["COLORS"],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "source-tiny-desk": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": ["Tiny Desk"],
+      "sources_exclude": [],
+      "format_include": [1],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "source-more-kexp-no-tiny-desk": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": ["KEXP"],
+      "sources_exclude": ["Tiny Desk"],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "source-unknown-series": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": ["Live Lounge"],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "format-full-band": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [3, 4],
+      "format_exclude": [5, 6],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "format-stripped-back": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": ["acoustic", "folk"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [1, 5],
+      "format_exclude": [3, 4],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "format-voice-and-beat": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [5, 6],
+      "format_exclude": [3, 4],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "familiarity-never-heard": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 2
+        },
+        {
+          "from_min": 30,
+          "to_min": 90,
+          "energy": 3
+        },
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "prefer_unfamiliar",
+      "surprise": false
+    },
+    "familiarity-deep-cuts": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 2
+        },
+        {
+          "from_min": 30,
+          "to_min": 90,
+          "energy": 3
+        },
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 2
+        }
+      ],
+      "genres": ["desert blues", "west african", "blues"],
+      "scenes": ["desert blues", "mali", "niger"],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "prefer_unfamiliar",
+      "surprise": false
+    },
+    "familiarity-crowd-pleasers": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 3
+        },
+        {
+          "from_min": 30,
+          "to_min": 90,
+          "energy": 4
+        },
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": ["pop", "rock", "soul"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "duration-90-min": {
+      "stated_length_min": 90,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 20,
+          "energy": 2
+        },
+        {
+          "from_min": 20,
+          "to_min": 60,
+          "energy": 3
+        },
+        {
+          "from_min": 60,
+          "to_min": 90,
+          "energy": 2
+        }
+      ],
+      "genres": ["soul"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "duration-three-hours": {
+      "stated_length_min": 180,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 3
+        },
+        {
+          "from_min": 30,
+          "to_min": 90,
+          "energy": 4
+        },
+        {
+          "from_min": 90,
+          "to_min": 150,
+          "energy": 4
+        },
+        {
+          "from_min": 150,
+          "to_min": 180,
+          "energy": 3
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "duration-half-hour": {
+      "stated_length_min": 30,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 3
+        }
+      ],
+      "genres": ["jazz"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "duration-control-only": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 10,
+          "energy": 2
+        },
+        {
+          "from_min": 10,
+          "to_min": 40,
+          "energy": 3
+        },
+        {
+          "from_min": 40,
+          "to_min": 50,
+          "energy": 4
+        },
+        {
+          "from_min": 50,
+          "to_min": 60,
+          "energy": 3
+        }
+      ],
+      "genres": ["soul", "funk"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "seed-must-include-and-influence": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 2
+        },
+        {
+          "from_min": 30,
+          "to_min": 70,
+          "energy": 3
+        },
+        {
+          "from_min": 70,
+          "to_min": 120,
+          "energy": 4
+        }
+      ],
+      "genres": ["psychedelic soul", "funk", "indie rock"],
+      "scenes": ["houston", "oxford"],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [
+        {
+          "name": "Radiohead",
+          "genres": ["alternative rock", "art rock", "electronic"],
+          "scenes": ["oxford"],
+          "energy": 3
+        }
+      ],
+      "novelty": "default",
+      "surprise": false
+    },
+    "influence-in-text": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 40,
+          "energy": 1
+        },
+        {
+          "from_min": 40,
+          "to_min": 90,
+          "energy": 2
+        },
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 1
+        }
+      ],
+      "genres": ["trip hop", "downtempo", "electronica"],
+      "scenes": ["bristol"],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [
+        {
+          "name": "Portishead",
+          "genres": ["trip hop", "downtempo"],
+          "scenes": ["bristol"],
+          "energy": 2
+        }
+      ],
+      "novelty": "default",
+      "surprise": false
+    },
+    "exclusion-artist": {
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 30,
+          "energy": 3
+        },
+        {
+          "from_min": 30,
+          "to_min": 70,
+          "energy": 4
+        },
+        {
+          "from_min": 70,
+          "to_min": 105,
+          "energy": 4
+        },
+        {
+          "from_min": 105,
+          "to_min": 120,
+          "energy": 3
+        }
+      ],
+      "genres": ["psychedelic funk", "funk", "psychedelic soul"],
+      "scenes": [],
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": ["Khruangbin"],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "combined-chip-source-duration": {
+      "stated_length_min": 45,
+      "curve": [
+        {
+          "from_min": 0,
+          "to_min": 5,
+          "energy": 4
+        },
+        {
+          "from_min": 5,
+          "to_min": 15,
+          "energy": 5
+        },
+        {
+          "from_min": 15,
+          "to_min": 20,
+          "energy": 3
+        },
+        {
+          "from_min": 20,
+          "to_min": 45,
+          "energy": 5
+        }
+      ],
+      "genres": [],
+      "scenes": [],
+      "sources_include": ["KEXP"],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "influences": [],
+      "novelty": "default",
+      "surprise": false
+    },
+    "refine-funkier-second-half": {
+      "scope": {
+        "from_index": 10,
+        "to_index": 19
+      },
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 60,
+          "to_min": 120,
+          "energy": 4
+        }
+      ],
+      "genres": null,
+      "scenes": null,
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "novelty": null
+    },
+    "refine-calmer-middle": {
+      "scope": {
+        "from_index": 5,
+        "to_index": 15
+      },
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 40,
+          "to_min": 90,
+          "energy": 2
+        }
+      ],
+      "genres": null,
+      "scenes": null,
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "novelty": null
+    },
+    "refine-more-kexp": {
+      "scope": null,
+      "stated_length_min": null,
+      "curve": null,
+      "genres": null,
+      "scenes": null,
+      "sources_include": ["KEXP"],
+      "sources_exclude": [],
+      "format_include": [3, 4],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "novelty": null
+    },
+    "refine-no-colors": {
+      "scope": null,
+      "stated_length_min": null,
+      "curve": null,
+      "genres": null,
+      "scenes": null,
+      "sources_include": [],
+      "sources_exclude": ["COLORS"],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "novelty": null
+    },
+    "refine-unknown-series": {
+      "scope": null,
+      "stated_length_min": null,
+      "curve": null,
+      "genres": null,
+      "scenes": null,
+      "sources_include": [],
+      "sources_exclude": ["Live Lounge"],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "novelty": null
+    },
+    "refine-unfamiliar": {
+      "scope": null,
+      "stated_length_min": null,
+      "curve": null,
+      "genres": null,
+      "scenes": null,
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "novelty": "prefer_unfamiliar"
+    },
+    "refine-keep-first-five": {
+      "scope": {
+        "from_index": 5,
+        "to_index": 19
+      },
+      "stated_length_min": null,
+      "curve": null,
+      "genres": null,
+      "scenes": null,
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "novelty": null
+    },
+    "refine-last-30-upbeat": {
+      "scope": {
+        "from_index": 16,
+        "to_index": 19
+      },
+      "stated_length_min": null,
+      "curve": [
+        {
+          "from_min": 90,
+          "to_min": 120,
+          "energy": 4
+        }
+      ],
+      "genres": null,
+      "scenes": null,
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "novelty": null
+    },
+    "refine-full-band": {
+      "scope": null,
+      "stated_length_min": null,
+      "curve": null,
+      "genres": null,
+      "scenes": null,
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [2, 3, 4],
+      "format_exclude": [1, 5, 6],
+      "exclude_artists": [],
+      "novelty": null
+    },
+    "refine-drop-artist": {
+      "scope": null,
+      "stated_length_min": null,
+      "curve": null,
+      "genres": null,
+      "scenes": null,
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": ["Khruangbin"],
+      "novelty": null
+    },
+    "refine-three-hours": {
+      "scope": null,
+      "stated_length_min": 180,
+      "curve": null,
+      "genres": null,
+      "scenes": null,
+      "sources_include": [],
+      "sources_exclude": [],
+      "format_include": [],
+      "format_exclude": [],
+      "exclude_artists": [],
+      "novelty": null
+    }
+  },
+  "calls": {
+    "chip-dinner-party": {
+      "tokensIn": 2368,
+      "tokensOut": 158,
+      "latencyMs": 1619
+    },
+    "chip-friends-over": {
+      "tokensIn": 2356,
+      "tokensOut": 158,
+      "latencyMs": 1276
+    },
+    "chip-sunday-morning": {
+      "tokensIn": 2356,
+      "tokensOut": 124,
+      "latencyMs": 2309
+    },
+    "chip-after-hours": {
+      "tokensIn": 2352,
+      "tokensOut": 172,
+      "latencyMs": 1202
+    },
+    "chip-high-energy": {
+      "tokensIn": 2356,
+      "tokensOut": 200,
+      "latencyMs": 1186
+    },
+    "chip-surprise-me": {
+      "tokensIn": 2352,
+      "tokensOut": 201,
+      "latencyMs": 1980
+    },
+    "chip-dinner-with-text": {
+      "tokensIn": 2378,
+      "tokensOut": 150,
+      "latencyMs": 1220
+    },
+    "energy-mellow-then-groovy": {
+      "tokensIn": 2322,
+      "tokensOut": 137,
+      "latencyMs": 1089
+    },
+    "energy-wind-down": {
+      "tokensIn": 2326,
+      "tokensOut": 158,
+      "latencyMs": 1430
+    },
+    "energy-calm-throughout": {
+      "tokensIn": 2333,
+      "tokensOut": 116,
+      "latencyMs": 1081
+    },
+    "energy-peak-middle": {
+      "tokensIn": 2330,
+      "tokensOut": 179,
+      "latencyMs": 1181
+    },
+    "structure-loud-then-chill": {
+      "tokensIn": 2332,
+      "tokensOut": 137,
+      "latencyMs": 1150
+    },
+    "structure-last-30-upbeat": {
+      "tokensIn": 2335,
+      "tokensOut": 140,
+      "latencyMs": 1021
+    },
+    "structure-part-length-not-total": {
+      "tokensIn": 2329,
+      "tokensOut": 137,
+      "latencyMs": 2000
+    },
+    "source-only-kexp": {
+      "tokensIn": 2323,
+      "tokensOut": 121,
+      "latencyMs": 1702
+    },
+    "source-no-colors": {
+      "tokensIn": 2325,
+      "tokensOut": 168,
+      "latencyMs": 1330
+    },
+    "source-tiny-desk": {
+      "tokensIn": 2325,
+      "tokensOut": 125,
+      "latencyMs": 1174
+    },
+    "source-more-kexp-no-tiny-desk": {
+      "tokensIn": 2329,
+      "tokensOut": 129,
+      "latencyMs": 1087
+    },
+    "source-unknown-series": {
+      "tokensIn": 2324,
+      "tokensOut": 123,
+      "latencyMs": 1140
+    },
+    "format-full-band": {
+      "tokensIn": 2324,
+      "tokensOut": 122,
+      "latencyMs": 1100
+    },
+    "format-stripped-back": {
+      "tokensIn": 2324,
+      "tokensOut": 130,
+      "latencyMs": 1378
+    },
+    "format-voice-and-beat": {
+      "tokensIn": 2327,
+      "tokensOut": 122,
+      "latencyMs": 1756
+    },
+    "familiarity-never-heard": {
+      "tokensIn": 2323,
+      "tokensOut": 167,
+      "latencyMs": 1121
+    },
+    "familiarity-deep-cuts": {
+      "tokensIn": 2335,
+      "tokensOut": 189,
+      "latencyMs": 1211
+    },
+    "familiarity-crowd-pleasers": {
+      "tokensIn": 2327,
+      "tokensOut": 167,
+      "latencyMs": 1295
+    },
+    "duration-90-min": {
+      "tokensIn": 2324,
+      "tokensOut": 161,
+      "latencyMs": 1366
+    },
+    "duration-three-hours": {
+      "tokensIn": 2326,
+      "tokensOut": 179,
+      "latencyMs": 1184
+    },
+    "duration-half-hour": {
+      "tokensIn": 2323,
+      "tokensOut": 120,
+      "latencyMs": 922
+    },
+    "duration-control-only": {
+      "tokensIn": 2322,
+      "tokensOut": 185,
+      "latencyMs": 1167
+    },
+    "seed-must-include-and-influence": {
+      "tokensIn": 2378,
+      "tokensOut": 228,
+      "latencyMs": 1321
+    },
+    "influence-in-text": {
+      "tokensIn": 2327,
+      "tokensOut": 218,
+      "latencyMs": 1183
+    },
+    "exclusion-artist": {
+      "tokensIn": 2331,
+      "tokensOut": 205,
+      "latencyMs": 1709
+    },
+    "combined-chip-source-duration": {
+      "tokensIn": 2365,
+      "tokensOut": 184,
+      "latencyMs": 1316
+    },
+    "refine-funkier-second-half": {
+      "tokensIn": 2968,
+      "tokensOut": 122,
+      "latencyMs": 1067
+    },
+    "refine-calmer-middle": {
+      "tokensIn": 2968,
+      "tokensOut": 122,
+      "latencyMs": 1086
+    },
+    "refine-more-kexp": {
+      "tokensIn": 2966,
+      "tokensOut": 96,
+      "latencyMs": 1185
+    },
+    "refine-no-colors": {
+      "tokensIn": 2966,
+      "tokensOut": 93,
+      "latencyMs": 1687
+    },
+    "refine-unknown-series": {
+      "tokensIn": 2968,
+      "tokensOut": 95,
+      "latencyMs": 1080
+    },
+    "refine-unfamiliar": {
+      "tokensIn": 2968,
+      "tokensOut": 99,
+      "latencyMs": 2115
+    },
+    "refine-keep-first-five": {
+      "tokensIn": 2966,
+      "tokensOut": 101,
+      "latencyMs": 1108
+    },
+    "refine-last-30-upbeat": {
+      "tokensIn": 2974,
+      "tokensOut": 122,
+      "latencyMs": 1145
+    },
+    "refine-full-band": {
+      "tokensIn": 2964,
+      "tokensOut": 98,
+      "latencyMs": 1619
+    },
+    "refine-drop-artist": {
+      "tokensIn": 2969,
+      "tokensOut": 95,
+      "latencyMs": 1105
+    },
+    "refine-three-hours": {
+      "tokensIn": 2966,
+      "tokensOut": 88,
+      "latencyMs": 1104
+    }
+  }
+}

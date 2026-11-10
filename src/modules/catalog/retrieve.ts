@@ -2,6 +2,7 @@ import "server-only";
 import type { Brief, PerformanceCard, PerformanceId } from "@/contracts";
 import { sql } from "@/lib/db";
 import { performanceCards } from "./cards";
+import { cleared } from "./review";
 import type {
   Candidate,
   ListItemFacts,
@@ -14,10 +15,10 @@ export const REPLACE_OPTIONS = 3;
 export const REPLACE_ENERGY_SPREAD = 1;
 export const REPLACE_DURATION_SPREAD = 0.3;
 
-// Performances the curator may use: eligible and available, not in `notIds`,
-// inside the brief's series constraints and exclusions. A performance's energy,
-// genres and scenes are its first-billed artist's profile, so one without a
-// profiled lead artist is left out.
+// Performances the curator may use: eligible, available and cleared by review,
+// not in `notIds`, inside the brief's series constraints and exclusions. A
+// performance's energy, genres and scenes are its first-billed artist's
+// profile, so one without a profiled lead artist is left out.
 function playable(notIds: PerformanceId[], brief: Brief | null) {
   const include = brief?.series_include ?? [];
   const exclude = brief?.series_exclude ?? [];
@@ -35,7 +36,7 @@ function playable(notIds: PerformanceId[], brief: Brief | null) {
     join artist_profile lp on lp.artist_id = lead.artist_id
     join performance_artist pa on pa.performance_id = p.id
     join artist a on a.id = pa.artist_id
-    where p.eligible and c.available
+    where p.eligible and c.available and ${cleared()}
       and p.id <> all(${notIds}::bigint[])
       and (cardinality(${include}::bigint[]) = 0 or p.series_id = any(${include}::bigint[]))
       and p.series_id <> all(${exclude}::bigint[])

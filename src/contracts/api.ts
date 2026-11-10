@@ -145,13 +145,25 @@ export const catalogSearchResponse = z.object({
 export const catalogArtistsRequest = z.object({
   q: z.string().trim().min(1).max(100),
 });
+const typeaheadArtist = z.object({
+  id: artistId,
+  name: z.string().min(1),
+  // Zero means the seed has nothing playable (PRD 7.2).
+  eligibleCount: z.number().int().nonnegative(),
+});
 export const catalogArtistsResponse = z.object({
   artists: z.array(
-    z.object({
-      id: artistId,
-      name: z.string().min(1),
-      // Zero means the seed has nothing playable (PRD 7.2).
-      eligibleCount: z.number().int().nonnegative(),
+    typeaheadArtist.extend({
+      // Only when eligibleCount is zero: the most similar artists that have a
+      // playable performance, most similar first (PRD 7.2).
+      closest: z
+        .array(
+          typeaheadArtist.extend({
+            eligibleCount: z.number().int().positive(),
+          }),
+        )
+        .max(3)
+        .optional(),
     }),
   ),
 });
@@ -163,8 +175,12 @@ export const eventsResponse = z.object({ ok: z.literal(true) });
 // POST /api/auth/sign-in starts sign-in; the guest token, when sent, gets a
 // one-time claim code in `redirectTo`. The browser passes `redirectTo` to Supabase
 // Auth as the Google or email link redirect. POST /api/auth/session, sent with the
-// session as Authorization: Bearer from that page, creates the user on first sign-in.
+// session as Authorization: Bearer from that page, creates the user on first sign-in
+// and claims the guest's drafts with the code `redirectTo` carried back.
 export const signInResponse = z.object({ redirectTo: z.url() });
+export const sessionRequest = z.strictObject({
+  claim: z.string().min(1).optional(),
+});
 export const sessionResponse = z.object({ userId });
 
 // POST /api/billing/checkout returns the Stripe Checkout URL; POST /api/billing/portal
@@ -248,7 +264,7 @@ export const routes = {
   "POST /api/events": { request: eventsRequest, response: eventsResponse },
   "POST /api/auth/sign-in": { request: emptyRequest, response: signInResponse },
   "POST /api/auth/session": {
-    request: emptyRequest,
+    request: sessionRequest,
     response: sessionResponse,
   },
   "POST /api/billing/checkout": {
@@ -282,6 +298,7 @@ export type CatalogSearchResponse = z.infer<typeof catalogSearchResponse>;
 export type CatalogArtistsResponse = z.infer<typeof catalogArtistsResponse>;
 export type EventsRequest = z.infer<typeof eventsRequest>;
 export type SignInResponse = z.infer<typeof signInResponse>;
+export type SessionRequest = z.infer<typeof sessionRequest>;
 export type SessionResponse = z.infer<typeof sessionResponse>;
 export type CheckoutRequest = z.infer<typeof checkoutRequest>;
 export type UrlResponse = z.infer<typeof urlResponse>;

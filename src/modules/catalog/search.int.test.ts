@@ -27,7 +27,12 @@ const playableIds = async (where = sql``) =>
       select p.id from performance p
       join performance_yt_cache c on c.performance_id = p.id
       join series s on s.id = p.series_id
-      where p.eligible and c.available ${where}`
+      where p.eligible and c.available
+        and p.review_status not in ('flagged', 'rejected')
+        and not exists (select 1 from performance_artist pa
+          join artist a on a.id = pa.artist_id
+          where pa.performance_id = p.id and a.review_status in ('flagged', 'rejected'))
+        ${where}`
   ).map((r) => r.id);
 
 describe("search", () => {
@@ -90,6 +95,38 @@ describe("search", () => {
     for (const { id } of hidden) expect(found).not.toContain(id);
   });
 
+  test("leaves out flagged and rejected performances and those billing a flagged or rejected artist", async () => {
+    const make = async (review_status: string, artistStatus = "pending") => {
+      const p = await factories.performance({
+        eligible: true,
+        review_status,
+        series_id: 1,
+      });
+      const a = await factories.artist({ review_status: artistStatus });
+      await factories.performanceArtist({
+        performance_id: p.id,
+        artist_id: a.id,
+      });
+      await factories.performanceYtCache({
+        performance_id: p.id,
+        title: `Vwqk Live Session ${p.id}`,
+      });
+      return p.id as number;
+    };
+    const held = [
+      await make("flagged"),
+      await make("rejected"),
+      await make("accepted", "flagged"),
+      await make("pending", "rejected"),
+    ];
+    const cleared = [await make("pending"), await make("accepted", "accepted")];
+
+    expect((await all({ q: "vwqk" })).sort()).toEqual(cleared.sort());
+    const browsed = await all({});
+    for (const id of held) expect(browsed).not.toContain(id);
+    for (const id of cleared) expect(browsed).toContain(id);
+  });
+
   test("treats a query with no words as browse", async () => {
     expect(await find({ q: "&!:*" })).toEqual(await find({}));
   });
@@ -107,9 +144,43 @@ describe("artistTypeahead", () => {
     await factories.performanceYtCache({ performance_id: p.id });
 
     expect(await artistTypeahead("qzx")).toEqual([
-      { id: start.id, name: "Qzxv", eligibleCount: 0 },
+      { id: start.id, name: "Qzxv", eligibleCount: 0, closest: [] },
       { id: inside.id, name: "The Qzxv Band", eligibleCount: 1 },
     ]);
+  });
+
+  test("offers an artist with nothing to play its closest artists that have something", async () => {
+    const playable = async (name: string) => {
+      const a = await factories.artist({ name });
+      const p = await factories.performance({ eligible: true, series_id: 1 });
+      await factories.performanceArtist({
+        performance_id: p.id,
+        artist_id: a.id,
+      });
+      await factories.performanceYtCache({ performance_id: p.id });
+      return a;
+    };
+    const [first, second, third, fourth] = await Promise.all(
+      ["Qzxw One", "Qzxw Two", "Qzxw Three", "Qzxw Four"].map(playable),
+    );
+    const silent = await factories.artist({ name: "Qzxw Silent" });
+    const seed = await factories.artist({ name: "Zzqv" });
+    await factories.artistProfile({
+      artist_id: seed.id,
+      similar_artist_ids: [silent.id, second.id, first.id, third.id, fourth.id],
+    });
+
+    const [found] = await artistTypeahead("zzqv");
+    expect(found).toEqual({
+      id: seed.id,
+      name: "Zzqv",
+      eligibleCount: 0,
+      closest: [second, first, third].map((a) => ({
+        id: a.id,
+        name: a.name,
+        eligibleCount: 1,
+      })),
+    });
   });
 
   test("finds an artist by an alias", async () => {
@@ -123,6 +194,51 @@ describe("artistTypeahead", () => {
     expect(
       found.find((a) => a.id === aliased.id)!.eligibleCount,
     ).toBeGreaterThan(0);
+  });
+
+  test("hides flagged and rejected artists and counts only cleared performances", async () => {
+    const pending = await factories.artist({ name: "Kvwq Pending" });
+    await factories.artist({ name: "Kvwq Flagged", review_status: "flagged" });
+    await factories.artist({
+      name: "Kvwq Rejected",
+      review_status: "rejected",
+    });
+    const flaggedAlias = await factories.artist({
+      name: "Someone Else",
+      review_status: "flagged",
+    });
+    await factories.artistAlias({
+      artist_id: flaggedAlias.id,
+      alias: "Kvwq Alias",
+    });
+    const rejectedGuest = await factories.artist({ review_status: "rejected" });
+    const make = async (review_status: string, guest?: number) => {
+      const p = await factories.performance({
+        eligible: true,
+        review_status,
+        series_id: 1,
+      });
+      await factories.performanceArtist({
+        performance_id: p.id,
+        artist_id: pending.id,
+      });
+      if (guest)
+        await factories.performanceArtist({
+          performance_id: p.id,
+          artist_id: guest,
+          billing_order: 2,
+        });
+      await factories.performanceYtCache({ performance_id: p.id });
+    };
+    await make("pending");
+    await make("accepted");
+    await make("flagged");
+    await make("rejected");
+    await make("accepted", rejectedGuest.id);
+
+    expect(await artistTypeahead("kvwq")).toEqual([
+      { id: pending.id, name: "Kvwq Pending", eligibleCount: 2 },
+    ]);
   });
 
   test("reads % and _ as text", async () => {

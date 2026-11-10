@@ -76,15 +76,22 @@ export type CreateShareLink = (
   body: ShareLinkRequest,
 ) => Promise<ApiResult<ShareLinkResponse>>;
 
-// The ordered video ids behind a code, sliced from its start index; null when unknown.
-export type ResolveShareLink = (code: string) => Promise<string[] | null>;
+// What a code points at, with the revision's video ids in order, sliced from
+// its start index; null when unknown.
+export type SharedList = {
+  draftId: DraftId;
+  revision: number;
+  startIndex: number;
+  videoIds: string[];
+};
+export type ResolveShareLink = (code: string) => Promise<SharedList | null>;
 
 export type RecordHandoff = (event: HandoffEvent) => Promise<void>;
 
-// Library and claiming (C4).
+// Library and claiming (C4). An unknown, used or expired code is `not_found`.
 export type ClaimGuestDrafts = (
   claimCode: string,
   userId: UserId,
-) => Promise<{ claimed: number }>;
+) => Promise<ApiResult<{ claimed: number }>>;
 
 export type ListLibrary = (userId: UserId) => Promise<LibraryResponse>;

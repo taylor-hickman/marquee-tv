@@ -191,7 +191,15 @@ export const examples = {
   catalogSearchResponse: { performances: [performanceCard], nextOffset: 24 },
   catalogArtistsRequest: { q: "khru" },
   catalogArtistsResponse: {
-    artists: [{ id: 7, name: "Khruangbin", eligibleCount: 3 }],
+    artists: [
+      { id: 7, name: "Khruangbin", eligibleCount: 3 },
+      {
+        id: 8,
+        name: "Khruangbin & Leon Bridges",
+        eligibleCount: 0,
+        closest: [{ id: 7, name: "Khruangbin", eligibleCount: 3 }],
+      },
+    ],
   },
   eventsRequest: {
     name: "brief_submitted",
@@ -203,6 +211,7 @@ export const examples = {
     redirectTo:
       "https://getmarquee.tv/auth/callback?claim=Vb3nQ8sK2yTf1mXc6rJp0w",
   },
+  sessionRequest: { claim: "Vb3nQ8sK2yTf1mXc6rJp0w" },
   sessionResponse: { userId: "8d2e4f6a-1b3c-4d5e-9f70-a1b2c3d4e5f6" },
   checkoutRequest: { plan: "session_pass", draftId: DRAFT_ID },
   urlResponse: { url: "https://checkout.stripe.com/c/pay/cs_test_a1b2c3" },
