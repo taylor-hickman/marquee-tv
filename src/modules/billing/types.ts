@@ -54,5 +54,6 @@ export type HandleStripeWebhook = (
 // The guest a one-time claim code was minted for, once; null after that (D1).
 export type ConsumeClaimCode = (code: string) => Promise<GuestId | null>;
 
-// Account deletion cancels any active subscription at Stripe first (D3).
-export type CancelSubscriptions = (userId: UserId) => Promise<void>;
+// DELETE /api/account (D3): cancels any live subscription at Stripe, then
+// deletes the user and everything that cascades from them.
+export type DeleteAccount = (userId: UserId) => Promise<void>;
