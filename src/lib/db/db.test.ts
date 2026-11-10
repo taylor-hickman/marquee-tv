@@ -69,18 +69,16 @@ describe("database", () => {
   });
 
   // The publishable and anon keys both reach Postgres as the anon role, which
-  // PostgREST assumes with set local role.
-  test("the anon role reads zero rows from every table", async () => {
+  // PostgREST assumes with set local role. Granting anon select first leaves
+  // row-level security as the only thing between it and the rows.
+  test("the anon role reads zero rows from every table, even with select granted", async () => {
+    await testSql`grant select on all tables in schema public to anon`;
     for (const table of tables) {
-      const result = await testSql
-        .begin(async (tx) => {
-          await tx`set local role anon`;
-          return tx`select * from ${tx(table)}`;
-        })
-        .catch((error: { code: string; message: string }) => error);
-      if ("code" in result)
-        expect(result.code, `${table}: ${result.message}`).toBe("42501");
-      else expect(result, table).toEqual([]);
+      const rows = await testSql.begin(async (tx) => {
+        await tx`set local role anon`;
+        return tx`select * from ${tx(table)}`;
+      });
+      expect(rows, table).toEqual([]);
     }
   });
 });
