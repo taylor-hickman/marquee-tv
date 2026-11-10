@@ -123,9 +123,14 @@ async function toRefine(
   const durationS = typedDuration(model.stated_length_min);
   if (durationS) delta.duration_s = durationS;
 
-  const curve =
-    model.curve && clipCurve(model.curve, (durationS ?? brief.duration_s) / 60);
-  if (curve?.length) delta.curve = curve;
+  const lengthMin = (durationS ?? brief.duration_s) / 60;
+  const changed = model.curve ? clipCurve(model.curve, lengthMin) : [];
+  if (durationS && durationS !== brief.duration_s) {
+    // A new length stretches the current curve to it, so the delta carries the whole curve.
+    delta.curve = overlayCurve(fitCurve(brief.curve, lengthMin), changed);
+  } else if (changed.length) {
+    delta.curve = changed;
+  }
   // An empty list means unchanged, as null does: never a wipe of the current terms.
   if (model.genres?.length) delta.genres = terms(model.genres);
   if (model.scenes?.length) delta.scenes = terms(model.scenes);
@@ -143,7 +148,7 @@ async function toRefine(
     delta.exclusions = narrowed.exclusions;
   }
 
-  return { delta, scope: fitScope(model.scope, delta.curve, list) };
+  return { delta, scope: fitScope(model.scope, changed, list) };
 }
 
 // The length the model read from the text, as whole minutes within the control's range.
@@ -153,30 +158,68 @@ function typedDuration(minutes: number | null): number | null {
   return whole >= 1 && whole <= MAX_MIN ? whole * 60 : null;
 }
 
-// The model's segments, sorted, joined end to end and stretched so they run
-// from 0 to the set's length. Models are loose with arithmetic; the shape is what counts.
+// The model's segments as one curve from 0 to the set's length, stretched from
+// their own start and end. Where segments overlap, the one that starts later wins,
+// so a peak nested in a longer segment survives; a gap keeps the energy before it.
+// Models are loose with arithmetic; the shape is what counts.
 export function fitCurve(
   segments: ModelBrief["curve"],
   lengthMin: number,
 ): Brief["curve"] {
-  const sorted = segments
+  const valid = segments
     .filter((s) => s.to_min > s.from_min)
     .sort((a, b) => a.from_min - b.from_min);
-  if (sorted.length === 0) {
+  if (valid.length === 0) {
     return [
       { from_min: 0, to_min: lengthMin, energy: segments[0]?.energy ?? 3 },
     ];
   }
-  const start = sorted[0].from_min;
-  const span = sorted.at(-1)!.to_min - start;
-  const at = (min: number) => Math.round(((min - start) / span) * lengthMin);
+  const start = valid[0].from_min;
+  const end = Math.max(...valid.map((s) => s.to_min));
+  const points = unique(valid.flatMap((s) => [s.from_min, s.to_min])).sort(
+    (a, b) => a - b,
+  );
   const curve: Brief["curve"] = [];
-  for (const [i, s] of sorted.entries()) {
+  for (const [i, a] of points.slice(0, -1).entries()) {
+    const b = points[i + 1];
+    const energy =
+      valid.findLast((s) => s.from_min <= a && b <= s.to_min)?.energy ??
+      curve.at(-1)?.energy ??
+      valid[0].energy;
     const from_min = curve.at(-1)?.to_min ?? 0;
-    const to_min = i === sorted.length - 1 ? lengthMin : at(s.to_min);
-    if (to_min > from_min) curve.push({ from_min, to_min, energy: s.energy });
+    const to_min =
+      b === end
+        ? lengthMin
+        : Math.min(
+            lengthMin,
+            Math.round(((b - start) / (end - start)) * lengthMin),
+          );
+    if (to_min <= from_min) continue;
+    if (curve.at(-1)?.energy === energy) curve.at(-1)!.to_min = to_min;
+    else curve.push({ from_min, to_min, energy });
   }
   return curve;
+}
+
+// `top` laid over `base`: top's segments replace base over their span. This is
+// how a refine's curve delta merges into the current curve.
+export function overlayCurve(
+  base: Brief["curve"],
+  top: Brief["curve"],
+): Brief["curve"] {
+  const kept = base.flatMap((s) =>
+    top.reduce<Brief["curve"]>(
+      (pieces, t) =>
+        pieces.flatMap((p) =>
+          [
+            { ...p, to_min: Math.min(p.to_min, t.from_min) },
+            { ...p, from_min: Math.max(p.from_min, t.to_min) },
+          ].filter((q) => q.to_min > q.from_min),
+        ),
+      [s],
+    ),
+  );
+  return [...kept, ...top].sort((a, b) => a.from_min - b.from_min);
 }
 
 // A refine's segments cover only the stretch that changes: clip them to the set.
@@ -235,8 +278,7 @@ type Constraints = Pick<
 >;
 
 // The model's sources, formats and excluded artists against the catalog, on top
-// of `current`. A source and a format together keep the series that fit both.
-// Exclusions only grow, and nothing excluded stays included (CLAUDE.md rule 2).
+// of `current`. Artist and publisher exclusions only grow (CLAUDE.md rule 2).
 async function constraints(
   model: Narrowing,
   context: BriefContext,
@@ -255,14 +297,25 @@ async function constraints(
       .map((s) => s.id),
   ]);
   const format = known(model.format_include);
-  const both = named.filter((id) => format.includes(id));
-  const include =
-    [both, named, format].find((ids) => ids.length) ?? current.series_include;
+  // The source: one this request names, else the include already in force. A
+  // format narrows it to the series that fit both and never cuts it to nothing.
+  const source = named.length > 0 ? named : current.series_include;
+  const both = source.filter((id) => format.includes(id));
+  const wanted =
+    source.length > 0 && format.length > 0
+      ? both.length > 0
+        ? both
+        : source
+      : source.length > 0
+        ? source
+        : format;
 
   const ruledOut = sources(model.sources_exclude, context);
+  // A newly named source lifts an earlier series exclusion of itself, and a
+  // format never excludes the source.
   const series_exclude = unique([
-    ...current.series_exclude,
-    ...known(model.format_exclude),
+    ...current.series_exclude.filter((id) => !named.includes(id)),
+    ...known(model.format_exclude).filter((id) => !source.includes(id)),
     ...ruledOut.series,
   ]);
   const publisher_ids = unique([
@@ -274,12 +327,15 @@ async function constraints(
       context.artistIdFor(name),
     ),
   );
+  const open = wanted.filter(
+    (id) =>
+      !series_exclude.includes(id) &&
+      !publisher_ids.includes(publisherOf.get(id)!),
+  );
   return {
-    series_include: include.filter(
-      (id) =>
-        !series_exclude.includes(id) &&
-        !publisher_ids.includes(publisherOf.get(id)!),
-    ),
+    // Exclusions that shut every wanted series keep the include as asked: an
+    // empty include would mean every series, the opposite of the request.
+    series_include: open.length > 0 ? open : wanted,
     series_exclude,
     exclusions: {
       artist_ids: unique([

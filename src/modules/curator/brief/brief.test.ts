@@ -2,7 +2,13 @@ import { describe, expect, test } from "vitest";
 import { brief as briefSchema, refineBrief, type Brief } from "@/contracts";
 import { createFakeAdapter, type LlmAdapter } from "../llm";
 import { type Case, type Expect, cases, context, current, list } from "./cases";
-import { CHIP_TEXT, extractBrief, extractRefineBrief, fitCurve } from "./index";
+import {
+  CHIP_TEXT,
+  extractBrief,
+  extractRefineBrief,
+  fitCurve,
+  overlayCurve,
+} from "./index";
 import {
   type ModelBrief,
   type ModelRefine,
@@ -20,25 +26,28 @@ function replay(output: unknown): Pick<LlmAdapter, "extractBrief"> {
   return createFakeAdapter({ extractBrief: () => ({ output }) });
 }
 
-// The brief a refine leaves behind, for checking: delta fields replace the
-// current ones, and curve segments replace the current curve over their span.
+// The brief a refine leaves behind: delta fields replace the current ones, and
+// the delta's curve is laid over the current curve.
 function merged(delta: Partial<Brief>): Brief {
-  return { ...current, ...delta, curve: current.curve };
+  return {
+    ...current,
+    ...delta,
+    curve: overlayCurve(current.curve, delta.curve ?? []),
+  };
 }
 
-function energyAt(
-  b: Brief,
-  curveDelta: Brief["curve"] | undefined,
-  fraction: number,
-) {
+function energyAt(b: Brief, fraction: number) {
   const minute = fraction * (b.duration_s / 60);
-  const hit = (c: Brief["curve"]) =>
-    c.find((s) => s.from_min <= minute && minute < s.to_min);
-  return (
-    (curveDelta && hit(curveDelta))?.energy ??
-    hit(b.curve)?.energy ??
-    b.curve.at(-1)!.energy
-  );
+  return b.curve.find((s) => s.from_min <= minute && minute < s.to_min)?.energy;
+}
+
+// The curve runs from 0 to the set's length with no gap or overlap.
+function spansTheSet(b: Brief) {
+  expect(b.curve[0].from_min).toBe(0);
+  expect(b.curve.at(-1)!.to_min).toBe(b.duration_s / 60);
+  for (const [i, s] of b.curve.slice(1).entries()) {
+    expect(s.from_min).toBe(b.curve[i].to_min);
+  }
 }
 
 function allowed(b: Brief, seriesId: number) {
@@ -50,8 +59,8 @@ function allowed(b: Brief, seriesId: number) {
   );
 }
 
-function check(b: Brief, e: Expect, curveDelta?: Brief["curve"]) {
-  const at = (f: number) => energyAt(b, curveDelta, f);
+function check(b: Brief, e: Expect) {
+  const at = (f: number) => energyAt(b, f) ?? 0;
   const [start, mid, end] = [at(0.05), at(0.5), at(0.95)];
   if (e.shape === "rising") expect(end).toBeGreaterThan(start);
   if (e.shape === "falling") expect(end).toBeLessThan(start);
@@ -130,12 +139,14 @@ describe("recorded outputs give the expected brief", () => {
     const narrows = c.types.includes("source") || c.types.includes("format");
     const result = await run(c);
     if (result.brief) {
+      spansTheSet(result.brief);
       check(result.brief, c.expect);
       if (!narrows) check(result.brief, { allowed: everySeries });
       return;
     }
     const { delta, scope } = result.refine!;
-    check(merged(delta), c.expect, delta.curve);
+    spansTheSet(merged(delta));
+    check(merged(delta), c.expect);
     if (!narrows) check(merged(delta), { allowed: everySeries });
     for (const field of c.expect.unchanged ?? [])
       expect(delta).not.toHaveProperty(field);
@@ -264,6 +275,94 @@ describe("code holds what the model may not decide", () => {
     });
   });
 
+  test("a format never cuts a named source to nothing", async () => {
+    const result = await extractBrief(input, context, {
+      llm: replay({
+        ...model,
+        sources_include: ["KEXP"],
+        format_include: [1, 5],
+        format_exclude: [3, 4],
+      }),
+    });
+    expect(result.ok && result.output).toMatchObject({
+      series_include: [3, 4],
+      series_exclude: [],
+    });
+  });
+
+  test("a refine's format narrows the include already in force, and keeps it on a conflict", async () => {
+    const tinyDeskOnly = { ...current, series_include: [1, 2] };
+    const narrow = await extractRefineBrief(
+      { instruction: "full band only", brief: tinyDeskOnly, list },
+      context,
+      {
+        llm: replay({
+          ...unchanged,
+          format_include: [2, 3, 4],
+          format_exclude: [1, 5, 6],
+        }),
+      },
+    );
+    expect(narrow.ok && narrow.output.delta).toMatchObject({
+      series_include: [2],
+      series_exclude: [5, 6],
+    });
+    const conflict = await extractRefineBrief(
+      {
+        instruction: "full band only",
+        brief: { ...current, series_include: [1] },
+        list,
+      },
+      context,
+      { llm: replay({ ...unchanged, format_include: [3, 4] }) },
+    );
+    expect(conflict.ok && conflict.output.delta).not.toHaveProperty(
+      "series_include",
+    );
+  });
+
+  test("exclusions that shut every wanted series never leave the include open", async () => {
+    const result = await extractRefineBrief(
+      {
+        instruction: "only Tiny Desk",
+        brief: {
+          ...current,
+          exclusions: { artist_ids: [], publisher_ids: [1] },
+        },
+        list,
+      },
+      context,
+      { llm: replay({ ...unchanged, sources_include: ["Tiny Desk"] }) },
+    );
+    expect(result.ok && result.output.delta.series_include).toEqual([1, 2]);
+  });
+
+  test("a new length stretches the current curve, with the delta's segments laid over it", async () => {
+    const result = await extractRefineBrief(
+      {
+        instruction: "make it three hours, last half hour upbeat",
+        brief: current,
+        list,
+      },
+      context,
+      {
+        llm: replay({
+          ...unchanged,
+          stated_length_min: 180,
+          curve: [{ from_min: 150, to_min: 180, energy: 4 }],
+        }),
+      },
+    );
+    expect(result.ok && result.output.delta).toEqual({
+      duration_s: 10800,
+      curve: [
+        { from_min: 0, to_min: 60, energy: 2 },
+        { from_min: 60, to_min: 150, energy: 3 },
+        { from_min: 150, to_min: 180, energy: 4 },
+      ],
+    });
+  });
+
   test("seeds come from the input, never the model", async () => {
     const result = await extractBrief(
       {
@@ -342,7 +441,7 @@ describe("code holds what the model may not decide", () => {
     expect(!result.ok && result.calls).toHaveLength(2);
   });
 
-  test("a curve with gaps and overlaps is joined end to end", () => {
+  test("a curve with a gap is joined end to end and stretched to the set", () => {
     expect(
       fitCurve(
         [
@@ -353,8 +452,36 @@ describe("code holds what the model may not decide", () => {
         60,
       ),
     ).toEqual([
-      { from_min: 0, to_min: 24, energy: 2 },
-      { from_min: 24, to_min: 60, energy: 4 },
+      { from_min: 0, to_min: 30, energy: 2 },
+      { from_min: 30, to_min: 60, energy: 4 },
+    ]);
+  });
+
+  test("a peak nested inside a longer segment survives, and the curve ends at the set's length", () => {
+    expect(
+      fitCurve(
+        [
+          { from_min: 0, to_min: 60, energy: 2 },
+          { from_min: 30, to_min: 120, energy: 4 },
+          { from_min: 90, to_min: 100, energy: 5 },
+        ],
+        120,
+      ),
+    ).toEqual([
+      { from_min: 0, to_min: 30, energy: 2 },
+      { from_min: 30, to_min: 90, energy: 4 },
+      { from_min: 90, to_min: 100, energy: 5 },
+      { from_min: 100, to_min: 120, energy: 4 },
+    ]);
+  });
+
+  test("a curve delta replaces the current curve over its span only", () => {
+    expect(
+      overlayCurve(current.curve, [{ from_min: 30, to_min: 100, energy: 5 }]),
+    ).toEqual([
+      { from_min: 0, to_min: 30, energy: 2 },
+      { from_min: 30, to_min: 100, energy: 5 },
+      { from_min: 100, to_min: 120, energy: 3 },
     ]);
   });
 });
