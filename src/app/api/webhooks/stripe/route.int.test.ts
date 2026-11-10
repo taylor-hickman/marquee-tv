@@ -1,6 +1,8 @@
 import { sql } from "@/test/db";
 import { beforeAll, describe, expect, test, vi } from "vitest";
 import Stripe from "stripe";
+import { draftView } from "@/contracts";
+import { asUser } from "@/lib/auth/testing";
 import { canRunCurator, expirePasses } from "@/modules/billing";
 import {
   checkoutCompleted,
@@ -10,6 +12,9 @@ import {
   webhookRequest,
 } from "@/modules/billing/testing";
 import * as factories from "@/test/factories";
+import { GET as getDraft } from "../../drafts/[id]/route";
+import { POST as ops } from "../../drafts/[id]/ops/route";
+import { POST as undo } from "../../drafts/[id]/undo/route";
 import { POST } from "./route";
 
 vi.mock("server-only", () => ({}));
@@ -199,6 +204,65 @@ describe("a pass draft goes read_only after seven days", () => {
     expect(await canRunCurator(owner, await draft(), sevenDays)).toBe(
       "read_only",
     );
+  });
+
+  test("with no job run, the draft reads read_only and refuses ops and undo", async () => {
+    const user = await asUser();
+    await factories.playlistDraft({ owner_user_id: user.userId, free: true });
+    const held = await factories.playlistDraft({
+      owner_user_id: user.userId,
+      creation_method: "typed",
+      status: "awaiting_payment",
+    });
+    await factories.playlistRevision({ draft_id: held.id });
+    await factories.playlistRevision({ draft_id: held.id });
+    await sql`update playlist_draft set current_revision = 2 where id = ${held.id}`;
+    await send(
+      checkoutCompleted({
+        userId: user.userId,
+        draftId: held.id,
+        plan: "session_pass",
+        created: new Date(Date.now() - 8 * DAY),
+      }),
+    );
+
+    const call = (
+      route: typeof ops | typeof undo,
+      path: string,
+      body: unknown,
+    ) =>
+      route(
+        new Request(`http://localhost/api/drafts/${held.id}${path}`, {
+          method: "POST",
+          headers: user.headers,
+          body: JSON.stringify(body),
+        }),
+        { params: Promise.resolve({ id: held.id }) },
+      );
+    const edit = await call(ops, "/ops", {
+      baseRevision: 2,
+      ops: [{ op: "rename", title: "Still mine" }],
+    });
+    expect(edit.status).toBe(403);
+    expect(await edit.json()).toEqual({ error: "read_only" });
+    expect((await call(undo, "/undo", { baseRevision: 2 })).status).toBe(403);
+
+    const read = await getDraft(
+      new Request(`http://localhost/api/drafts/${held.id}`, {
+        headers: user.headers,
+      }),
+      { params: Promise.resolve({ id: held.id }) },
+    );
+    const view = draftView.parse(await read.json());
+    expect(view.draft.status).toBe("read_only");
+    expect(view.entitlement.state).toBe("read_only");
+  });
+
+  test("a pass still running leaves the draft open", async () => {
+    const { userId, draftId } = await heldDraft();
+    await send(checkoutCompleted({ userId, draftId, plan: "session_pass" }));
+    expect(await expirePasses(new Date(), draftId)).toEqual([]);
+    expect((await draftRow(draftId)).status).toBe("active");
   });
 });
 
