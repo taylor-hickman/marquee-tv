@@ -65,6 +65,7 @@ export const schemas = {
   eventsRequest: api.eventsRequest,
   eventsResponse: api.eventsResponse,
   signInResponse: api.signInResponse,
+  sessionRequest: api.sessionRequest,
   sessionResponse: api.sessionResponse,
   checkoutRequest: api.checkoutRequest,
   urlResponse: api.urlResponse,

@@ -13,9 +13,6 @@ export const auth = () =>
     { auth: { flowType: "implicit" } },
   )).auth;
 
-// Where the callback page leaves the claim code for the claim (card C4).
-export const CLAIM_CODE_KEY = "marquee.claimCode";
-
 // Sends the guest token, when there is one, so the redirect carries a claim
 // code; then hands off to Google or sends the email link. The header name is
 // GUEST_TOKEN_HEADER in @/lib/auth, which is server-only.
