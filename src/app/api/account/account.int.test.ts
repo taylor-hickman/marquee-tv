@@ -1,4 +1,5 @@
 import { sql } from "@/test/db";
+import { randomBytes } from "node:crypto";
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import {
@@ -12,6 +13,7 @@ import {
 } from "vitest";
 import { deleteAccountResponse } from "@/contracts";
 import { asGuest, asUser } from "@/lib/auth/testing";
+import { connectUrl, finishConnect } from "@/modules/youtube";
 import * as factories from "@/test/factories";
 import { DELETE } from "./route";
 
@@ -146,6 +148,54 @@ describe("DELETE /api/account", () => {
     expect(await rows("curator_run", "id", other.runId)).toMatchObject([
       { draft_id: other.draftId },
     ]);
+  });
+
+  test("a YouTube grant is revoked at Google before the account goes", async () => {
+    vi.stubEnv("GOOGLE_OAUTH_CLIENT_ID", "client.apps.googleusercontent.com");
+    vi.stubEnv("GOOGLE_OAUTH_CLIENT_SECRET", "secret");
+    vi.stubEnv("YOUTUBE_TOKEN_KEY", randomBytes(32).toString("base64"));
+    const revoked: string[] = [];
+    const realFetch = globalThis.fetch;
+    vi.stubGlobal("fetch", async (input: RequestInfo, init?: RequestInit) => {
+      const request = new Request(input, init);
+      if (request.url === "https://oauth2.googleapis.com/token") {
+        return Response.json({
+          refresh_token: "1//grant",
+          scope: "https://www.googleapis.com/auth/youtube",
+        });
+      }
+      if (request.url === "https://oauth2.googleapis.com/revoke") {
+        revoked.push(new URLSearchParams(await request.text()).get("token")!);
+        return new Response(null, { status: 200 });
+      }
+      return realFetch(request);
+    });
+    try {
+      const user = await asUser();
+      const draft = await factories.playlistDraft({
+        owner_user_id: user.userId,
+      });
+      const origin = "https://marquee.test";
+      const { url, nonce } = connectUrl(
+        user.userId,
+        draft.id,
+        origin,
+        `${user.userId}@example.test`,
+      );
+      const state = new URL(url).searchParams.get("state")!;
+      await finishConnect({ code: "code", state }, nonce, origin);
+      expect(
+        await rows("youtube_connection", "user_id", user.userId),
+      ).toHaveLength(1);
+
+      expect((await del(user.headers)).status).toBe(200);
+      expect(revoked).toEqual(["1//grant"]);
+      expect(await rows("youtube_connection", "user_id", user.userId)).toEqual(
+        [],
+      );
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   test("a user with no subscription is deleted without calling Stripe", async () => {

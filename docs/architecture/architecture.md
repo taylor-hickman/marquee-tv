@@ -44,6 +44,7 @@ flowchart LR
     CA[catalog module]
     BI[billing module]
     EV[events module]
+    YM[youtube module<br/>handoff_mode api only]
   end
   subgraph Supabase
     DB[(Postgres)]
@@ -51,19 +52,22 @@ flowchart LR
   end
   W[Ingestion worker<br/>scheduled]
   LLM[LLM provider]
-  YT[YouTube Data API<br/>read-only]
+  YT[YouTube Data API]
   STRIPE[Stripe]
   YTW[youtube.com / YouTube app]
 
   UI --> API
   UI -. watch_videos URL .-> YTW
-  API --> PL & CU & CA & BI & EV
+  API --> PL & CU & CA & BI & EV & YM
   CU --> CA
   CU --> LLM
   PL & CA & BI & EV --> DB
   BI <--> STRIPE
   API --> AUTH
   W --> YT
+  YM --> YT
+  BI --> YM
+  YM --> DB
   W --> LLM
   W --> DB
 ```
@@ -73,8 +77,9 @@ flowchart LR
 | `catalog` | Publishers, series, artists, performances, artist profiles; search and candidate retrieval | Postgres |
 | `curator` | Brief extraction, composition, refinement, replace suggestions, validation | `catalog` (through its interface only), LLM adapter |
 | `playlist` | Drafts, revisions, edit operations, undo, concurrency | Postgres, `curator` |
-| `billing` | Entitlements, checkout, Stripe webhooks, the free-playlist rule | Stripe, Postgres |
+| `billing` | Entitlements, checkout, Stripe webhooks, the free-playlist rule | Stripe, Postgres, `youtube` (account deletion revokes the grant) |
 | `events` | Analytics events and `HandoffEvent` rows | Postgres |
+| `youtube` | Save to my YouTube (P1, section 11): the Google grant, export jobs | Google OAuth, YouTube Data API (`playlists.insert`, `playlistItems.insert`), Postgres, `playlist` |
 | `ingest` (worker) | Pulling uploads, classifying, parsing artists, refreshing availability, building artist profiles | YouTube Data API, LLM, Postgres |
 
 The one boundary that matters most: `curator` never writes to Postgres and never runs SQL. It reads through `catalog` functions and returns proposed operations. `playlist` validates and applies them. That makes "the model never writes to playlist state" (PRD 8.3) a property of the code layout, not a rule someone has to remember.
@@ -391,6 +396,7 @@ src/
     playlist/          drafts, revisions, ops, concurrency
     billing/           entitlements, stripe
     events/
+    youtube/           Google grant, Save to my YouTube export
   lib/                 db client, auth, rate limit, flags
 scripts/
   ingest/              worker jobs
