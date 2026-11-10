@@ -2,6 +2,7 @@ import { errorStatus, eventsRequest, type ErrorBody } from "@/contracts";
 import { getOwner } from "@/lib/auth";
 import { ipHash, limitPlain } from "@/lib/rate-limit";
 import * as events from "@/modules/events";
+import * as playlist from "@/modules/playlist";
 
 const fail = (error: ErrorBody) =>
   Response.json(error, {
@@ -31,7 +32,8 @@ export async function POST(request: Request) {
   }
 
   const event = parsed.data;
-  // Handoff fields go in props; the handoff_event row is C3's.
+  // A handoff is also a handoff_event row; its fields go in props as well.
+  if ("revision" in event) await playlist.recordHandoff(event);
   const props =
     "revision" in event
       ? {

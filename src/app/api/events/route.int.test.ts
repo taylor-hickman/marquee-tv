@@ -80,6 +80,44 @@ describe("POST /api/events", () => {
     });
   });
 
+  test("writes a handoff_event row for each handoff", async () => {
+    const draft = await factories.playlistDraft();
+    for (const [name, part] of [
+      ["handoff_opened", 1],
+      ["handoff_copied", 2],
+      ["handoff_shared", 1],
+    ] as const) {
+      await post({
+        name,
+        draftId: draft.id,
+        revision: 3,
+        part,
+        startIndex: 7,
+        surface: "ios",
+      });
+    }
+    const rows = await sql`
+      select type, revision, part, start_index, surface from handoff_event
+      where draft_id = ${draft.id} order by id`;
+    expect(rows).toEqual([
+      { type: "open", revision: 3, part: 1, start_index: 7, surface: "ios" },
+      { type: "copy", revision: 3, part: 2, start_index: 7, surface: "ios" },
+      { type: "share", revision: 3, part: 1, start_index: 7, surface: "ios" },
+    ]);
+  });
+
+  test("keeps a handoff for a draft that doesn't exist, without the draft", async () => {
+    const response = await post({
+      ...examples.handoffEvent,
+      draftId: crypto.randomUUID(),
+      surface: "c3-missing-draft",
+    });
+    expect(response.status).toBe(200);
+    const rows = await sql`
+      select draft_id from handoff_event where surface = 'c3-missing-draft'`;
+    expect(rows.map((r) => r.draft_id)).toContain(null);
+  });
+
   test("rejects an unknown event name", async () => {
     const response = await post({ name: "page_scrolled" });
     expect(response.status).toBe(400);
