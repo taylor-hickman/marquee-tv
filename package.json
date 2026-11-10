@@ -9,6 +9,7 @@
     "db:start": "supabase start",
     "db:reset": "supabase db reset",
     "seed": "node scripts/seed/seed.mts",
+    "expire-passes": "tsx --conditions=react-server scripts/billing/expire-passes.mts",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint && prettier --check .",
     "format": "prettier --write .",
@@ -47,6 +48,7 @@
     "msw": "^3.0.4",
     "prettier": "^3.9.10",
     "tailwindcss": "4.3.5",
+    "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "vitest": "^5.1.0"
   }
