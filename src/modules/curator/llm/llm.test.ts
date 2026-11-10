@@ -3,6 +3,7 @@ import { setupServer } from "msw/node";
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "vitest";
 import { brief, composeOutput, refineBrief } from "@/contracts";
 import { examples } from "@/contracts/examples";
+import { modelBrief, modelRefine } from "../brief/prompt";
 import {
   COMPOSE_MODEL,
   createAnthropicAdapter,
@@ -266,6 +267,12 @@ describe("fake adapter", () => {
       output: examples.brief,
     });
     expect(await fake.extractBrief(input, refineBrief)).toMatchObject({
+      ok: true,
+    });
+    expect(await fake.extractBrief(input, modelBrief)).toMatchObject({
+      ok: true,
+    });
+    expect(await fake.extractBrief(input, modelRefine)).toMatchObject({
       ok: true,
     });
     expect(await fake.compose(input, composeOutput)).toMatchObject({
