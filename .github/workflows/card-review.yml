@@ -53,6 +53,8 @@ jobs:
             exit 0
           fi
 
+          # Red, never pending, until a review exists: an agent waiting for
+          # checks to finish would otherwise wait on this one forever.
           # The latest comment whose first line is `Card review: <sha>` naming
           # the head commit. Comment bodies are data: they only go through jq.
           review=$(gh api --paginate "repos/$REPO/issues/$PR/comments" --jq '.[]' |
@@ -62,14 +64,14 @@ jobs:
                     | $sha | startswith($s)))
               | sort_by(.created_at) | last')
           if [[ $review == null ]]; then
-            status pending "Waiting for a Card review of ${sha:0:7}"
+            status failure "No card review of ${sha:0:7}: run build plan 4.1"
             exit 0
           fi
 
           # An open finding is an unticked task-list item.
           open=$(jq -r .body <<<"$review" | grep -cE '^[[:space:]]*[-*] \[ \]' || true)
           if (( open > 0 )); then
-            status failure "$open open finding(s) in the Card review of ${sha:0:7}"
+            status failure "$open open finding(s) on ${sha:0:7}: fix, push, review again"
           else
             status success "Card review of ${sha:0:7} has no open finding"
           fi
