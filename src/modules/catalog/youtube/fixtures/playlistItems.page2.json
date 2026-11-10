@@ -1,0 +1,39 @@
+{
+  "kind": "youtube#playlistItemListResponse",
+  "etag": "etag-page2",
+  "nextPageToken": "PAGE3",
+  "prevPageToken": "PREV",
+  "items": [
+    {
+      "kind": "youtube#playlistItem",
+      "etag": "etag-item-4",
+      "id": "VVVhMmZpeHR1cmUu0004",
+      "contentDetails": {
+        "videoId": "A2fixture04",
+        "videoPublishedAt": "2026-11-04T16:00:00Z"
+      }
+    },
+    {
+      "kind": "youtube#playlistItem",
+      "etag": "etag-item-5",
+      "id": "VVVhMmZpeHR1cmUu0005",
+      "contentDetails": {
+        "videoId": "A2fixture05",
+        "videoPublishedAt": "2026-11-03T16:00:00Z"
+      }
+    },
+    {
+      "kind": "youtube#playlistItem",
+      "etag": "etag-item-6",
+      "id": "VVVhMmZpeHR1cmUu0006",
+      "contentDetails": {
+        "videoId": "A2fixture06",
+        "videoPublishedAt": "2026-11-02T16:00:00Z"
+      }
+    }
+  ],
+  "pageInfo": {
+    "totalResults": 8,
+    "resultsPerPage": 3
+  }
+}
