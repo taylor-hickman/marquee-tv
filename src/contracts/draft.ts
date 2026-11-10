@@ -108,8 +108,10 @@ export const entitlementState = z.enum([
 ]);
 export type EntitlementState = z.infer<typeof entitlementState>;
 
-// P0 values of app_flag.handoff_mode (architecture 7.2; T4 seeds `url`).
-export const handoffMode = z.enum(["url", "copy_list"]);
+// Values of app_flag.handoff_mode (architecture 7.2; T4 seeds `url`). `api`
+// adds Save to my YouTube (architecture 11); only staging sets it until the
+// quota extension is approved.
+export const handoffMode = z.enum(["url", "copy_list", "api"]);
 
 // GET /api/drafts/:id, and the body every draft write returns.
 export const draftView = z.object({

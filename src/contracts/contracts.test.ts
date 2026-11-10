@@ -19,7 +19,7 @@ const invalid: Record<keyof typeof schemas, unknown> = {
   revision: { ...examples.revision, number: 0 },
   op: { op: "rename" },
   curatorOp: { op: "pin", performance_id: 102 },
-  draftView: { ...examples.draftView, flags: { handoffMode: "api" } },
+  draftView: { ...examples.draftView, flags: { handoffMode: "upload" } },
   candidateRow: { ...examples.candidateRow, artist_energy: 6 },
   composeOutput: { ...examples.composeOutput, ids: [] },
   refineOutput: { ops: [{ op: "unpin", performance_id: 101 }] },
@@ -72,6 +72,16 @@ const invalid: Record<keyof typeof schemas, unknown> = {
   accountResponse: { ...examples.accountResponse, defaultPlan: "annual" },
   deleteAccountResponse: { deleted: false },
   staticPageResponse: "",
+  youtubeConnectRequest: { draftId: "not-a-uuid" },
+  youtubeCallbackRequest: { code: "4/0AanRRrt" },
+  youtubeCallbackResponse: { location: "https://evil.example/d/x" },
+  youtubeConnectionResponse: { connected: "yes" },
+  youtubeExportRequest: { baseRevision: null },
+  youtubeExportResponse: {
+    status: "done",
+    playlistId: "PLm3xQ8vK1wZ0pR7nYc2bLg",
+    url: "https://evil.example/playlist?list=PL",
+  },
 };
 
 describe("contracts", () => {
@@ -137,6 +147,11 @@ describe("contracts", () => {
       "DELETE /api/account",
       "GET /privacy",
       "GET /terms",
+      "POST /api/youtube/connect",
+      "GET /api/youtube/callback",
+      "GET /api/youtube/connection",
+      "DELETE /api/youtube/connection",
+      "POST /api/drafts/:id/youtube-export",
     ]);
     const named = new Set<unknown>(Object.values(schemas));
     for (const [route, { request, response }] of Object.entries(routes)) {

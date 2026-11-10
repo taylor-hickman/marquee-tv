@@ -246,4 +246,14 @@ export const examples = {
   },
   deleteAccountResponse: { deleted: true },
   staticPageResponse: "<!doctype html><title>Privacy</title>",
+  youtubeConnectRequest: { draftId: DRAFT_ID },
+  youtubeCallbackRequest: { code: "4/0AanRRrt", state: "eyJkIjoiMyJ9.c2ln" },
+  youtubeCallbackResponse: { location: `/d/${DRAFT_ID}?youtube=save` },
+  youtubeConnectionResponse: { connected: true },
+  youtubeExportRequest: { baseRevision: 3 },
+  youtubeExportResponse: {
+    status: "done",
+    playlistId: "PLm3xQ8vK1wZ0pR7nYc2bLg",
+    url: "https://www.youtube.com/playlist?list=PLm3xQ8vK1wZ0pR7nYc2bLg",
+  },
 } satisfies { [K in keyof typeof schemas]: z.input<(typeof schemas)[K]> };

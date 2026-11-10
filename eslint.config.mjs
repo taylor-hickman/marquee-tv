@@ -6,7 +6,14 @@ import prettier from "eslint-config-prettier/flat";
 // Architecture 3: modules import each other only through index.ts, and
 // curator never reaches Postgres. A module's testing.ts (build plan 6.2) is
 // the one other entry point.
-const modules = ["catalog", "curator", "playlist", "billing", "events"];
+const modules = [
+  "catalog",
+  "curator",
+  "playlist",
+  "billing",
+  "events",
+  "youtube",
+];
 
 const throughIndex = {
   regex: "^@/modules/[^/]+/(?!testing$)",

@@ -19,7 +19,7 @@ describe("getFlag", () => {
   });
 
   test("refuses a value outside the flag's schema", async () => {
-    await sql`update app_flag set value = 'api' where key = 'handoff_mode'`;
+    await sql`update app_flag set value = 'upload' where key = 'handoff_mode'`;
     try {
       await expect(getFlag("handoff_mode")).rejects.toThrow();
     } finally {
