@@ -51,6 +51,8 @@ describe.skipIf(!stack)("database", () => {
       const [guest] = await tx`
         insert into guest (token_hash, cohort)
         values (sha256(convert_to(${userId}, 'utf8')), 'pass_first') returning id`;
+      await tx`insert into claim_code (code_hash, guest_id)
+               values (sha256(convert_to(${userId}, 'utf8')), ${guest.id})`;
       const [entitlement] = await tx`
         insert into entitlement (user_id, kind, status) values (${userId}, 'subscription', 'active') returning id`;
       const [draft] = await tx`
