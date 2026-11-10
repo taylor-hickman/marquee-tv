@@ -65,9 +65,38 @@ On Nov 9, 2026 `verify.sh` passes: all 14 variables exist in every target and en
 | `google-oauth` | Consent screen External, in Testing, authorized domains `getmarquee.tv` and `supabase.co`. Web client "Supabase Auth" with both callback URLs. Google sign-in on in both Supabase projects |
 | `stripe` | Sandbox "Marquee TV sandbox" (`acct_1UZsUPCL0MHWeXeo`, owner ops@getmarquee.tv). Prices `marquee_session_pass` $2.99 and `marquee_monthly` $4.99/month. Webhooks for the four events at `https://getmarquee.tv/api/webhooks/stripe` (production) and `https://staging.getmarquee.tv/api/webhooks/stripe` (preview). Standard account, no Connect, no Stripe Tax, no Managed Payments |
 | `sentry` | Org `marquee-tv` (US region), project `marquee-tv` (Next.js), team `marquee-tv` |
-| `llm` | Anthropic workspaces `marquee-preview` (about $10 a month cap) and `marquee-production`, one key each; both answered `GET /v1/models` before they were stored |
+| `llm` | Anthropic workspaces `marquee-preview` (about $10 a month cap) and `marquee-production`, one key each; both answered `GET /v1/models` before they were stored. On Nov 9 the stored Vercel values each answered a one-token messages call with 200 from inside a deployment ([Checking a stored secret](#checking-a-stored-secret)): Preview `sk-ant-usr-1Cq...6AAA`, Production `sk-ant-usr-1Ho...EAAA` |
 
 The `supabase`, `google-oauth`, `stripe`, `sentry` and `llm` stages were run by hand with the same commands and API calls the wizard makes, after the early wizard bugs fixed in this card's PR.
+
+## Checking a stored secret
+
+`put` stores every Vercel value as sensitive, so Vercel never decrypts it outside a deployment. `vercel env pull` writes the literal `[SENSITIVE]` (11 characters) in its place, and sending that to an API fails. A failure with a pulled Vercel value says nothing about the stored one.
+
+To check a stored value, read it inside a deployment. For `ANTHROPIC_API_KEY`, deploy a one-function probe to the project, call it, then delete the deployment:
+
+```js
+// api/check.js, beside a vercel.json of { "framework": null, "buildCommand": "", "installCommand": "", "outputDirectory": "." }
+export default async function handler(req, res) {
+  const k = process.env.ANTHROPIC_API_KEY || "";
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "x-api-key": k, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+    body: JSON.stringify({ model: "claude-haiku-5-5", max_tokens: 1, messages: [{ role: "user", content: "hi" }] }),
+  });
+  const body = await r.json().catch(() => ({}));
+  res.status(200).json({ env: process.env.VERCEL_ENV, hint: `${k.slice(0, 14)}...${k.slice(-4)}`, status: r.status, error: body.error ?? null });
+}
+```
+
+```sh
+vercel deploy --project marquee-tv --yes                       # Preview env
+vercel deploy --prod --skip-domain --project marquee-tv --yes  # Production env, not promoted
+vercel curl /api/check --deployment <url>
+vercel rm <url> --yes
+```
+
+The hint matches the key list in the Anthropic console, which shows the workspace that owns it.
 
 ## Still to do
 
