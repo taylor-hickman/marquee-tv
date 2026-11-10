@@ -69,6 +69,35 @@ On Nov 9, 2026 `verify.sh` passes: all 14 variables exist in every target and en
 
 The `supabase`, `google-oauth`, `stripe`, `sentry` and `llm` stages were run by hand with the same commands and API calls the wizard makes, after the early wizard bugs fixed in this card's PR.
 
+## Checking a stored secret
+
+`put` stores every Vercel value as sensitive, so Vercel never decrypts it outside a deployment. `vercel env pull` writes the literal `[SENSITIVE]` (11 characters) in its place, and sending that to an API fails. A failure with a pulled Vercel value says nothing about the stored one.
+
+To check a stored value, read it inside a deployment. For `ANTHROPIC_API_KEY`, deploy a one-function probe to the project, call it, then delete the deployment:
+
+```js
+// api/check.js, beside a vercel.json of { "framework": null, "buildCommand": "", "installCommand": "", "outputDirectory": "." }
+export default async function handler(req, res) {
+  const k = process.env.ANTHROPIC_API_KEY || "";
+  const r = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "x-api-key": k, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+    body: JSON.stringify({ model: "claude-haiku-5-5", max_tokens: 1, messages: [{ role: "user", content: "hi" }] }),
+  });
+  const body = await r.json().catch(() => ({}));
+  res.status(200).json({ env: process.env.VERCEL_ENV, hint: `${k.slice(0, 14)}...${k.slice(-4)}`, status: r.status, error: body.error ?? null });
+}
+```
+
+```sh
+vercel deploy --project marquee-tv --yes                       # Preview env
+vercel deploy --prod --skip-domain --project marquee-tv --yes  # Production env, not promoted
+vercel curl /api/check --deployment <url>
+vercel rm <url> --yes
+```
+
+The hint matches the key list in the Anthropic console, which shows the workspace that owns it.
+
 ## Still to do
 
 None of these blocks `verify.sh`.
