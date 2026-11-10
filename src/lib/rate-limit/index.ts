@@ -1,5 +1,6 @@
 import "server-only";
 import { createHash } from "node:crypto";
+import type { TransactionSql } from "postgres";
 import type { ErrorBody, Owner } from "@/contracts";
 import { sql } from "@/lib/db";
 
@@ -34,15 +35,16 @@ export function ipHash(request: Request): Buffer {
 
 // Null when the run may go ahead. Each array_agg picks the limit-th newest run
 // in the window: when one exists the limit is reached, and it frees up an hour
-// after that run.
+// after that run. A caller that holds a transaction passes it as `db`.
 export async function limitRuns(
   ip: Buffer,
   owner: Owner | null,
   now: Date,
+  db: typeof sql | TransactionSql = sql,
 ): Promise<RateLimited | null> {
   const guestId = owner?.kind === "guest" ? owner.guestId : null;
   const userId = owner?.kind === "user" ? owner.userId : null;
-  const [row] = await sql<{ times: (Date | null)[] }[]>`
+  const [row] = await db<{ times: (Date | null)[] }[]>`
     select array[
       (array_agg(r.created_at order by r.created_at desc)
         filter (where r.ip_hash = ${ip}))[${RUNS_PER_HOUR.ip}],

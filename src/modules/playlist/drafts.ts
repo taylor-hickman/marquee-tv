@@ -20,7 +20,7 @@ import { edit } from "./ops";
 import type { ApplyOps, CreateDraft, GetDraft, Undo } from "./types";
 
 // Model-backed runs allowed per draft (architecture 6.3, PRD 8.5).
-const RUN_CAP = 25;
+export const RUN_CAP = 25;
 
 type DraftRow = {
   id: DraftId;
