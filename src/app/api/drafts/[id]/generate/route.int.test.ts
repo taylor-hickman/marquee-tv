@@ -249,6 +249,42 @@ describe("POST /api/drafts/:id/generate", () => {
     });
   });
 
+  test("a burst of runs sent at once gets no more than the run limit", async () => {
+    const guest = await asGuest();
+    const id = await draftAt(ids, {
+      owner_guest_id: guest.guestId,
+      free: true,
+    });
+
+    const responses = await Promise.all(
+      Array.from({ length: 12 }, () =>
+        post(id, { baseRevision: 1, mode: "regenerate" }, guest.headers),
+      ),
+    );
+    const statuses = responses.map((r) => r.status).sort();
+    expect(statuses).toEqual([...Array(10).fill(200), 429, 429]);
+    await Promise.all(responses.map((r) => r.text()));
+    await settle();
+    expect(await runs(id)).toHaveLength(10);
+  });
+
+  test("a burst on a draft one run short of the cap gets one run", async () => {
+    const guest = await asGuest();
+    const id = await draftAt(ids, {
+      owner_guest_id: guest.guestId,
+      free: true,
+    });
+    await pastRuns(id, 24);
+
+    const responses = await Promise.all(
+      Array.from({ length: 3 }, () =>
+        post(id, { baseRevision: 1, mode: "regenerate" }, guest.headers),
+      ),
+    );
+    expect(responses.map((r) => r.status).sort()).toEqual([200, 429, 429]);
+    await Promise.all(responses.map((r) => r.text()));
+  });
+
   test("past 25 runs the draft gets run_cap_reached and manual edits still work", async () => {
     const guest = await asGuest();
     const id = await draftAt(ids, {
@@ -351,8 +387,10 @@ describe("POST /api/drafts/:id/generate", () => {
     });
     let started = false;
     const seen: boolean[] = [];
-    llm.before = () => {
+    const claimed: unknown[] = [];
+    llm.before = async () => {
       seen.push(started);
+      claimed.push(...(await runs(draft.id)).map((run) => run.error));
     };
 
     const response = await post(
@@ -369,6 +407,8 @@ describe("POST /api/drafts/:id/generate", () => {
     while (!(await reader.read()).done);
 
     expect(seen).toEqual([true, true]);
+    // The run's row is taken before the model is called.
+    expect(claimed).toEqual(["running", "running"]);
     expect(llm.calls).toEqual(["extractBrief", "compose"]);
   });
 

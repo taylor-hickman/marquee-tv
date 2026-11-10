@@ -26,7 +26,7 @@ import type { ReplaceOptions, StartRun } from "./types";
 // Model-backed runs (architecture 6.2, 6.3, 7.3): generate, regenerate, fill
 // and refine. The checks come before the stream opens, so a refused run is a
 // plain error response; once `started` is sent the run always ends in
-// `result` or `error`, and writes its curator_run row whether or not anyone
+// `result` or `error`, and finishes its curator_run row whether or not anyone
 // is still reading.
 
 // The run gives up after this long (architecture 6.2, J11).
@@ -118,27 +118,65 @@ type RunFacts = Partial<CuratorProposal["run"]> & {
   warnings?: CuratorProposal["warnings"];
 };
 
-const insertRun = (
+type RunRecord = {
+  id: string;
+  draftId: DraftId;
+  kind: Kind;
+  ipHash: Uint8Array;
+};
+
+// The run takes its curator_run row before the model is called, so the rate
+// limit and the run cap count it from the start. Requests from one IP or owner
+// take their turn here, and each sees the rows the ones before it took: a
+// burst sent at once can't get past either. The row says `running` until the
+// run finishes it.
+async function claim(
+  context: Parameters<StartRun>[0],
+  run: RunRecord,
+): Promise<ErrorBody | null> {
+  const { owner } = context;
+  const ip = Buffer.from(run.ipHash);
+  return sql.begin(async (tx) => {
+    // Always IP, then owner, then draft, so two requests never wait on each other.
+    for (const key of [
+      `run:ip:${ip.toString("hex")}`,
+      owner.kind === "guest"
+        ? `run:guest:${owner.guestId}`
+        : `run:user:${owner.userId}`,
+    ]) {
+      await tx`select pg_advisory_xact_lock(hashtextextended(${key}, 0))`;
+    }
+    await tx`select 1 from playlist_draft where id = ${run.draftId} for update`;
+    const limited = await limitRuns(ip, owner, context.now, tx);
+    if (limited) return limited;
+    const [{ runs }] = await tx<{ runs: number }[]>`
+      select count(*)::int as runs from curator_run
+      where draft_id = ${run.draftId}`;
+    if (runs >= RUN_CAP) return { error: "run_cap_reached" } as const;
+    await tx`
+      insert into curator_run (id, draft_id, kind, error, ip_hash)
+      values (${run.id}, ${run.draftId}, ${run.kind}, 'running', ${ip})`;
+    return null;
+  });
+}
+
+const finishRun = (
   db: typeof sql | TransactionSql,
-  run: {
-    id: string;
-    draftId: DraftId;
-    kind: Kind;
-    ipHash: Uint8Array;
-    facts: RunFacts;
-    error: string | null;
-  },
+  id: string,
+  facts: RunFacts,
+  error: string | null,
 ) => db`
-  insert into curator_run (id, draft_id, kind, brief, candidate_ids,
-    output_ids, warnings, model, tokens_in, tokens_out, latency_ms, error,
-    ip_hash)
-  values (${run.id}, ${run.draftId}, ${run.kind},
-    ${run.facts.brief ? db.json(run.facts.brief) : null},
-    ${run.facts.candidateIds ?? []}, ${run.facts.outputIds ?? []},
-    ${db.json(run.facts.warnings ?? [])}, ${run.facts.model ?? null},
-    ${run.facts.tokensIn ?? null}, ${run.facts.tokensOut ?? null},
-    ${run.facts.latencyMs ?? null}, ${run.error},
-    ${Buffer.from(run.ipHash)})`;
+  update curator_run set
+    brief = ${facts.brief ? db.json(facts.brief) : null},
+    candidate_ids = ${facts.candidateIds ?? []},
+    output_ids = ${facts.outputIds ?? []},
+    warnings = ${db.json(facts.warnings ?? [])},
+    model = ${facts.model ?? null},
+    tokens_in = ${facts.tokensIn ?? null},
+    tokens_out = ${facts.tokensOut ?? null},
+    latency_ms = ${facts.latencyMs ?? null},
+    error = ${error}
+  where id = ${id}`;
 
 export const startRun: StartRun = async (context, draftId, request) => {
   const { owner, now } = context;
@@ -161,6 +199,8 @@ export const startRun: StartRun = async (context, draftId, request) => {
     });
   }
 
+  // Checked again when the run claims its row; this one keeps a rate-limited
+  // request from reaching the entitlement check and holding the draft.
   const limited = await limitRuns(Buffer.from(context.ipHash), owner, now);
   if (limited) return failed(limited);
 
@@ -183,9 +223,15 @@ export const startRun: StartRun = async (context, draftId, request) => {
     return hold(owner, draft.id, input);
   }
 
-  const [{ runs }] = await sql<{ runs: number }[]>`
-    select count(*)::int as runs from curator_run where draft_id = ${draftId}`;
-  if (runs >= RUN_CAP) return failed({ error: "run_cap_reached" });
+  const kind: Kind = request.kind === "refine" ? "refine" : request.body.mode;
+  const record: RunRecord = {
+    id: randomUUID(),
+    draftId,
+    kind,
+    ipHash: context.ipHash,
+  };
+  const refused = await claim(context, record);
+  if (refused) return failed(refused);
 
   // New input first, then what a 402 held, then the revision's own brief. A
   // set with none of these, such as a hand-built one, runs on its length.
@@ -213,19 +259,17 @@ export const startRun: StartRun = async (context, draftId, request) => {
         where r.draft_id = ${draftId}`
     ).map((row) => row.id),
   };
-  const kind: Kind = request.kind === "refine" ? "refine" : request.body.mode;
   const run = (options: curator.RunOptions) =>
     request.kind === "refine"
       ? curator.refine(state, request.body.instruction, options)
       : curator[request.body.mode](state, options);
 
-  const runId = randomUUID();
   let controller!: ReadableStreamDefaultController<StreamEvent>;
   let open = true;
   const stream = new ReadableStream<StreamEvent>({
     start(c) {
       controller = c;
-      c.enqueue({ type: "started", runId });
+      c.enqueue({ type: "started", runId: record.id });
     },
     // The reader went away; the run carries on and writes what it finds.
     cancel() {
@@ -240,8 +284,6 @@ export const startRun: StartRun = async (context, draftId, request) => {
     if (open) controller.close();
     open = false;
   };
-  const record = { id: runId, draftId, kind, ipHash: context.ipHash };
-
   const done = (async () => {
     const abort = new AbortController();
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -257,19 +299,16 @@ export const startRun: StartRun = async (context, draftId, request) => {
         ceiling,
       ]);
       if (outcome === "timeout") {
-        await insertRun(sql, {
-          ...record,
-          facts: { latencyMs: context.ceilingMs },
-          error: "timeout",
-        });
+        await finishRun(
+          sql,
+          record.id,
+          { latencyMs: context.ceilingMs },
+          "timeout",
+        );
         return finish(generationFailed);
       }
       if (!outcome.ok) {
-        await insertRun(sql, {
-          ...record,
-          facts: outcome.run,
-          error: outcome.error,
-        });
+        await finishRun(sql, record.id, outcome.run, outcome.error);
         return finish(generationFailed);
       }
       const proposal = outcome.proposal;
@@ -288,9 +327,7 @@ export const startRun: StartRun = async (context, draftId, request) => {
       );
     } catch (error) {
       console.error("curator run failed", error);
-      await insertRun(sql, { ...record, facts: {}, error: "internal" }).catch(
-        () => {},
-      );
+      await finishRun(sql, record.id, {}, "internal").catch(() => {});
       finish(generationFailed);
     } finally {
       clearTimeout(timer);
@@ -301,11 +338,11 @@ export const startRun: StartRun = async (context, draftId, request) => {
   return { ok: true, value: stream };
 };
 
-// The revision and its curator_run row in one transaction (architecture 6.2
-// step 5). A write that landed on the draft while the model ran wins: the run
+// The revision and the facts on its curator_run row in one transaction
+// (architecture 6.2 step 5). A write that landed on the draft while the model ran wins: the run
 // is recorded as a conflict and the draft keeps that revision.
 async function write(
-  record: Omit<Parameters<typeof insertRun>[1], "facts" | "error">,
+  record: RunRecord,
   baseRevision: number | null,
   proposal: CuratorProposal,
   options: { instruction: string | null; keepTitle: boolean },
@@ -320,10 +357,10 @@ async function write(
       warnings: proposal.warnings,
     };
     if (!draft || draft.current_revision !== baseRevision) {
-      await insertRun(tx, { ...record, facts, error: "conflict" });
+      await finishRun(tx, record.id, facts, "conflict");
       return false;
     }
-    await insertRun(tx, { ...record, facts, error: null });
+    await finishRun(tx, record.id, facts, null);
     const number = (baseRevision ?? 0) + 1;
     await tx`
       insert into playlist_revision (draft_id, number, items, removed_ids,
