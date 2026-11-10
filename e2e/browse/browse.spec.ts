@@ -1,6 +1,4 @@
-import { execFileSync } from "node:child_process";
 import { expect, test, type Page } from "@playwright/test";
-import postgres from "postgres";
 import { draftView } from "@/contracts";
 import { expectNoAxeViolations } from "../support/axe";
 
@@ -11,23 +9,6 @@ const KHRUANGBIN = {
   id: 233,
   title: "Khruangbin - Full Performance (Live on KEXP at Home)",
 };
-
-// The global reset empties app_flag, whose handoff_mode row a migration seeds
-// and every draft read needs. Put it back until the reset keeps it (backlog:
-// marquee-e2e-reset-keeps-the-handoff-mode-flag-row). A deploy has its own.
-test.beforeAll(async () => {
-  if (process.env.PLAYWRIGHT_BASE_URL) return;
-  const { DB_URL } = JSON.parse(
-    execFileSync("supabase", ["status", "-o", "json"], {
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }),
-  );
-  const sql = postgres(DB_URL, { onnotice: () => {} });
-  await sql`insert into app_flag (key, value) values ('handoff_mode', 'url')
-    on conflict (key) do nothing`;
-  await sql.end();
-});
 
 // The PR gate reaches no third party: thumbnails stay placeholders.
 test.beforeEach(async ({ page }) => {
