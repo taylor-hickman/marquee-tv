@@ -10,8 +10,9 @@
 //          06 an upcoming premiere with no duration yet
 //   page3: 07, 08 desk concerts
 // `videos.later.json` is the same channel a week on: 01 went private, 03 was
-// retitled, 04's block lifted, 07 was deleted, 08 is no longer allowed in the
-// US, and 09 and 10 are back for performances whose cache rows had expired.
+// retitled, 04's block lifted, 06 has aired, 07 was deleted, 08 is no longer
+// allowed in the US, and 09 and 10 are back for performances whose cache rows
+// had expired.
 
 import { getResponse, http, HttpResponse } from "msw";
 import { vi } from "vitest";

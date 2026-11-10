@@ -51,9 +51,10 @@ describe("ingest:new", () => {
     const { desk, home, ids } = await fixtureSeries();
     const { calls, youtube } = api("now");
 
-    expect(await ingestNew(youtube, now, ids)).toEqual({ written: 5 });
+    expect(await ingestNew(youtube, now, ids)).toEqual({ written: 6 });
 
-    // 02 is in neither series, 05 is private, 06 hasn't aired.
+    // 02 is in neither series and 05 is private. 06 hasn't aired, so it has a
+    // performance row but no cache row yet.
     expect(await rows(ids)).toEqual([
       expect.objectContaining({
         video_id: "A2fixture01",
@@ -69,6 +70,12 @@ describe("ingest:new", () => {
         available: true,
       }),
       expect.objectContaining({ video_id: "A2fixture04", available: false }),
+      expect.objectContaining({
+        video_id: "A2fixture06",
+        series_id: desk.id,
+        title: null,
+        fetched_at: null,
+      }),
       expect.objectContaining({ video_id: "A2fixture07", duration_s: 3723 }),
       expect.objectContaining({ video_id: "A2fixture08", available: true }),
     ]);
@@ -77,23 +84,27 @@ describe("ingest:new", () => {
         review_status: "pending",
         eligible: false,
         last_verified_at: now,
-        fetched_at: now,
       });
     }
+    expect((await rows(ids)).filter((r) => r.fetched_at)).toHaveLength(5);
     expect(calls("playlistItems")).toHaveLength(3);
     expect(calls("videos")).toHaveLength(1);
     expect(youtube.units).toBe(4);
   });
 
-  test("stops paging at the first upload already in the catalog", async () => {
-    const { desk, ids } = await fixtureSeries();
+  test("stops paging once every series has reached its own newest upload in the catalog", async () => {
+    const { desk, home, ids } = await fixtureSeries();
+    await factories.performance({
+      series_id: home.id,
+      video_id: "A2fixture03",
+    });
     await factories.performance({
       series_id: desk.id,
       video_id: "A2fixture04",
     });
     const { calls, youtube } = api("now");
 
-    expect(await ingestNew(youtube, now, ids)).toEqual({ written: 2 });
+    expect(await ingestNew(youtube, now, ids)).toEqual({ written: 1 });
 
     expect((await rows(ids)).map((r) => r.video_id)).toEqual([
       "A2fixture01",
@@ -104,8 +115,50 @@ describe("ingest:new", () => {
       calls("playlistItems").map((u) => u.searchParams.get("pageToken")),
     ).toEqual([null, "PAGE2"]);
     expect(calls("videos")[0].searchParams.get("id")).toBe(
-      "A2fixture01,A2fixture02,A2fixture03",
+      "A2fixture01,A2fixture02",
     );
+  });
+
+  test("a series whose newest upload is older than its sibling's still gets every upload above it", async () => {
+    const { desk, home, ids } = await fixtureSeries();
+    // Home was ingested more recently than desk: desk's 04 and 06 came after
+    // desk's last run, below home's 03.
+    await factories.performance({
+      series_id: home.id,
+      video_id: "A2fixture03",
+    });
+    await factories.performance({
+      series_id: desk.id,
+      video_id: "A2fixture07",
+    });
+    const { calls, youtube } = api("now");
+
+    expect(await ingestNew(youtube, now, ids)).toEqual({ written: 3 });
+
+    expect((await rows(ids)).map((r) => r.video_id)).toEqual([
+      "A2fixture01",
+      "A2fixture03",
+      "A2fixture04",
+      "A2fixture06",
+      "A2fixture07",
+    ]);
+    expect(calls("playlistItems")).toHaveLength(3);
+  });
+
+  test("a series added to a playlist already ingested for its sibling is backfilled", async () => {
+    const { desk, home, ids } = await fixtureSeries();
+    await ingestNew(api("now").youtube, now, [desk.id]);
+    expect((await rows(ids)).map((r) => r.video_id)).not.toContain(
+      "A2fixture03",
+    );
+    const { calls, youtube } = api("now");
+
+    expect(await ingestNew(youtube, now, ids)).toEqual({ written: 1 });
+
+    expect(await rows([home.id])).toEqual([
+      expect.objectContaining({ video_id: "A2fixture03", fetched_at: now }),
+    ]);
+    expect(calls("playlistItems")).toHaveLength(3);
   });
 
   test("a run with nothing new writes nothing", async () => {
@@ -115,7 +168,7 @@ describe("ingest:new", () => {
 
     expect(await ingestNew(youtube, now, ids)).toEqual({ written: 0 });
     expect(calls("playlistItems")).toHaveLength(1);
-    expect(await rows(ids)).toHaveLength(5);
+    expect(await rows(ids)).toHaveLength(6);
   });
 });
 
@@ -127,10 +180,10 @@ describe("refresh", () => {
     const { calls, youtube } = api("later");
 
     expect(await refresh(youtube, later, ids)).toEqual({
-      checked: 5,
-      available: 2,
+      checked: 6,
+      available: 3,
       gone: 1,
-      restored: 0,
+      restored: 1,
     });
 
     const byId = Object.fromEntries(
@@ -150,6 +203,15 @@ describe("refresh", () => {
     });
     // US block lifted.
     expect(byId.A2fixture04).toMatchObject({ available: true });
+    // The premiere aired: its cache row arrives. It stays ineligible until A3
+    // gives it a kind.
+    expect(byId.A2fixture06).toMatchObject({
+      title: "Fen Fixture: Tiny Desk Concert",
+      duration_s: 1200,
+      available: true,
+      fetched_at: later,
+      eligible: false,
+    });
     // Deleted: unavailable, and its old fetched_at lets expire remove it.
     expect(byId.A2fixture07).toMatchObject({
       available: false,

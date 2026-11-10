@@ -112,6 +112,42 @@
     },
     {
       "kind": "youtube#video",
+      "etag": "etag-A2fixture06",
+      "id": "A2fixture06",
+      "snippet": {
+        "publishedAt": "2026-11-02T16:00:00Z",
+        "channelId": "UCa2fixtureChannel000000",
+        "title": "Fen Fixture: Tiny Desk Concert",
+        "description": "",
+        "thumbnails": {},
+        "channelTitle": "Fixture Music",
+        "categoryId": "10",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "Fen Fixture: Tiny Desk Concert",
+          "description": ""
+        }
+      },
+      "contentDetails": {
+        "duration": "PT20M",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true,
+        "contentRating": {},
+        "projection": "rectangular"
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "public",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true,
+        "madeForKids": false
+      }
+    },
+    {
+      "kind": "youtube#video",
       "etag": "etag-A2fixture08",
       "id": "A2fixture08",
       "snippet": {
@@ -223,7 +259,7 @@
     }
   ],
   "pageInfo": {
-    "totalResults": 6,
-    "resultsPerPage": 6
+    "totalResults": 7,
+    "resultsPerPage": 7
   }
 }

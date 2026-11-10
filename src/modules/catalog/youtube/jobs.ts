@@ -10,10 +10,17 @@ export const RETENTION_DAYS = 30;
 
 type Series = { id: number; uploads_playlist_id: string; title_rule: string };
 
-// Pages each series' uploads playlist, newest first, until it reaches a video
-// already in the catalog, and writes a pending performance and its cache row
-// for each new upload in the series. Series that share a channel share its
-// uploads playlist, so each playlist is paged once.
+// Pages each series' uploads playlist, newest first, and writes a pending
+// performance and its cache row for each new upload in the series. Series that
+// share a channel share its uploads playlist, so each playlist is paged once,
+// until every series in it has reached its own newest upload in the catalog. A
+// series with none yet pages back to the channel's first upload.
+//
+// An upload with no duration yet (a premiere or live stream that hasn't aired)
+// gets its performance row without a cache row, so it counts as known; refresh
+// writes the cache row once it has aired. Private uploads aren't stored: a
+// video's publishedAt becomes the time it's made public, which puts it back at
+// the top of the playlist for a later run.
 export async function ingestNew(
   youtube: YouTube,
   now: Date,
@@ -28,12 +35,12 @@ export async function ingestNew(
     series,
     (s) => s.uploads_playlist_id,
   )) {
-    const videos = await youtube.videos(await newUploads(youtube, playlist));
-    const rows = videos.flatMap((video) => {
+    const fresh = await newUploads(youtube, playlist, members);
+    const rows = (await youtube.videos([...fresh.keys()])).flatMap((video) => {
       const s = seriesFor(video.title, members);
-      // A premiere or live stream has no duration until it has aired; a later
-      // run picks it up.
-      return s && video.durationS > 0 ? [{ video, seriesId: s.id }] : [];
+      return s && fresh.get(video.videoId)!.has(s.id)
+        ? [{ video, seriesId: s.id }]
+        : [];
     });
     if (rows.length === 0) continue;
     await sql.begin(async (tx) => {
@@ -48,35 +55,48 @@ export async function ingestNew(
         )}
         returning id, video_id`;
       const ids = new Map(performances.map((p) => [p.video_id, p.id]));
-      await tx`insert into performance_yt_cache ${tx(
-        rows.map(({ video }) => cacheRow(ids.get(video.videoId), video, now)),
-      )}`;
+      const aired = rows.filter(({ video }) => video.durationS > 0);
+      if (aired.length > 0) {
+        await tx`insert into performance_yt_cache ${tx(
+          aired.map(({ video }) =>
+            cacheRow(ids.get(video.videoId), video, now),
+          ),
+        )}`;
+      }
     });
     written += rows.length;
   }
   return { written };
 }
 
-async function newUploads(youtube: YouTube, playlistId: string) {
-  const fresh: string[] = [];
+// The playlist's uploads not yet in the catalog, each with the series that
+// hadn't yet reached their newest catalogued upload at that point in the list.
+async function newUploads(
+  youtube: YouTube,
+  playlistId: string,
+  members: Series[],
+) {
+  const fresh = new Map<string, Set<number>>();
+  const open = new Set(members.map((s) => s.id));
   let pageToken: string | undefined;
   do {
     const page = await youtube.playlistItems(playlistId, pageToken);
-    const known = new Set(
+    const known = new Map<string, number>(
       page.videoIds.length === 0
         ? []
         : (
-            await sql`select video_id from performance where video_id in ${sql(page.videoIds)}`
-          ).map((r) => r.video_id),
+            await sql`
+              select video_id, series_id from performance
+              where video_id in ${sql(page.videoIds)}`
+          ).map((r) => [r.video_id, r.series_id]),
     );
-    const firstKnown = page.videoIds.findIndex((id) => known.has(id));
-    if (firstKnown >= 0) {
-      fresh.push(...page.videoIds.slice(0, firstKnown));
-      break;
+    for (const id of page.videoIds) {
+      if (open.size === 0) break;
+      if (known.has(id)) open.delete(known.get(id)!);
+      else fresh.set(id, new Set(open));
     }
-    fresh.push(...page.videoIds);
     pageToken = page.nextPageToken;
-  } while (pageToken);
+  } while (pageToken && open.size > 0);
   return fresh;
 }
 
