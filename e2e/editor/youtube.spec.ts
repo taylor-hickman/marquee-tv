@@ -1,5 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
-import { draftView, youtubeExportResponse } from "@/contracts";
+import {
+  draftView,
+  errorBody,
+  errorStatus,
+  urlResponse,
+  youtubeExportResponse,
+} from "@/contracts";
 import { examples } from "@/contracts/examples";
 import { expectNoAxeViolations } from "../support/axe";
 import {
@@ -56,11 +62,17 @@ test("without a grant, the authorization screen names the scope and sends the pe
 }) => {
   await withApiFlag(page);
   await page.route(`**/api/drafts/${id}/youtube-export`, (route) =>
-    route.fulfill({ status: 403, json: { error: "youtube_not_connected" } }),
+    route.fulfill({
+      status: errorStatus.youtube_not_connected,
+      json: errorBody.parse({ error: "youtube_not_connected" }),
+    }),
   );
   await page.route("**/api/youtube/connect", (route) =>
     route.fulfill({
-      json: { url: "https://accounts.google.com/o/oauth2/v2/auth?state=s" },
+      json: urlResponse.parse({
+        ...examples.urlResponse,
+        url: "https://accounts.google.com/o/oauth2/v2/auth?state=s",
+      }),
     }),
   );
   await page.route("https://accounts.google.com/**", (route) =>

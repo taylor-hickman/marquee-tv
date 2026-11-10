@@ -193,7 +193,7 @@ describe("POST /api/youtube/connect", () => {
     );
   });
 
-  test("a guest gets 401, and the route is off unless handoff_mode is api", async () => {
+  test("a guest gets 401, and connect and callback are off unless handoff_mode is api", async () => {
     const guest = await asGuest();
     const draftId = await draftAt(await catalogIds(1), {
       owner_guest_id: guest.guestId,
@@ -207,6 +207,9 @@ describe("POST /api/youtube/connect", () => {
     });
     await sql`update app_flag set value = 'url' where key = 'handoff_mode'`;
     expect((await startConnect(user.headers, own)).status).toBe(404);
+    expect((await finish({ code: "auth-code", state: "a.b" })).status).toBe(
+      404,
+    );
   });
 });
 

@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { deleteAccountResponse } from "@/contracts";
+import { deleteAccountResponse, youtubeConnectionResponse } from "@/contracts";
 import { examples } from "@/contracts/examples";
 import { expectNoAxeViolations } from "../support/axe";
 import { signedInUser, sql, userDraft } from "./support";
@@ -62,7 +62,12 @@ test("YouTube shows while connected, and Disconnect revokes it and hides it", as
       disconnects++;
       connected = false;
     }
-    return route.fulfill({ json: { connected } });
+    return route.fulfill({
+      json: youtubeConnectionResponse.parse({
+        ...examples.youtubeConnectionResponse,
+        connected,
+      }),
+    });
   });
 
   await page.goto("/account");

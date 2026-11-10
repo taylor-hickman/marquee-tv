@@ -1,9 +1,13 @@
+import { getFlag } from "@/lib/flags";
 import { fail } from "@/modules/playlist";
 import { finishConnect, NONCE_COOKIE } from "@/modules/youtube";
 
 // Google's redirect back from consent. Stores the grant and returns the
 // browser to the draft, which starts the export on `?youtube=save`.
 export async function GET(request: Request) {
+  if ((await getFlag("handoff_mode")) !== "api") {
+    return fail({ error: "not_found" });
+  }
   const url = new URL(request.url);
   const state = url.searchParams.get("state");
   if (!state) return fail({ error: "invalid_request", issues: ["state"] });
