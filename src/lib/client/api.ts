@@ -1,5 +1,6 @@
 import type { z } from "zod";
 import {
+  accountResponse,
   catalogArtistsResponse,
   catalogSearchResponse,
   createDraftResponse,
@@ -134,6 +135,7 @@ export function createApiClient({
       json(urlResponse, "POST", "/api/billing/checkout", body),
     billingPortal: () => json(urlResponse, "POST", "/api/billing/portal", {}),
     library: () => json(libraryResponse, "GET", "/api/library"),
+    account: () => json(accountResponse, "GET", "/api/account"),
     deleteAccount: () => json(deleteAccountResponse, "DELETE", "/api/account"),
   };
 }

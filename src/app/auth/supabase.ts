@@ -18,16 +18,20 @@ export const CLAIM_CODE_KEY = "marquee.claimCode";
 
 // Sends the guest token, when there is one, so the redirect carries a claim
 // code; then hands off to Google or sends the email link. The header name is
-// GUEST_TOKEN_HEADER in @/lib/auth, which is server-only.
+// GUEST_TOKEN_HEADER in @/lib/auth, which is server-only. `next` is the path
+// the callback goes on to, such as the plan screen (card E8).
 export async function startSignIn(
   method: { provider: "google" } | { email: string },
   guestToken?: string,
+  next?: string,
 ): Promise<void> {
   const response = await fetch("/api/auth/sign-in", {
     method: "POST",
     headers: guestToken ? { "x-guest-token": guestToken } : {},
   });
-  const { redirectTo } = signInResponse.parse(await response.json());
+  const url = new URL(signInResponse.parse(await response.json()).redirectTo);
+  if (next) url.searchParams.set("next", next);
+  const redirectTo = url.toString();
   const { error } =
     "email" in method
       ? await auth().signInWithOtp({
