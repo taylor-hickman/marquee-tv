@@ -56,6 +56,8 @@ const invalid: Record<keyof typeof schemas, unknown> = {
     draftId: examples.getDraftRequest.id,
   },
   eventsResponse: { ok: false },
+  signInResponse: { redirectTo: "/auth/callback?claim=Vb3nQ8sK2yTf1mXc6rJp0w" },
+  sessionResponse: { userId: "not-a-uuid" },
   checkoutRequest: { plan: "annual", draftId: examples.getDraftRequest.id },
   urlResponse: { url: "http://checkout.stripe.com/c/pay/cs_test_a1b2c3" },
   stripeWebhookRequest: {
@@ -123,6 +125,8 @@ describe("contracts", () => {
       "GET /api/catalog/search",
       "GET /api/catalog/artists",
       "POST /api/events",
+      "POST /api/auth/sign-in",
+      "POST /api/auth/session",
       "POST /api/billing/checkout",
       "POST /api/billing/portal",
       "POST /api/webhooks/stripe",

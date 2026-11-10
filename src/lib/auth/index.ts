@@ -1,8 +1,8 @@
 import "server-only";
 import { createHash, randomBytes, randomInt } from "node:crypto";
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { ApiResult, GuestId, Owner, UserId } from "@/contracts";
 import { sql } from "@/lib/db";
+import { sessionUser } from "./supabase";
 
 // Who a request acts for (architecture 4). A guest sends its bearer token in a
 // header, never a cookie; a signed-in user sends the Supabase access token.
@@ -36,33 +36,17 @@ export async function verifyGuestToken(token: string): Promise<GuestId | null> {
   return guest?.id ?? null;
 }
 
-let supabase: SupabaseClient | undefined;
-
-// The user behind a Supabase access token, checked with Supabase Auth, or null.
-async function verifySession(accessToken: string): Promise<UserId | null> {
-  supabase ??= createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-    { auth: { persistSession: false, autoRefreshToken: false } },
-  );
-  const { data, error } = await supabase.auth.getUser(accessToken);
-  return error ? null : data.user.id;
-}
-
 // Every identity the request proves. A signed-in browser may still send its
 // guest token, so both can be present.
 async function identify(
   request: Request,
 ): Promise<{ guestId: GuestId | null; userId: UserId | null }> {
   const token = request.headers.get(GUEST_TOKEN_HEADER);
-  const bearer = request.headers
-    .get("authorization")
-    ?.match(/^Bearer (.+)$/)?.[1];
-  const [guestId, userId] = await Promise.all([
+  const [guestId, user] = await Promise.all([
     token ? verifyGuestToken(token) : null,
-    bearer ? verifySession(bearer) : null,
+    sessionUser(request),
   ]);
-  return { guestId, userId };
+  return { guestId, userId: user?.id ?? null };
 }
 
 // The request's owner, preferring the signed-in user; null when it proves none.

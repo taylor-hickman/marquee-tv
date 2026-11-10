@@ -4,13 +4,13 @@ import { notImplemented } from "@/contracts";
 import type {
   CancelSubscriptions,
   CanRunCurator,
-  ConsumeClaimCode,
   CreateCheckout,
   CreatePortal,
   HandleStripeWebhook,
 } from "./types";
 
 export type * from "./types";
+export { consumeClaimCode, ensureAppUser, mintClaimCode } from "./users";
 
 export const canRunCurator: CanRunCurator = () =>
   notImplemented("billing.canRunCurator");
@@ -20,7 +20,5 @@ export const createPortal: CreatePortal = () =>
   notImplemented("billing.createPortal");
 export const handleStripeWebhook: HandleStripeWebhook = () =>
   notImplemented("billing.handleStripeWebhook");
-export const consumeClaimCode: ConsumeClaimCode = () =>
-  notImplemented("billing.consumeClaimCode");
 export const cancelSubscriptions: CancelSubscriptions = () =>
   notImplemented("billing.cancelSubscriptions");

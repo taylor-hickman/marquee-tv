@@ -11,6 +11,7 @@ import {
   revisionNumber,
   seriesId,
   shareCode,
+  userId,
   videoId,
 } from "./common";
 import { creationMethod, draftStatus, draftView, op } from "./draft";
@@ -159,6 +160,13 @@ export const catalogArtistsResponse = z.object({
 export const eventsRequest = z.union([handoffEvent, analyticsEvent]);
 export const eventsResponse = z.object({ ok: z.literal(true) });
 
+// POST /api/auth/sign-in starts sign-in; the guest token, when sent, gets a
+// one-time claim code in `redirectTo`. The browser passes `redirectTo` to Supabase
+// Auth as the Google or email link redirect. POST /api/auth/session, sent with the
+// session as Authorization: Bearer from that page, creates the user on first sign-in.
+export const signInResponse = z.object({ redirectTo: z.url() });
+export const sessionResponse = z.object({ userId });
+
 // POST /api/billing/checkout returns the Stripe Checkout URL; POST /api/billing/portal
 // takes nothing and returns the Customer Portal URL.
 export const checkoutRequest = z.object({ plan, draftId });
@@ -238,6 +246,11 @@ export const routes = {
     response: catalogArtistsResponse,
   },
   "POST /api/events": { request: eventsRequest, response: eventsResponse },
+  "POST /api/auth/sign-in": { request: emptyRequest, response: signInResponse },
+  "POST /api/auth/session": {
+    request: emptyRequest,
+    response: sessionResponse,
+  },
   "POST /api/billing/checkout": {
     request: checkoutRequest,
     response: urlResponse,
@@ -268,6 +281,8 @@ export type CatalogSearchRequest = z.infer<typeof catalogSearchRequest>;
 export type CatalogSearchResponse = z.infer<typeof catalogSearchResponse>;
 export type CatalogArtistsResponse = z.infer<typeof catalogArtistsResponse>;
 export type EventsRequest = z.infer<typeof eventsRequest>;
+export type SignInResponse = z.infer<typeof signInResponse>;
+export type SessionResponse = z.infer<typeof sessionResponse>;
 export type CheckoutRequest = z.infer<typeof checkoutRequest>;
 export type UrlResponse = z.infer<typeof urlResponse>;
 export type LibraryResponse = z.infer<typeof libraryResponse>;

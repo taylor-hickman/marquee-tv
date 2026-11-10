@@ -199,6 +199,11 @@ export const examples = {
     props: { entry: "chip" },
   },
   eventsResponse: { ok: true },
+  signInResponse: {
+    redirectTo:
+      "https://getmarquee.tv/auth/callback?claim=Vb3nQ8sK2yTf1mXc6rJp0w",
+  },
+  sessionResponse: { userId: "8d2e4f6a-1b3c-4d5e-9f70-a1b2c3d4e5f6" },
   checkoutRequest: { plan: "session_pass", draftId: DRAFT_ID },
   urlResponse: { url: "https://checkout.stripe.com/c/pay/cs_test_a1b2c3" },
   stripeWebhookRequest: {

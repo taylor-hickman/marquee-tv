@@ -64,6 +64,8 @@ export const schemas = {
   catalogArtistsResponse: api.catalogArtistsResponse,
   eventsRequest: api.eventsRequest,
   eventsResponse: api.eventsResponse,
+  signInResponse: api.signInResponse,
+  sessionResponse: api.sessionResponse,
   checkoutRequest: api.checkoutRequest,
   urlResponse: api.urlResponse,
   stripeWebhookRequest: api.stripeWebhookRequest,
