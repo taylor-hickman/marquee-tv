@@ -20,6 +20,7 @@ import { limitRuns } from "@/lib/rate-limit";
 import { canRunCurator } from "@/modules/billing";
 import * as catalog from "@/modules/catalog";
 import * as curator from "@/modules/curator";
+import * as events from "@/modules/events";
 import { RUN_CAP, getDraft } from "./drafts";
 import type { ReplaceOptions, StartRun } from "./types";
 
@@ -27,7 +28,9 @@ import type { ReplaceOptions, StartRun } from "./types";
 // and refine. The checks come before the stream opens, so a refused run is a
 // plain error response; once `started` is sent the run always ends in
 // `result` or `error`, and finishes its curator_run row whether or not anyone
-// is still reading.
+// is still reading. Each run that starts also writes one journey event,
+// generation_completed or generation_failed, repeating that row (journeys 6,
+// architecture 9.3).
 
 // The run gives up after this long (architecture 6.2, J11).
 export const RUN_CEILING_MS = 20_000;
@@ -293,6 +296,9 @@ export const startRun: StartRun = async (context, draftId, request) => {
         resolve("timeout");
       }, context.ceilingMs);
     });
+    // The curator_run row once it is finished; a run that throws before then
+    // ends as internal.
+    let ended: { facts: RunFacts; error: string | null } | undefined;
     try {
       const outcome = await Promise.race([
         run({ emit: send, signal: abort.signal }),
@@ -305,10 +311,12 @@ export const startRun: StartRun = async (context, draftId, request) => {
           { latencyMs: context.ceilingMs },
           "timeout",
         );
+        ended = { facts: { latencyMs: context.ceilingMs }, error: "timeout" };
         return finish(generationFailed);
       }
       if (!outcome.ok) {
         await finishRun(sql, record.id, outcome.run, outcome.error);
+        ended = { facts: outcome.run, error: outcome.error };
         return finish(generationFailed);
       }
       const proposal = outcome.proposal;
@@ -319,6 +327,10 @@ export const startRun: StartRun = async (context, draftId, request) => {
         // draft has, which may be one the person typed.
         keepTitle: kind !== "generate",
       });
+      ended = {
+        facts: { ...proposal.run, warnings: proposal.warnings },
+        error: written ? null : "conflict",
+      };
       const view = written ? await getDraft(owner, draftId) : null;
       return finish(
         view?.ok
@@ -331,6 +343,18 @@ export const startRun: StartRun = async (context, draftId, request) => {
       finish(generationFailed);
     } finally {
       clearTimeout(timer);
+      const { facts, error } = ended ?? { facts: {}, error: "internal" };
+      await events.write(error ? "generation_failed" : "generation_completed", {
+        owner,
+        draftId,
+        props: {
+          runId: record.id,
+          kind,
+          latencyMs: facts.latencyMs ?? null,
+          warnings: facts.warnings?.length ?? 0,
+          error,
+        },
+      });
     }
   })();
   // The response may end first; the run still writes what it finds.

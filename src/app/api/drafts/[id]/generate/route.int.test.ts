@@ -57,6 +57,13 @@ const draftRow = async (id: string) =>
 const runs = (id: string) =>
   sql`select id, kind, error from curator_run where draft_id = ${id}`;
 
+// The journey events a draft's runs wrote (journeys 6).
+const runEvents = (id: string) =>
+  sql`select name, guest_id, user_id, props from event
+    where draft_id = ${id}
+      and name in ('generation_completed', 'generation_failed')
+    order by id`;
+
 // `n` runs on a draft, `ago` before now.
 const pastRuns = (draftId: string, n: number, ago = "2 hours") =>
   sql`insert into curator_run (draft_id, kind, created_at)
@@ -125,6 +132,20 @@ describe("POST /api/drafts/:id/generate", () => {
       free: true,
       current_revision: 1,
     });
+    expect(await runEvents(draft.id)).toEqual([
+      {
+        name: "generation_completed",
+        guest_id: guest.guestId,
+        user_id: null,
+        props: {
+          runId,
+          kind: "generate",
+          latencyMs: expect.any(Number),
+          warnings: expect.any(Number),
+          error: null,
+        },
+      },
+    ]);
   });
 
   test("rule 3: a guest's second model-backed draft gets 402, awaiting_payment and the brief held", async () => {
@@ -151,6 +172,7 @@ describe("POST /api/drafts/:id/generate", () => {
       current_revision: null,
     });
     expect(await runs(second.id)).toEqual([]);
+    expect(await runEvents(second.id)).toEqual([]);
     expect(llm.calls).toEqual([]);
   });
 
@@ -247,6 +269,13 @@ describe("POST /api/drafts/:id/generate", () => {
       status: "active",
       current_revision: 1,
     });
+    expect(await runEvents(draft.id)).toEqual([
+      expect.objectContaining({
+        name: "generation_completed",
+        guest_id: null,
+        user_id: user.userId,
+      }),
+    ]);
   });
 
   test("a burst of runs sent at once gets no more than the run limit", async () => {
@@ -440,6 +469,12 @@ describe("POST /api/drafts/:id/generate", () => {
       where draft_id = ${draft.id}`;
     expect(revision).toEqual({ number: 1, curator_run_id: runId });
     expect(await draftRow(draft.id)).toMatchObject({ current_revision: 1 });
+    expect(await runEvents(draft.id)).toEqual([
+      expect.objectContaining({
+        name: "generation_completed",
+        props: expect.objectContaining({ runId }),
+      }),
+    ]);
   });
 
   test("past the ceiling the run ends generation_failed and the draft keeps its revision", async () => {
@@ -475,10 +510,25 @@ describe("POST /api/drafts/:id/generate", () => {
     expect(events.at(-1)).toEqual({ type: "error", code: "generation_failed" });
 
     await settle();
+    const [{ id: runId }] = await runs(id);
     expect(await runs(id)).toEqual([
       expect.objectContaining({ kind: "regenerate", error: "timeout" }),
     ]);
     expect(await draftRow(id)).toMatchObject({ current_revision: 1 });
+    expect(await runEvents(id)).toEqual([
+      {
+        name: "generation_failed",
+        guest_id: guest.guestId,
+        user_id: null,
+        props: {
+          runId,
+          kind: "regenerate",
+          latencyMs: 50,
+          warnings: 0,
+          error: "timeout",
+        },
+      },
+    ]);
   });
 
   test("a model failure ends generation_failed, records the run and leaves the draft", async () => {
@@ -503,6 +553,97 @@ describe("POST /api/drafts/:id/generate", () => {
       current_revision: null,
       free: true,
     });
+    expect(await runEvents(draft.id)).toEqual([
+      expect.objectContaining({
+        name: "generation_failed",
+        props: expect.objectContaining({ kind: "generate", error: "provider" }),
+      }),
+    ]);
+  });
+
+  test("a run that throws ends generation_failed with internal", async () => {
+    const guest = await asGuest();
+    const draft = await factories.playlistDraft({
+      owner_guest_id: guest.guestId,
+    });
+    llm.before = () => {
+      throw new Error("boom");
+    };
+    vi.spyOn(console, "error").mockImplementationOnce(() => {});
+
+    const response = await post(
+      draft.id,
+      { baseRevision: null, mode: "generate", input },
+      guest.headers,
+    );
+    expect((await read(response)).at(-1)).toEqual({
+      type: "error",
+      code: "generation_failed",
+    });
+    await settle();
+    const [{ id: runId }] = await runs(draft.id);
+    expect(await runs(draft.id)).toEqual([
+      expect.objectContaining({ kind: "generate", error: "internal" }),
+    ]);
+    expect(await runEvents(draft.id)).toEqual([
+      {
+        name: "generation_failed",
+        guest_id: guest.guestId,
+        user_id: null,
+        props: {
+          runId,
+          kind: "generate",
+          latencyMs: null,
+          warnings: 0,
+          error: "internal",
+        },
+      },
+    ]);
+  });
+
+  test("an edit that lands while the model runs ends the run generation_failed with conflict", async () => {
+    const guest = await asGuest();
+    const id = await draftAt(ids, {
+      owner_guest_id: guest.guestId,
+      free: true,
+    });
+    await sql`update playlist_revision set brief = ${sql.json(heldBrief)}
+      where draft_id = ${id}`;
+    llm.before = async () => {
+      // Regenerate calls the model once, at compose.
+      const edited = await postOps(
+        new Request(`http://localhost/api/drafts/${id}/ops`, {
+          method: "POST",
+          headers: guest.headers,
+          body: JSON.stringify({
+            baseRevision: 1,
+            ops: [{ op: "pin", performance_id: ids[0] }],
+          }),
+        }),
+        { params: Promise.resolve({ id }) },
+      );
+      expect(edited.status).toBe(200);
+    };
+
+    const response = await post(
+      id,
+      { baseRevision: 1, mode: "regenerate" },
+      guest.headers,
+    );
+    expect((await read(response)).at(-1)).toEqual({
+      type: "error",
+      code: "generation_failed",
+    });
+    await settle();
+    expect(await runs(id)).toEqual([
+      expect.objectContaining({ kind: "regenerate", error: "conflict" }),
+    ]);
+    expect(await runEvents(id)).toEqual([
+      expect.objectContaining({
+        name: "generation_failed",
+        props: expect.objectContaining({ error: "conflict" }),
+      }),
+    ]);
   });
 
   test("fill on a hand-built draft runs to the draft's length and keeps the picks", async () => {

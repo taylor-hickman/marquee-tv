@@ -89,8 +89,21 @@ describe("POST /api/drafts/:id/refine", () => {
     });
     await settle();
     const [run] =
-      await sql`select kind, error from curator_run where draft_id = ${id}`;
-    expect(run).toEqual({ kind: "refine", error: null });
+      await sql`select id, kind, error from curator_run where draft_id = ${id}`;
+    expect(run).toEqual({
+      id: expect.any(String),
+      kind: "refine",
+      error: null,
+    });
+    expect(
+      await sql`select name, props from event
+        where draft_id = ${id} and name like 'generation%'`,
+    ).toEqual([
+      {
+        name: "generation_completed",
+        props: expect.objectContaining({ runId: run.id, kind: "refine" }),
+      },
+    ]);
   });
 
   test("rule 3: refine on a draft without an entitlement gets 402", async () => {
