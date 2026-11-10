@@ -76,8 +76,15 @@ export type CreateShareLink = (
   body: ShareLinkRequest,
 ) => Promise<ApiResult<ShareLinkResponse>>;
 
-// The ordered video ids behind a code, sliced from its start index; null when unknown.
-export type ResolveShareLink = (code: string) => Promise<string[] | null>;
+// What a code points at, with the revision's video ids in order, sliced from
+// its start index; null when unknown.
+export type SharedList = {
+  draftId: DraftId;
+  revision: number;
+  startIndex: number;
+  videoIds: string[];
+};
+export type ResolveShareLink = (code: string) => Promise<SharedList | null>;
 
 export type RecordHandoff = (event: HandoffEvent) => Promise<void>;
 
