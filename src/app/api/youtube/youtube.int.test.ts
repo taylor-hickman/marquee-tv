@@ -38,7 +38,7 @@ const REFRESH = "1//refresh-token-from-google";
 type Call = { path: string; body: unknown };
 let calls: Call[] = [];
 let refresh: "ok" | "invalid_grant" = "ok";
-let failItem: number | null = null;
+let failItem: { at: number; status: number; reason: string } | null = null;
 let items = 0;
 const google = [
   http.post("https://oauth2.googleapis.com/token", async ({ request }) => {
@@ -73,8 +73,12 @@ const google = [
         snippet: { playlistId: string; resourceId: { videoId: string } };
       };
       calls.push({ path: "playlistItems", body });
-      if (items++ === failItem) {
-        return HttpResponse.json({ error: {} }, { status: 500 });
+      if (items++ === failItem?.at) {
+        const { status, reason } = failItem;
+        return HttpResponse.json(
+          { error: { code: status, errors: [{ reason }] } },
+          { status },
+        );
       }
       return HttpResponse.json({ id: `PLI${items}`, snippet: body.snippet });
     },
@@ -287,7 +291,7 @@ describe("POST /api/drafts/:id/youtube-export", () => {
 
   test("a failure mid-export resumes from the item it stopped at", async () => {
     const user = await connected();
-    failItem = 1;
+    failItem = { at: 1, status: 500, reason: "backendError" };
     const failed = await save(user.headers, user.draftId);
     expect(failed.status).toBe(502);
     expect(errorBody.parse(await failed.json())).toEqual({
@@ -299,6 +303,22 @@ describe("POST /api/drafts/:id/youtube-export", () => {
     expect(retried.status).toBe(200);
     expect(calls.some((c) => c.path === "playlists")).toBe(false);
     expect(inserted()).toEqual(user.videoIds.slice(1));
+  });
+
+  test("skips a video YouTube no longer has, but fails when the playlist is gone", async () => {
+    const user = await connected();
+    failItem = { at: 1, status: 404, reason: "videoNotFound" };
+    const skipped = await save(user.headers, user.draftId);
+    expect(skipped.status).toBe(200);
+    expect(inserted()).toEqual(user.videoIds);
+
+    const other = await connected();
+    calls = [];
+    items = 0;
+    failItem = { at: 0, status: 404, reason: "playlistNotFound" };
+    const failed = await save(other.headers, other.draftId);
+    expect(failed.status).toBe(502);
+    expect(inserted()).toEqual(other.videoIds.slice(0, 1));
   });
 
   test("no grant, or one Google revoked, asks the client to connect", async () => {

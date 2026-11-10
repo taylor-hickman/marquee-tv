@@ -132,7 +132,7 @@ export async function exportRevision(
   }
 
   // Performances deleted from the catalog since the revision drop out, as in
-  // the share link; a video YouTube no longer has (404) is skipped.
+  // the share link; a video YouTube no longer has (videoNotFound) is skipped.
   const [{ videoIds }] = await sql<{ videoIds: string[] }[]>`
     select coalesce((
       select array_agg(p.video_id order by e.ord)
@@ -149,14 +149,15 @@ export async function exportRevision(
     }).catch(() => null);
     const item = (await response?.json().catch(() => null)) as {
       snippet?: { playlistId?: string; resourceId?: { videoId?: string } };
+      error?: { errors?: { reason?: string }[] };
     } | null;
     const inserted =
       response?.ok &&
       item?.snippet?.playlistId === playlistId &&
       item.snippet.resourceId?.videoId === videoId;
-    if (!inserted && response?.status !== 404) {
-      return fail(running, "youtube_failed");
-    }
+    // playlistNotFound is a 404 too, and must not empty the playlist.
+    const gone = item?.error?.errors?.some((e) => e.reason === "videoNotFound");
+    if (!inserted && !gone) return fail(running, "youtube_failed");
     await sql`
       update export_job set items_done = ${i + 1}, updated_at = now()
       where id = ${running.id}`;
