@@ -67,8 +67,8 @@ export function PlanScreen() {
         const view = result?.ok ? result.value : null;
         if (
           view?.draft.status === "active" &&
-          (view.entitlement.state === "pass" ||
-            view.entitlement.state === "subscription")
+          view.entitlement.state !== "payment_required" &&
+          view.entitlement.state !== "read_only"
         ) {
           return router.replace(resumePath(draftId));
         }

@@ -14,6 +14,9 @@ test("the held brief resumes after a checkout completed by a signed webhook", as
   request,
 }) => {
   const { userId } = await signedInUser(page, request);
+  // The free set the guest made first, claimed at sign-in (J7).
+  const free = await userDraft(userId, { performances: 1 });
+  await sql`update playlist_draft set free = true where id = ${free.id}`;
   const held = await userDraft(userId, { status: "awaiting_payment" });
   // Stripe's own page is not part of the test.
   await page.route("https://checkout.stripe.com/**", (route) =>
