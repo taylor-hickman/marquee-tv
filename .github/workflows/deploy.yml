@@ -22,6 +22,8 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
     runs-on: ubuntu-latest
     environment: preview
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v7
         with:
@@ -34,6 +36,13 @@ jobs:
       - run: supabase db push --yes --db-url "${DATABASE_URL/:6543\//:5432/}"
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      # staging.getmarquee.tv serves the staging branch, and Stripe's preview
+      # webhook posts there, so the branch follows main onto the migrated
+      # staging database. Vercel's Git integration builds it.
+      - run: gh api --method PATCH "repos/$GITHUB_REPOSITORY/git/refs/heads/staging" -f sha="$SHA" -F force=true --silent
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.workflow_run.head_sha }}
 
   production:
     needs: staging

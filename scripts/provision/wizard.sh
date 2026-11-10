@@ -451,18 +451,28 @@ stripe_price() {
   echo "$id"
 }
 
-# stripe_webhook ENV URL: one endpoint per environment. Stripe shows a signing
-# secret only when the endpoint is created, so an endpoint whose secret is
-# missing from Vercel is replaced.
+# stripe_webhook ENV URL: one endpoint per environment, found by URL without
+# its query. Stripe shows a signing secret only when the endpoint is created,
+# so an endpoint whose secret is missing from Vercel is replaced; one whose
+# query differs is updated in place, which keeps its secret.
 stripe_webhook() {
   local env="$1" url="$2" existing args=() event
   for event in checkout.session.completed invoice.paid customer.subscription.updated customer.subscription.deleted; do
     args+=(--enabled-events "$event")
   done
   existing=$(show stripe webhook_endpoints list --limit 100 |
-    jq -r --arg u "$url" '.data[] | select(.url == $u) | .id')
+    jq -r --arg u "${url%%\?*}" '.data[] | select((.url | split("?")[0]) == $u) | "\(.id) \(.url)"')
   if [[ -n "$existing" ]]; then
-    [[ -z "$(missing STRIPE_WEBHOOK_SECRET | awk -v e="$env" '$3 == e')" ]] && { note "webhook for $env exists"; return; }
+    if [[ -z "$(missing STRIPE_WEBHOOK_SECRET | awk -v e="$env" '$3 == e')" ]]; then
+      if [[ "${existing#* }" != "$url" ]]; then
+        show stripe webhook_endpoints update "${existing%% *}" --url "$url" >/dev/null
+        note "webhook for $env now posts to its new URL"
+      else
+        note "webhook for $env exists"
+      fi
+      return
+    fi
+    existing="${existing%% *}"
     confirm "The $env webhook exists but its secret isn't in Vercel. Replace the endpoint?" || return
     show stripe webhook_endpoints delete "$existing" --confirm >/dev/null
   fi
@@ -489,7 +499,13 @@ stage_stripe() {
   say "Preview deploys need one stable URL that Stripe can reach (no Vercel login wall)."
   ask PREVIEW_URL "Preview base URL for the webhook, e.g. https://staging.getmarquee.tv (Enter skips):"
   if [[ -n "$PREVIEW_URL" ]]; then
-    stripe_webhook preview "${PREVIEW_URL%/}/api/webhooks/stripe"
+    # Vercel's login wall covers preview domains; the project's automation
+    # bypass secret, as a query parameter, lets Stripe's POST through.
+    local bypass
+    bypass=$(show vc api "/v9/projects/$VERCEL_PROJECT" |
+      jq -r '[.protectionBypass // {} | to_entries[] | select(.value.scope == "automation-bypass") | .key][0] // empty')
+    [[ -n "$bypass" ]] || { warn "no Protection Bypass for Automation secret: create one under Vercel → Settings → Deployment Protection, then re-run --only stripe"; exit 1; }
+    stripe_webhook preview "${PREVIEW_URL%/}/api/webhooks/stripe?x-vercel-protection-bypass=$bypass"
   else
     SKIPPED+=("Stripe preview webhook: re-run --only stripe with a stable preview URL")
   fi
