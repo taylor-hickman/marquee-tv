@@ -75,3 +75,18 @@ export type ReplaceOptions = (
 export type PerformanceCards = (
   ids: PerformanceId[],
 ) => Promise<PerformanceCard[]>;
+
+// The catalog the brief step matches a request against (architecture 6.2 step 1).
+export type BriefCatalogContext = {
+  publishers: { id: number; name: string }[];
+  series: {
+    id: number;
+    publisher_id: number;
+    name: string;
+    convention: string;
+  }[];
+  // An exact name or alias match, ignoring case; null when there is none.
+  artistIdFor: (name: string) => Promise<ArtistId | null>;
+};
+
+export type BriefContext = () => Promise<BriefCatalogContext>;
