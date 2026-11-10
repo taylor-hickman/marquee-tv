@@ -522,6 +522,46 @@ describe("POST /api/drafts/:id/generate", () => {
     ]);
   });
 
+  test("a run that throws ends generation_failed with internal", async () => {
+    const guest = await asGuest();
+    const draft = await factories.playlistDraft({
+      owner_guest_id: guest.guestId,
+    });
+    llm.before = () => {
+      throw new Error("boom");
+    };
+    vi.spyOn(console, "error").mockImplementationOnce(() => {});
+
+    const response = await post(
+      draft.id,
+      { baseRevision: null, mode: "generate", input },
+      guest.headers,
+    );
+    expect((await read(response)).at(-1)).toEqual({
+      type: "error",
+      code: "generation_failed",
+    });
+    await settle();
+    const [{ id: runId }] = await runs(draft.id);
+    expect(await runs(draft.id)).toEqual([
+      expect.objectContaining({ kind: "generate", error: "internal" }),
+    ]);
+    expect(await runEvents(draft.id)).toEqual([
+      {
+        name: "generation_failed",
+        guest_id: guest.guestId,
+        user_id: null,
+        props: {
+          runId,
+          kind: "generate",
+          latencyMs: null,
+          warnings: 0,
+          error: "internal",
+        },
+      },
+    ]);
+  });
+
   test("an edit that lands while the model runs ends the run generation_failed with conflict", async () => {
     const guest = await asGuest();
     const id = await draftAt(ids, {
