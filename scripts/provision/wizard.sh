@@ -646,7 +646,7 @@ stage_email() {
   fi
 
   resend_api POST "/domains/$domain/verify" >/dev/null
-  say "waiting for Resend to verify $MAIL_DOMAIN…"
+  say "waiting for Resend to verify ${MAIL_DOMAIN}…"
   for _ in $(seq 60); do
     status=$(resend_api GET "/domains/$domain" | jq -r .status)
     [[ "$status" == verified ]] && break
