@@ -53,6 +53,6 @@ The 17 rows flagged for possible multiple artists are mostly real collaborations
 ## What this means for A2 and A3
 
 - The 13 desk concerts and 2 Contest winners are rule gaps. A3 should widen the title rule or let its model pass pick them up. They're about 1% of the series.
-- Whether the 28 festival sets count as Tiny Desk Concerts is a product question, not a parsing one. They were filmed at festivals, not at the desk, and the publisher brands them as a separate strand. Until the PRD says otherwise, they stay flagged and out of the eligible set. The 11 videos with several acts each don't fit "one performance, one artist" and should stay out either way.
+- Whether the 28 festival sets count as Tiny Desk Concerts was a product question, not a parsing one. PRD 9.1 has since ruled them out, and the 11 videos with several acts each with them. A2's ingest already leaves both out: their titles don't carry "Tiny Desk Concert", so no series takes them.
 - Artist strings are raw. 1,653 distinct strings for 1,764 performances means repeat artists are rare at NPR, but A4's profiles still need to split collaborations and merge spellings.
 - The cache row's `available` flag works: 3 performances are blocked in the US. A2's `refresh` should keep that check.
