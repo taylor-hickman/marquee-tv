@@ -259,6 +259,123 @@
         "publicStatsViewable": true,
         "madeForKids": false
       }
+    },
+    {
+      "kind": "youtube#video",
+      "etag": "etag-A2fixture11",
+      "id": "A2fixture11",
+      "snippet": {
+        "publishedAt": "2026-10-28T16:00:00Z",
+        "channelId": "UCa2fixtureChannel000000",
+        "title": "Tiny Desk Meets Fixture Fest: Kit Fixture",
+        "description": "",
+        "thumbnails": {},
+        "channelTitle": "Fixture Music",
+        "categoryId": "10",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "Tiny Desk Meets Fixture Fest: Kit Fixture",
+          "description": ""
+        }
+      },
+      "contentDetails": {
+        "duration": "PT24M",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true,
+        "contentRating": {},
+        "projection": "rectangular",
+        "regionRestriction": {
+          "allowed": ["US", "GB"]
+        }
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "public",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true,
+        "madeForKids": false
+      }
+    },
+    {
+      "kind": "youtube#video",
+      "etag": "etag-A2fixture12",
+      "id": "A2fixture12",
+      "snippet": {
+        "publishedAt": "2026-10-27T16:00:00Z",
+        "channelId": "UCa2fixtureChannel000000",
+        "title": "Lu Fixture: Tiny Desk x Fixture Fest",
+        "description": "",
+        "thumbnails": {},
+        "channelTitle": "Fixture Music",
+        "categoryId": "10",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "Lu Fixture: Tiny Desk x Fixture Fest",
+          "description": ""
+        }
+      },
+      "contentDetails": {
+        "duration": "PT24M",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true,
+        "contentRating": {},
+        "projection": "rectangular",
+        "regionRestriction": {
+          "allowed": ["US", "GB"]
+        }
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "public",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true,
+        "madeForKids": false
+      }
+    },
+    {
+      "kind": "youtube#video",
+      "etag": "etag-A2fixture13",
+      "id": "A2fixture13",
+      "snippet": {
+        "publishedAt": "2026-10-26T16:00:00Z",
+        "channelId": "UCa2fixtureChannel000000",
+        "title": "Tiny Desk Meets Fixture Fest: Mo Fixture, Ned Fixture, Oz Fixture",
+        "description": "",
+        "thumbnails": {},
+        "channelTitle": "Fixture Music",
+        "categoryId": "10",
+        "liveBroadcastContent": "none",
+        "localized": {
+          "title": "Tiny Desk Meets Fixture Fest: Mo Fixture, Ned Fixture, Oz Fixture",
+          "description": ""
+        }
+      },
+      "contentDetails": {
+        "duration": "PT55M",
+        "dimension": "2d",
+        "definition": "hd",
+        "caption": "false",
+        "licensedContent": true,
+        "contentRating": {},
+        "projection": "rectangular",
+        "regionRestriction": {
+          "allowed": ["US", "GB"]
+        }
+      },
+      "status": {
+        "uploadStatus": "processed",
+        "privacyStatus": "public",
+        "license": "youtube",
+        "embeddable": true,
+        "publicStatsViewable": true,
+        "madeForKids": false
+      }
     }
   ],
   "pageInfo": {
