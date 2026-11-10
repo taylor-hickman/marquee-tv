@@ -36,6 +36,8 @@ export default defineConfig({
   globalSetup: deployed ? undefined : "./e2e/support/db.ts",
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
+  // A spec that passes only on retry fails the run (build plan 6.1).
+  failOnFlakyTests: !!process.env.CI,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : "list",
   use: {
     baseURL: deployed ?? "http://localhost:3000",

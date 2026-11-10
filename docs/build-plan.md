@@ -1,6 +1,8 @@
 # Marquee TV: build plan
 
-Nov 9, 2026 · Taylor Hickman · Version 0.3 · Status: Draft · Built from PRD v1.1, user journeys v0.2, architecture v0.2
+Nov 10, 2026 · Taylor Hickman · Version 0.4 · Status: Draft · Built from PRD v1.1, user journeys v0.2, architecture v0.2
+
+**Changes in 0.4.** A reviewer agent checks every code PR against its card before merge, not only once per milestone, and the required `card-review` status enforces it. B5 starts as soon as B4 merges. C2's entitlement tests carry `rule 3` in their names. CI fails a Playwright spec that passes only on retry. Section 6.3 describes the ruleset `main` has: pull requests only, no up-to-date rule, any merge method. The `migrations` job's drift check is gone from 6.3; it had nothing to compare against in the PR gate. Section 4 is current at `182508b` and lists the tasks the orchestrator ran outside the cards.
 
 **Changes in 0.3.** Added card T1b for the test tooling that 0.2 added to T1 after T1 merged under 0.1. T2 now waits on T1b. Section 4 shows each card's status at `ef28c02` and the orchestrator's merge rules.
 
@@ -23,7 +25,7 @@ Each task is a card in section 5. The card is the whole brief: an agent reads it
 
 Every card is run by an agent. Some cards reach outside the repo: a phone, a third-party dashboard, policy text. The agent does what its tools reach, the card says what it produces for the rest and marks it unverified, and the downstream card names the default it takes when a result is missing.
 
-`pnpm check` (format, typecheck, lint, unit and integration tests) is the gate on every card, plus `pnpm test:e2e` on cards with Playwright specs; the card lists what else must hold. Section 6 says where tests live, what they may touch and which workflow runs them. A reviewer agent that did not write the code runs once per milestone against the milestone's exit gate (section 2).
+`pnpm check` (format, typecheck, lint, unit and integration tests) is the gate on every card, plus `pnpm test:e2e` on cards with Playwright specs; the card lists what else must hold. Section 6 says where tests live, what they may touch and which workflow runs them. A reviewer agent that did not write the code reviews every code PR against its card before merge (section 4.1), and runs once per milestone against the milestone's exit gate (section 2).
 
 Status lives in the table in section 4. The orchestrator updates it; the cards do not change.
 
@@ -98,7 +100,7 @@ Soft dependencies: the card may start, but the earlier card's result can change 
 
 ## 4. Status
 
-At `ef28c02`, Nov 9, 2026. `done #N` means merged in pull request N.
+At `182508b`, Nov 10, 2026. `done #N` means merged in pull request N; `in progress #N` means pull request N is open.
 
 | ID | Card | Milestone | Depends on | Status |
 | --- | --- | --- | --- | --- |
@@ -115,31 +117,31 @@ At `ef28c02`, Nov 9, 2026. `done #N` means merged in pull request N.
 | T4 | Guest auth, rate limit, flags, events | M1 | T3 | done #20 |
 | A0 | `watch_videos` probe | M2 | T1 | done #8 |
 | A1 | Catalog queries and retrieval | M2 | M1 | done #25 |
-| A2 | Ingest, refresh, expire | M2 | A1 | open |
+| A2 | Ingest, refresh, expire | M2 | A1 | in progress #46 |
 | A3 | Classify and artist parse | M2 | A2, B1, soft R2 | open |
 | A4 | Artist profiles | M2 | A3, soft R2 | open |
 | A5 | Review queue | M2 | A4 | open |
 | A6 | Scheduled jobs | M2 | A5, A0 | open |
 | B1 | LLM adapter | M2 | M1, T0 | done #22 |
 | B2 | Brief extraction | M2 | B1 | done #33 |
-| B3 | Compose, validate, repair | M2 | B2, A1 | open |
-| B4 | Refine, regenerate, fill the rest | M2 | B3 | open |
+| B3 | Compose, validate, repair | M2 | B2, A1 | done #42 |
+| B4 | Refine, regenerate, fill the rest | M2 | B3 | in progress #50 |
 | B5 | Eval runner | M2 | B4 | open |
 | C1 | Drafts, revisions, ops, undo | M2 | M1 | done #23 |
 | C2 | Generate and refine routes | M2 | C1, B4, D2 | open |
 | C3 | Share links, redirect, handoff events | M2 | C1, A1, R1 | done #35 |
-| C4 | Library, claim, retention | M2 | C3, D1 | in progress |
+| C4 | Library, claim, retention | M2 | C3, D1 | done #41 |
 | D1 | Auth and claim codes | M2 | M1 | done #24 |
-| D2 | Stripe and entitlements | M2 | D1 | in progress; draft #37 |
-| D3 | Account deletion and legal pages | M2 | D2 | open |
+| D2 | Stripe and entitlements | M2 | D1 | done #37 |
+| D3 | Account deletion and legal pages | M2 | D2 | in progress #49 |
 | E1 | App shell and primitives | M2 | M1 | done #26 |
 | E2 | Landing and returning guest card | M2 | E1, R5 | done #32 |
-| E3 | Editor | M2 | E2, C1 | open |
+| E3 | Editor | M2 | E2, C1 | done #44 |
 | E4 | Refine input and diff | M2 | E3, C2 | open |
 | E5 | Handoff | M2 | E4, C3 | open |
 | E6 | Artist seed entry | M2 | E1, A1 | done #30 |
 | E7 | Performance browser and drawer | M2 | E1, A1 | done #31 |
-| E8 | Sign-up, pay, library, account | M2 | E3, D2, C4 | open |
+| E8 | Sign-up, pay, library, account | M2 | E3, D2, C4 | done #45 |
 | E9 | Error states and accessibility | M2 | E5, E6, E7, E8 | open |
 | I1 | End-to-end journeys | M3 | M2 | open |
 | I2 | Observability and alerts | M3 | I1 | open |
@@ -153,12 +155,34 @@ At `ef28c02`, Nov 9, 2026. `done #N` means merged in pull request N.
 
 ### 4.1 Merge rules
 
-The orchestrator merges by these rules until this section changes. Section 6.3 describes the ruleset `main` will end up with. These rules describe the one it has now.
+The orchestrator merges by these rules until this section changes. Section 6.3 describes the ruleset `main` has.
 
 - `pnpm check` stays the gate on every card. A card runs it before handback, and the `check` job in `ci.yml` runs it in CI. New jobs run alongside it and never replace it, and `check` keeps its name, because the ruleset requires that name.
-- A pull request merges only after the required `check` job has passed on its latest commit. A pending, skipped or failed `check` blocks the merge, and so does a red `main` (6.3).
-- The `main` ruleset requires `check`, `e2e` and `migrations` and refuses deletion and force pushes. A card that would add any other required check or change another rule (pull requests only, up to date with `main`, merge method) asks Taylor first and changes the ruleset only after a yes. Until then its job runs on every pull request without being required.
+- A pull request merges only after the required `check`, `e2e` and `migrations` jobs and the `card-review` status have passed on its latest commit. A pending, skipped or failed one blocks the merge, and so does a red `main` (6.3).
+- Before merging a pull request that changes anything outside `docs/`, the orchestrator runs a reviewer agent that did not write it. The reviewer reads the card (or the task, for work outside the cards), `CLAUDE.md` and the diff, and checks three things: each "Done when" item holds and has a test; each test named `rule N` fails if the rule's enforcement is removed; nothing is written outside the card's "Owns" paths. It posts one PR comment whose first line is `Card review: <sha>`, naming the commit it read, with each finding as an unticked task-list item (`- [ ] ...`) and no task-list items when there are none. The `card-review` status, set by `card-review.yml`, passes only when the latest such comment names the head commit and has no unticked item. A new commit needs a new review. A finding the author disputes goes to Taylor, who ticks it to override.
+- B5 starts as soon as B4 merges, alongside C2. Until `evals.yml` runs, nothing checks the curator against the real model.
+- The `main` ruleset requires pull requests, the `check`, `e2e` and `migrations` jobs, and the `card-review` status from GitHub Actions, and refuses deletion and force pushes. A card that would add any other required check or change another rule (up to date with `main`, merge method) asks Taylor first and changes the ruleset only after a yes. Until then its job runs on every pull request without being required.
+- A task the orchestrator runs outside the cards gets a row in 4.2 when its pull request opens.
 - The hold on T2 is over. T2 merged as #9, T1b as #12 and T2b as #14, so T3 and the cards after it run.
+
+### 4.2 Tasks outside the cards
+
+Fixes and wiring the orchestrator ran between cards, after M1. Pull requests that were Dependabot updates or status updates to this plan are left out.
+
+| PR | Task | Status |
+| --- | --- | --- |
+| #21 | Stop preview-smoke running on `deploy.yml`'s staging job | done |
+| #27 | Check the stored `ANTHROPIC_API_KEY` values inside a deployment | done |
+| #28 | Catalog reads leave out flagged and rejected rows | done |
+| #29 | Custom SMTP for Supabase Auth email links | done |
+| #34 | `db.test.ts` runs on the worktree's own test database | done |
+| #36 | e2e reset keeps the `handoff_mode` flag row | done |
+| #39 | Run `billing.expirePasses` on a schedule | done |
+| #40 | Let Stripe's preview webhook reach a preview running current code | done |
+| #43 | Wire the claim code into sign-in so `claimGuestDrafts` runs | done |
+| #47 | Point playlist's draft view at `catalog.performanceCards` and `billing.canRunCurator` | done |
+| #48 | Catalog `briefContext()` and wire `curator.generate` | in progress |
+| #51 | Artist entry saves its seeds as the pending brief | in progress |
 
 ## 5. Cards
 
@@ -397,7 +421,7 @@ T1 merged as pull request #2 against this plan's 0.1 card. Version 0.2 then wide
 - Owns: `src/app/api/drafts/[id]/generate/**`, `src/app/api/drafts/[id]/refine/**`, `src/app/api/drafts/[id]/replace-options/**`, `src/modules/playlist/runs.ts`
 - Reads: architecture 4 (what the free limit counts), 6.2 (sequence, latency budget, disconnects), 6.3 (cap paragraph), 7.1 step 3, 7.3 steps 1 and 5 and the entitlement table, 9.1; PRD 7.6, 8.5, 13
 - Deliverable: streamed `POST /generate` and `POST /refine`. Order per request: owner, `baseRevision`, rate limit, entitlement. A guest's first model-backed draft becomes `free`; any other draft without an entitlement gets `402`, `status = awaiting_payment`, brief held on the draft. Over 25 runs returns a typed error that leaves manual edits working. Stream events: `started`, `brief`, `candidates`, `result` or `error`, with `started` sent before any model call. The run finishes and writes revision plus `curator_run` in one transaction even when the client disconnects. A 20 s ceiling, injected so tests set it to milliseconds, returns `generation_failed`. `GET /replace-options?index=` calls A1 with no entitlement check.
-- Done when: tests cover the free draft, the `402` on a second draft, a pass holder on and off their draft, a subscriber, the run cap, the `409`, a disconnect still writing the revision, and `started` arriving before the fake adapter is called; `pnpm check` green.
+- Done when: tests cover the free draft, the `402` on a second draft, a pass holder on and off their draft, a subscriber, the run cap, the `409`, a disconnect still writing the revision, and `started` arriving before the fake adapter is called; the `402` test and a test that `replace-options` answers without an entitlement carry `rule 3` in their names; `pnpm check` green.
 - Out of scope: UI, payment flows.
 
 #### C3 · Share links, redirect, handoff events
@@ -635,7 +659,7 @@ Rules for every layer:
 - Each rule in `CLAUDE.md` "Rules the code enforces" has at least one PR-gate test with `rule N` in its name. I5 finds them by that name.
 - Code that must hold for any input gets a fast-check property test as well as examples: B3's repair step and C3's URL builder.
 - An e2e spec that mocks a route with `page.route` builds the body from `src/contracts/examples.ts` and parses it with the T3 schema, so a contract change breaks the mock at the same moment it breaks the route.
-- Playwright retries twice in CI and keeps a trace on the first retry. A spec that passes only on retry counts as failing for the card that owns it. Skipping a spec needs a follow-up card in section 5.
+- Playwright retries twice in CI and keeps a trace on the first retry. A spec that passes only on retry counts as failing for the card that owns it; `failOnFlakyTests` makes CI fail it. Skipping a spec needs a follow-up card in section 5.
 - Coverage is reported on every PR. Thresholds sit only on code that enforces a rule: 90% of branches in `src/modules/curator/validate/**`, `src/lib/handoff-url.ts`, `src/lib/auth/**` and `src/modules/billing/**`. No global threshold.
 - T1 installs every test dependency (Vitest, coverage, Playwright, `@axe-core/playwright`, MSW, fast-check). Lane cards add product dependencies only.
 - Left out of P0 on purpose: visual snapshot tests (fonts render differently on macOS worktrees and Linux CI), mutation testing, load testing.
@@ -661,7 +685,8 @@ A card that needs a helper another card owns and finds it missing says so in the
 
 | Workflow | Trigger | What it runs | Secrets | Owner |
 | --- | --- | --- | --- | --- |
-| `ci.yml` | Every PR; push to `main` | `check`: format, typecheck, lint, unit, integration, coverage. `e2e`: build, Playwright, report and traces uploaded on failure. `migrations`: apply every migration to an empty database, the migration tool's drift check, fail if a migration file already on `main` changed. `actionlint` when `.github/**` changes | None | T1; T2 adds the database and `migrations` |
+| `ci.yml` | Every PR; push to `main` | `check`: format, typecheck, lint, unit, integration, coverage. `e2e`: build, Playwright, report and traces uploaded on failure. `migrations`: apply every migration to an empty database, fail if a migration file already on `main` changed or a new one sorts before `main`'s latest. `actionlint` when `.github/**` changes | None | T1; T2 adds the database and `migrations` |
+| `card-review.yml` | PR opened or pushed; PR comment created, edited or deleted | Sets the `card-review` status on the head commit from the latest `Card review:` comment (4.1). Passes PRs that change only `docs/` and Dependabot PRs. Runs from `main` and checks out no code | None | Taylor |
 | `preview-smoke.yml` | Vercel `deployment_status` success on a PR | `e2e/smoke` against the preview URL | Vercel bypass | T1 |
 | `deploy.yml` | `ci.yml` succeeds on `main` | Migrate staging, migrate production, `vercel deploy --prod` | `staging`, `production` | T2 |
 | `evals.yml` | PRs changing `src/modules/curator/**`; nightly; manual | `pnpm evals --runs 1`, failing on any invariant violation | `staging` | B5 |
@@ -670,7 +695,7 @@ A card that needs a helper another card owns and finds it missing says so in the
 
 How the workflows fit together:
 
-- A ruleset protects `main`: changes arrive by PR only, `check`, `e2e` and `migrations` are required, the branch must be up to date with `main`, merges are squash merges, force pushes are refused. Merge queues are not available on a personal-account repo; if the repo moves to an organisation, turn the queue on and drop the up-to-date rule.
+- A ruleset protects `main`: changes arrive by PR only, `check`, `e2e` and `migrations` are required, so is the `card-review` status from the GitHub Actions app (a status posted with a person's token doesn't count), force pushes and deletion are refused. Any merge method is allowed. The branch need not be up to date with `main`: with several agents merging in parallel and no merge queue, that rule means a rebase and a full CI run per merge, and the push-to-`main` run plus the red-`main` stop below catch a bad combination instead. If the repo moves to an organisation, turn the merge queue on.
 - The PR gate finishes in under 10 minutes. The pnpm store and Playwright browsers are cached, `concurrency` cancels superseded runs on a branch, and Playwright shards once `e2e` passes 6 minutes.
 - A red `main` stops merges. The orchestrator merges nothing else until the push-to-`main` run passes again.
 - `deploy.yml` migrates before it deploys, so the running code meets the new schema for a few minutes. Every migration works with the code already deployed: add a column or table in one PR, drop the old one in a later PR.
