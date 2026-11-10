@@ -4,9 +4,10 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { draftId as draftIdSchema, plan as planSchema } from "@/contracts";
 import { Button } from "@/components/ui/button";
+import { accessToken } from "@/lib/client/api";
 import { useToast } from "@/components/ui/toast";
 import { PlanCards, plans } from "./plans";
-import { accessToken, api, resumePath, type Plan } from "./session";
+import { api, resumePath, type Plan } from "./session";
 import { SignIn } from "./sign-in";
 
 // Sign up · choose plan (J7 steps 2 to 5). The brief is already held on the

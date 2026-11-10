@@ -328,7 +328,7 @@ Only `eligible AND available` performances reach the curator. A new upload becom
 | `GET /api/catalog/search`, `GET /api/catalog/artists` | Browse and typeahead |
 | `POST /api/events` | Analytics and handoff events |
 | `POST /api/auth/sign-in` | Starts sign-in. Returns the callback URL for Supabase Auth, with a one-time claim code when the request carries a guest token |
-| `POST /api/auth/session` | Finishes sign-in with the session as `Authorization: Bearer`; creates `app_user` on the first |
+| `POST /api/auth/session` | Finishes sign-in with the session as `Authorization: Bearer`; creates `app_user` on the first, and claims the guest's drafts when the body carries the claim code |
 | `POST /api/billing/checkout`, `POST /api/billing/portal`, `POST /api/webhooks/stripe` | Payments and billing management |
 | `GET /api/library` | Drafts for the signed-in user |
 | `GET /api/account` | Email, current plan and its period end, and the cohort's default plan (J10) |

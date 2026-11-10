@@ -6,9 +6,10 @@ import { auth } from "@/app/auth/supabase";
 import type { AccountResponse } from "@/contracts";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/modal";
+import { accessToken } from "@/lib/client/api";
 import { useToast } from "@/components/ui/toast";
 import { plans } from "./plans";
-import { accessToken, api } from "./session";
+import { api } from "./session";
 import { SignIn } from "./sign-in";
 
 // Account (J10): the plan, the Stripe Customer Portal for cancel, switch and

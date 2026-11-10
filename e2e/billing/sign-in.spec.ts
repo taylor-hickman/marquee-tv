@@ -1,13 +1,14 @@
 import { randomUUID } from "node:crypto";
 import { expect, test } from "@playwright/test";
-import { createDraftResponse } from "@/contracts";
+import { checkoutRequest, createDraftResponse } from "@/contracts";
 import { expectNoAxeViolations } from "../support/axe";
-import { signInLink } from "./support";
+import { signInLink, sql } from "./support";
 
-// J7 step 3b: the email link, read from the local stack's mail server, signs
-// the person in and brings them back to the plan screen for the held draft.
+// J7 steps 3b and 4: the email link, read from the local stack's mail server,
+// signs the guest in, claims their drafts and brings them back to the plan
+// screen, where Pay opens Checkout for the held draft.
 
-test("an email link signs in and returns to the plan screen", async ({
+test("an email link signs in, claims the held draft and pays from the plan screen", async ({
   page,
   request,
 }) => {
@@ -42,6 +43,29 @@ test("an email link signs in and returns to the plan screen", async ({
 
   await page.goto(await signInLink(email));
   await expect(page).toHaveURL(`/plan?draft=${draftId}&plan=subscription`);
-  await expect(page.getByRole("button", { name: "Pay $4.99" })).toBeVisible();
+  const pay = page.getByRole("button", { name: "Pay $4.99" });
+  await expect(pay).toBeVisible();
   await expectNoAxeViolations(page);
+
+  // The claim moved the guest's draft to the user, so Checkout can bind to it.
+  const [draft] = await sql`
+    select d.owner_user_id, d.owner_guest_id, u.email from playlist_draft d
+    left join app_user u on u.id = d.owner_user_id where d.id = ${draftId}`;
+  expect(draft).toMatchObject({ owner_guest_id: null, email });
+
+  await page.route("https://checkout.stripe.com/**", (route) =>
+    route.fulfill({
+      contentType: "text/html",
+      body: "<title>Checkout</title>",
+    }),
+  );
+  const checkout = page.waitForResponse("**/api/billing/checkout");
+  await pay.click();
+  const response = await checkout;
+  expect(response.status()).toBe(200);
+  expect(checkoutRequest.parse(response.request().postDataJSON())).toEqual({
+    plan: "subscription",
+    draftId,
+  });
+  await expect(page).toHaveURL(/^https:\/\/checkout\.stripe\.com\//);
 });

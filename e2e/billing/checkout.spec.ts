@@ -25,8 +25,8 @@ test("the held brief resumes after a checkout completed by a signed webhook", as
       body: "<title>Checkout</title>",
     }),
   );
-  // POST /generate is C2's and the editor E3's; until both are on main the
-  // stream is the contract's example.
+  // POST /generate is C2's; until it is on main the stream is the contract's
+  // example.
   const generate: unknown[] = [];
   await page.route("**/api/drafts/*/generate", (route) => {
     generate.push(route.request().postDataJSON());
@@ -74,7 +74,9 @@ test("the held brief resumes after a checkout completed by a signed webhook", as
   const [draft] =
     await sql`select status from playlist_draft where id = ${held.id}`;
   expect(draft.status).toBe("active");
-  // Once E3's editor is on main it starts generation on arrival, with no
-  // input, so the server runs the brief it held.
-  for (const body of generate) expect(body).not.toHaveProperty("input");
+  // The editor starts generation on arrival with no input, so the server runs
+  // the brief it held: nothing is typed again.
+  await expect.poll(() => generate.length).toBe(1);
+  expect(generate[0]).toMatchObject({ mode: "generate" });
+  expect(generate[0]).not.toHaveProperty("input");
 });

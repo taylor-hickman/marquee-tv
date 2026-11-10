@@ -57,6 +57,7 @@ const invalid: Record<keyof typeof schemas, unknown> = {
   },
   eventsResponse: { ok: false },
   signInResponse: { redirectTo: "/auth/callback?claim=Vb3nQ8sK2yTf1mXc6rJp0w" },
+  sessionRequest: { claim: "" },
   sessionResponse: { userId: "not-a-uuid" },
   checkoutRequest: { plan: "annual", draftId: examples.getDraftRequest.id },
   urlResponse: { url: "http://checkout.stripe.com/c/pay/cs_test_a1b2c3" },

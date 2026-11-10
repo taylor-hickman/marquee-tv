@@ -6,8 +6,9 @@ import type { LibraryResponse } from "@/contracts";
 import { total } from "@/components/browser/format";
 import { Button, buttonClass } from "@/components/ui/button";
 import { handoffParts } from "@/lib/handoff-url";
+import { accessToken } from "@/lib/client/api";
 import { ago } from "./format";
-import { accessToken, api } from "./session";
+import { api } from "./session";
 import { SignIn } from "./sign-in";
 
 // The library (J8): saved sets with Play on YouTube and Edit, unfinished

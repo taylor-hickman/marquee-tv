@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { auth, CLAIM_CODE_KEY } from "../supabase";
+import type { SessionRequest } from "@/contracts";
+import { auth } from "../supabase";
 
 // Where Google and the email link land. The Supabase client reads the session
-// from the fragment; the server creates the user on their first sign-in. The
-// claim code waits in sessionStorage for the claim (card C4).
+// from the fragment; the server creates the user on their first sign-in and
+// claims the guest's drafts with the code the redirect carried.
 export default function Callback() {
   const router = useRouter();
   const [state, setState] = useState<"pending" | "done" | "failed">("pending");
@@ -22,10 +23,12 @@ export default function Callback() {
         ? await fetch("/api/auth/session", {
             method: "POST",
             headers: { authorization: `Bearer ${data.session.access_token}` },
+            body: JSON.stringify(
+              (claim ? { claim } : {}) satisfies SessionRequest,
+            ),
           })
         : null;
       if (!response?.ok) return setState("failed");
-      if (claim) sessionStorage.setItem(CLAIM_CODE_KEY, claim);
       if (next.origin === window.location.origin && next.pathname !== "/") {
         return router.replace(next.pathname + next.search);
       }
