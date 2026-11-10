@@ -2,13 +2,18 @@
 // validate and repair in code. It returns a proposed revision; playlist writes it
 // (step 5). A failed model call ends the run with the draft untouched: playlist
 // sends `generation_failed` and writes only the curator_run row.
-import type { Brief, CuratorProposal, PerformanceId } from "@/contracts";
+import type {
+  ArtistId,
+  Brief,
+  CuratorProposal,
+  PerformanceId,
+} from "@/contracts";
 import type { PerformanceCards, RetrieveCandidates } from "@/modules/catalog";
 import { type BriefContext, extractBrief } from "./brief";
 import { type PinnedSlot, compose } from "./compose";
 import type { CallRecord, LlmAdapter } from "./llm";
 import type { CuratorOutcome, Generate } from "./types";
-import { type PinFacts, repair } from "./validate";
+import { type PinFacts, names, repair } from "./validate";
 
 export type GenerateDeps = {
   llm: Pick<LlmAdapter, "extractBrief" | "compose">;
@@ -44,7 +49,17 @@ export function createGenerate(deps: GenerateDeps): Generate {
       facts?: Partial<CuratorProposal["run"]>,
     ): CuratorOutcome => ({ ok: false, error, run: run(facts) });
 
+    const pinned = state.items.filter((i) => i.pinned !== "none");
+    const cards = await deps.performanceCards(
+      pinned.map((i) => i.performance_id),
+    );
+    const pins = new Map<PerformanceId, PinFacts>(
+      cards.map((c) => [c.id, { artists: c.artists, durationS: c.durationS }]),
+    );
+
     let brief = state.brief;
+    // Artists this run's words excluded; only these may let a pin go (6.3).
+    let excludedNow: ArtistId[] = [];
     if (state.input) {
       const result = await extractBrief(
         state.input,
@@ -62,7 +77,29 @@ export function createGenerate(deps: GenerateDeps): Generate {
       );
       calls.push(...result.calls);
       if (!result.ok) return failed(result.error);
-      brief = result.output;
+      const text = state.input.text;
+      // An exclusion of a pinned artist the text never names is a misread: the
+      // pin stays, and the exclusion stays out of the brief so it can't cut that
+      // artist from every later run.
+      const misread = cards
+        .flatMap((c) => c.artists)
+        .filter(
+          (a) =>
+            result.excludedNow.includes(a.id) &&
+            !names(text, a.name) &&
+            !state.brief?.exclusions.artist_ids.includes(a.id),
+        )
+        .map((a) => a.id);
+      excludedNow = result.excludedNow.filter((id) => !misread.includes(id));
+      brief = {
+        ...result.output,
+        exclusions: {
+          ...result.output.exclusions,
+          artist_ids: result.output.exclusions.artist_ids.filter(
+            (id) => !misread.includes(id),
+          ),
+        },
+      };
     }
     if (!brief) throw new Error("generate needs an input or a held brief");
     emit({ type: "brief", brief, echo: echo(brief) });
@@ -75,13 +112,6 @@ export function createGenerate(deps: GenerateDeps): Generate {
     const candidateIds = candidates.map((c) => c.row.id);
     emit({ type: "candidates", count: candidates.length });
 
-    const pinned = state.items.filter((i) => i.pinned !== "none");
-    const cards = await deps.performanceCards(
-      pinned.map((i) => i.performance_id),
-    );
-    const pins = new Map<PerformanceId, PinFacts>(
-      cards.map((c) => [c.id, { artists: c.artists, durationS: c.durationS }]),
-    );
     const slots: PinnedSlot[] = state.items.flatMap((item, index) =>
       item.pinned === "none"
         ? []
@@ -115,9 +145,7 @@ export function createGenerate(deps: GenerateDeps): Generate {
       removedIds: state.removedIds,
       brief,
       instruction: state.input?.text ?? null,
-      newExclusions: brief.exclusions.artist_ids.filter(
-        (id) => !state.brief?.exclusions.artist_ids.includes(id),
-      ),
+      newExclusions: excludedNow,
     });
     return {
       ok: true,

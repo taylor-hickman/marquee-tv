@@ -412,6 +412,8 @@ describe("generate", () => {
     expect(ids(p)).toEqual([40, 1, 2, 3, 4, 5]);
     expect(p.items[0]).toEqual(pinnedKhruangbin.items[0]);
     expect(p.removedIds).toEqual([]);
+    // The misread never reaches the brief playlist saves, so a later "drop" still works.
+    expect(p.brief.exclusions.artist_ids).toEqual([]);
     expect(p.warnings).toEqual([]);
   });
 
@@ -427,6 +429,23 @@ describe("generate", () => {
     expect(p.removedIds).toEqual([40]);
     expect(p.brief.exclusions.artist_ids).toEqual([KHRUANGBIN]);
     expect(p.warnings).toEqual([]);
+  });
+
+  test("rule 2: drop <artist> releases a pin even when a held exclusion already covers the artist", async () => {
+    const { outcome } = await run({
+      ...pinnedKhruangbin,
+      held: {
+        ...proposalBrief,
+        exclusions: { artist_ids: [KHRUANGBIN], publisher_ids: [] },
+      },
+      brief: { exclude_artists: ["Khruangbin"] },
+      input: { text: "drop Khruangbin" },
+      composed: [1, 2, 3, 4, 5],
+    });
+    const p = proposal(outcome);
+    expect(ids(p)).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(p.removedIds).toEqual([40]);
+    expect(p.brief.exclusions.artist_ids).toEqual([KHRUANGBIN]);
   });
 
   test("a schema failure is retried once", async () => {

@@ -4,7 +4,7 @@
 // control only through the length the model read from the text (PRD 18.1).
 import type { ArtistId, Brief, BriefInput, RefineBrief } from "@/contracts";
 import * as llm from "../llm";
-import type { CallOptions, LlmAdapter, LlmResult } from "../llm";
+import type { CallOptions, CallRecord, LlmAdapter, LlmResult } from "../llm";
 import {
   type BriefCatalog,
   type ListRow,
@@ -34,6 +34,13 @@ export type BriefOptions = CallOptions & {
 // them (CLAUDE.md rule 2).
 export type HeldConstraints = Pick<Brief, "series_exclude" | "exclusions">;
 
+// A new brief, and the artists this run's model named for exclusion. A held
+// exclusion is not one of them: only this run's words may let a pin go
+// (architecture 6.3).
+export type BriefResult =
+  | { ok: true; output: Brief; calls: CallRecord[]; excludedNow: ArtistId[] }
+  | Extract<LlmResult<Brief>, { ok: false }>;
+
 const defaultLlm = { extractBrief: llm.extractBrief };
 
 const MAX_MIN = 6 * 60;
@@ -49,18 +56,20 @@ export async function extractBrief(
     },
     ...options
   }: BriefOptions & { held?: HeldConstraints } = {},
-): Promise<LlmResult<Brief>> {
+): Promise<BriefResult> {
   const result = await llm.extractBrief(
     { system: generateSystem(context), user: generateUser(input) },
     modelBrief,
     options,
   );
   if (!result.ok) return result;
-  return {
-    ok: true,
-    output: await toBrief(result.output, input, context, held),
-    calls: result.calls,
-  };
+  const { brief, excludedNow } = await toBrief(
+    result.output,
+    input,
+    context,
+    held,
+  );
+  return { ok: true, output: brief, calls: result.calls, excludedNow };
 }
 
 export type RefineRequest = {
@@ -95,15 +104,15 @@ async function toBrief(
   input: BriefInput,
   context: BriefContext,
   held: HeldConstraints,
-): Promise<Brief> {
+): Promise<{ brief: Brief; excludedNow: ArtistId[] }> {
   const durationS = typedDuration(model.stated_length_min) ?? input.durationS;
   // A held source include never carries over: a new request starts from every series.
-  const narrowed = await constraints(model, context, {
+  const { artistsNamed, ...narrowed } = await constraints(model, context, {
     series_include: [],
     series_exclude: held.series_exclude,
     exclusions: held.exclusions,
   });
-  return {
+  const brief: Brief = {
     curve: fitCurve(model.curve, durationS / 60),
     genres: terms(model.genres),
     scenes: terms(model.scenes),
@@ -125,6 +134,7 @@ async function toBrief(
     surprise: model.surprise || input.mood === "surprise_me",
     duration_s: durationS,
   };
+  return { brief, excludedNow: artistsNamed };
 }
 
 async function toRefine(
@@ -296,7 +306,7 @@ async function constraints(
   model: Narrowing,
   context: BriefContext,
   current: Constraints,
-): Promise<Constraints> {
+): Promise<Constraints & { artistsNamed: ArtistId[] }> {
   const publisherOf = new Map(
     context.series.map((s) => [s.id, s.publisher_id]),
   );
@@ -335,10 +345,14 @@ async function constraints(
     ...current.exclusions.publisher_ids,
     ...ruledOut.publishers,
   ]);
-  const artists = await Promise.all(
-    terms(model.exclude_artists, false).map((name) =>
-      context.artistIdFor(name),
-    ),
+  const artistsNamed = unique(
+    (
+      await Promise.all(
+        terms(model.exclude_artists, false).map((name) =>
+          context.artistIdFor(name),
+        ),
+      )
+    ).filter((id): id is ArtistId => id !== null),
   );
   const open = wanted.filter(
     (id) =>
@@ -351,12 +365,11 @@ async function constraints(
     series_include: open.length > 0 ? open : wanted,
     series_exclude,
     exclusions: {
-      artist_ids: unique([
-        ...current.exclusions.artist_ids,
-        ...artists.filter((id): id is ArtistId => id !== null),
-      ]),
+      artist_ids: unique([...current.exclusions.artist_ids, ...artistsNamed]),
       publisher_ids,
     },
+    // The artists this request named, held or not.
+    artistsNamed,
   };
 }
 
