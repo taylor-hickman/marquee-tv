@@ -191,7 +191,15 @@ export const examples = {
   catalogSearchResponse: { performances: [performanceCard], nextOffset: 24 },
   catalogArtistsRequest: { q: "khru" },
   catalogArtistsResponse: {
-    artists: [{ id: 7, name: "Khruangbin", eligibleCount: 3 }],
+    artists: [
+      { id: 7, name: "Khruangbin", eligibleCount: 3 },
+      {
+        id: 8,
+        name: "Khruangbin & Leon Bridges",
+        eligibleCount: 0,
+        closest: [{ id: 7, name: "Khruangbin", eligibleCount: 3 }],
+      },
+    ],
   },
   eventsRequest: {
     name: "brief_submitted",

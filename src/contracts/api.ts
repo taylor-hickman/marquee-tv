@@ -145,13 +145,25 @@ export const catalogSearchResponse = z.object({
 export const catalogArtistsRequest = z.object({
   q: z.string().trim().min(1).max(100),
 });
+const typeaheadArtist = z.object({
+  id: artistId,
+  name: z.string().min(1),
+  // Zero means the seed has nothing playable (PRD 7.2).
+  eligibleCount: z.number().int().nonnegative(),
+});
 export const catalogArtistsResponse = z.object({
   artists: z.array(
-    z.object({
-      id: artistId,
-      name: z.string().min(1),
-      // Zero means the seed has nothing playable (PRD 7.2).
-      eligibleCount: z.number().int().nonnegative(),
+    typeaheadArtist.extend({
+      // Only when eligibleCount is zero: the most similar artists that have a
+      // playable performance, most similar first (PRD 7.2).
+      closest: z
+        .array(
+          typeaheadArtist.extend({
+            eligibleCount: z.number().int().positive(),
+          }),
+        )
+        .max(3)
+        .optional(),
     }),
   ),
 });

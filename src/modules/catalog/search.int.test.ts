@@ -107,9 +107,43 @@ describe("artistTypeahead", () => {
     await factories.performanceYtCache({ performance_id: p.id });
 
     expect(await artistTypeahead("qzx")).toEqual([
-      { id: start.id, name: "Qzxv", eligibleCount: 0 },
+      { id: start.id, name: "Qzxv", eligibleCount: 0, closest: [] },
       { id: inside.id, name: "The Qzxv Band", eligibleCount: 1 },
     ]);
+  });
+
+  test("offers an artist with nothing to play its closest artists that have something", async () => {
+    const playable = async (name: string) => {
+      const a = await factories.artist({ name });
+      const p = await factories.performance({ eligible: true, series_id: 1 });
+      await factories.performanceArtist({
+        performance_id: p.id,
+        artist_id: a.id,
+      });
+      await factories.performanceYtCache({ performance_id: p.id });
+      return a;
+    };
+    const [first, second, third, fourth] = await Promise.all(
+      ["Qzxw One", "Qzxw Two", "Qzxw Three", "Qzxw Four"].map(playable),
+    );
+    const silent = await factories.artist({ name: "Qzxw Silent" });
+    const seed = await factories.artist({ name: "Zzqv" });
+    await factories.artistProfile({
+      artist_id: seed.id,
+      similar_artist_ids: [silent.id, second.id, first.id, third.id, fourth.id],
+    });
+
+    const [found] = await artistTypeahead("zzqv");
+    expect(found).toEqual({
+      id: seed.id,
+      name: "Zzqv",
+      eligibleCount: 0,
+      closest: [second, first, third].map((a) => ({
+        id: a.id,
+        name: a.name,
+        eligibleCount: 1,
+      })),
+    });
   });
 
   test("finds an artist by an alias", async () => {
