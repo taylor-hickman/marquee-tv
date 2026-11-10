@@ -63,14 +63,24 @@ export function readTitle(
 }
 
 const PUNCT = ":|\\-–—";
-const separator = (run: string) =>
+// A colon or bar, or a dash with spaces around it, so "Jay-Z" keeps its hyphen.
+const ANY_SEPARATOR = "(?:\\s*[:|]\\s*|\\s+[-–—]\\s+)";
+const ONE_SEPARATOR: Record<string, string> = {
+  ":": "\\s*:\\s*",
+  "|": "\\s*\\|\\s*",
+};
+// Between two slots ("{artist} - {song}") only the rule's own separator
+// counts; next to fixed text, any of them does, as in A2's series match.
+const separator = (run: string, betweenSlots: boolean) =>
   run === ""
     ? ""
     : run.includes(",")
       ? "\\s*,\\s*"
       : run.trim() === ""
         ? "\\s+"
-        : `\\s*[${PUNCT}]\\s*`;
+        : betweenSlots
+          ? (ONE_SEPARATOR[run.trim()[0]] ?? "\\s+[-–—]\\s+")
+          : ANY_SEPARATOR;
 const literal = (words: string) =>
   words
     .split(/\s+/)
@@ -78,20 +88,26 @@ const literal = (words: string) =>
     .join("\\s+");
 
 // "{artist} - Full Performance (Live on KEXP)" becomes a case-insensitive
-// pattern with an `artist` group. A colon, dash or bar in the rule matches any
-// of them, as A2's series match does; trailing bracketed notes such as
-// "(Trailer)" or "(From The Archives)" are allowed.
+// pattern with an `artist` group. Trailing bracketed notes such as "(Trailer)"
+// or "(From The Archives)" are allowed.
+const slotName = (piece = "") => /^\{(\w+)\}$/.exec(piece)?.[1];
 function compile(template: string) {
   const source = template
     .split(/(\{\w+\})/)
     .filter(Boolean)
-    .map((piece) => {
-      const slot = /^\{(\w+)\}$/.exec(piece)?.[1];
+    .map((piece, i, pieces) => {
+      const slot = slotName(piece);
       if (slot === "year") return "\\d{4}";
       if (slot) return `(?<${slot}>.+?)`;
       const [, lead, words, trail] =
         /^([\s,:|\-–—]*)(.*?)([\s,:|\-–—]*)$/s.exec(piece)!;
-      return separator(lead) + (words ? literal(words) : "") + separator(trail);
+      const betweenSlots =
+        !words && !!slotName(pieces[i - 1]) && !!slotName(pieces[i + 1]);
+      return (
+        separator(lead, betweenSlots) +
+        (words ? literal(words) : "") +
+        separator(trail, false)
+      );
     })
     .join("");
   return new RegExp(`^\\s*${source}(?:\\s*[([][^)\\]]*[)\\]])*\\s*$`, "i");

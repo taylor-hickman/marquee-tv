@@ -62,6 +62,7 @@ test("a rule-decided title gets its kind, a new artist with an alias, and eligib
     accepted: 1,
     flagged: 0,
     byModel: 0,
+    unreached: 0,
   });
   expect(calls).toBe(0);
   expect(await row(id)).toEqual({
@@ -98,7 +99,13 @@ test("a model-decided title takes the adapter's kind and its artist from the rea
     [series.id],
   );
 
-  expect(tally).toEqual({ classified: 2, accepted: 2, flagged: 0, byModel: 2 });
+  expect(tally).toEqual({
+    classified: 2,
+    accepted: 2,
+    flagged: 0,
+    byModel: 2,
+    unreached: 0,
+  });
   expect(await row(trailer)).toEqual({
     kind: "clip",
     review_status: "accepted",
@@ -116,6 +123,29 @@ test("a model-decided title takes the adapter's kind and its artist from the rea
     "Cy and the Fixtures",
     "the Fixtures",
   ]);
+});
+
+test("when the model can't be reached the row stays pending, and the next run classifies it", async () => {
+  const series = await deskSeries();
+  const id = await upload(
+    series.id,
+    "The best Tiny Desk Concert fixture moments",
+  );
+
+  expect(await classify(model(), [series.id])).toEqual(
+    expect.objectContaining({ classified: 0, flagged: 0, unreached: 1 }),
+  );
+  expect(await row(id)).toEqual(
+    expect.objectContaining({ kind: null, review_status: "pending" }),
+  );
+
+  await classify(
+    model(() => ({ output: { kind: "clip" } })),
+    [series.id],
+  );
+  expect(await row(id)).toEqual(
+    expect.objectContaining({ kind: "clip", review_status: "accepted" }),
+  );
 });
 
 describe("an injected title cannot escape the enum", () => {
@@ -216,10 +246,13 @@ describe("the fixture's 300 titles", () => {
       group by p.id order by p.id`;
   }
 
-  test("with the catalog's artists and no model, under 2% are flagged and every decided row is right", async () => {
+  test("with the catalog's artists and a model whose every answer fails the schema, under 2% are flagged and every decided row is right", async () => {
     await asIngested({ forgetArtists: false });
 
-    const tally = await classify(model(), SERIES);
+    const tally = await classify(
+      model(() => ({ output: null })),
+      SERIES,
+    );
 
     expect(tally.classified).toBe(300);
     expect(tally.flagged / 300).toBeLessThan(0.02);

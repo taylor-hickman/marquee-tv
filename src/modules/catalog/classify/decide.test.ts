@@ -23,7 +23,9 @@ function mockAsk(replies: { kind?: unknown; artists?: unknown }) {
     const call = input.system === SYSTEM.kind ? "kind" : "artists";
     calls.push({ call, user: input.user });
     const parsed = schema.safeParse(replies[call]);
-    return parsed.success ? { ok: true, output: parsed.data } : { ok: false };
+    return parsed.success
+      ? { ok: true, output: parsed.data }
+      : { ok: false, error: "schema" };
   };
   return { ask, calls };
 }
@@ -119,6 +121,26 @@ describe("a model-decided title", () => {
       reviewStatus: "flagged",
       via: "model",
     });
+  });
+
+  test("a model it can't reach leaves the row pending, not flagged", async () => {
+    const ask: Ask = async () => ({ ok: false, error: "provider" });
+    expect(
+      await decide(
+        { title: "The best Tiny Desk Concert moments", durationS: LONG },
+        desk,
+        known(),
+        ask,
+      ),
+    ).toEqual(expect.objectContaining({ reviewStatus: "pending" }));
+    expect(
+      await decide(
+        { title: "I'm With Her: Tiny Desk Concert", durationS: LONG },
+        desk,
+        known(),
+        async () => ({ ok: false, error: "timeout" }),
+      ),
+    ).toEqual(expect.objectContaining({ reviewStatus: "pending" }));
   });
 
   test("overlapping readings flag the row", async () => {

@@ -35,7 +35,14 @@ export async function classify(ask: Ask, seriesIds?: number[]) {
     if (!known.has(fold(text))) known.set(fold(text), id);
   }
 
-  const tally = { classified: 0, accepted: 0, flagged: 0, byModel: 0 };
+  // `unreached` rows stay pending: the model couldn't be reached for them.
+  const tally = {
+    classified: 0,
+    accepted: 0,
+    flagged: 0,
+    byModel: 0,
+    unreached: 0,
+  };
   for (const row of rows) {
     const decision = await decide(
       { title: row.title, durationS: row.duration_s },
@@ -43,6 +50,10 @@ export async function classify(ask: Ask, seriesIds?: number[]) {
       known,
       ask,
     );
+    if (decision.reviewStatus === "pending") {
+      tally.unreached++;
+      continue;
+    }
     const created = await sql.begin(async (tx) => {
       const ids: number[] = [];
       const added = new Map<string, number>();

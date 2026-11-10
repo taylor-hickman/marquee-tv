@@ -41,6 +41,16 @@ describe("the series' title rule", () => {
     });
   });
 
+  test("a hyphen inside a name is not a separator", () => {
+    expect(
+      readTitle("Jay-Fixture - 4:44 | A COLORS SHOW", 200, colors),
+    ).toEqual({ kind: "performance", artistText: "Jay-Fixture", shaped: true });
+    expect(
+      readTitle("Wu-Fixture Clan - Full Performance (Live on KEXP)", LONG, kexp)
+        .artistText,
+    ).toBe("Wu-Fixture Clan");
+  });
+
   test("a separator the rule has is required", () => {
     expect(readTitle("Ada Lark Tiny Desk Concert", LONG, desk)).toEqual(
       expect.objectContaining({ shaped: false }),
