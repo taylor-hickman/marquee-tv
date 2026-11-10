@@ -1,5 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
-import { createDraftRequest, createDraftResponse } from "@/contracts";
+import {
+  createDraftRequest,
+  createDraftResponse,
+  generateRequest,
+} from "@/contracts";
 import { expectNoAxeViolations } from "../support/axe";
 
 // The artist screen against the seeded catalog and the real routes: typeahead
@@ -58,6 +62,10 @@ test("catalog seeds are must-include and reach the draft", async ({ page }) => {
   await expect(hiatus).toHaveAttribute("aria-pressed", "false");
   await expectNoAxeViolations(page);
 
+  // The editor starts generate on arrival with the brief the screen saved.
+  const generate = page.waitForRequest(
+    (r) => r.url().endsWith("/generate") && r.method() === "POST",
+  );
   const body = await submit(page);
   expect(body.creationMethod).toBe("artist");
   expect(body.input?.seeds).toEqual([
@@ -68,6 +76,11 @@ test("catalog seeds are must-include and reach the draft", async ({ page }) => {
       mustInclude: false,
     },
   ]);
+  expect(generateRequest.parse((await generate).postDataJSON())).toEqual({
+    baseRevision: null,
+    mode: "generate",
+    input: body.input,
+  });
 });
 
 test("a name outside the catalog is a reference only", async ({ page }) => {
