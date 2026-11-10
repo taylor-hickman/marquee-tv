@@ -17,6 +17,8 @@ export default async function resetDatabase() {
     const tables = await sql<{ tablename: string }[]>`
       select tablename from pg_tables where schemaname = 'public'`;
     await sql`truncate ${sql(tables.map((t) => t.tablename))} restart identity cascade`;
+    // The truncate empties app_flag too; put back the flag a migration seeds.
+    await sql.file("supabase/migrations/20261109230000_seed_handoff_mode.sql");
   } finally {
     await sql.end();
   }
