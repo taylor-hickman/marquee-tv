@@ -6,6 +6,7 @@ import type {
 } from "@/contracts";
 import { sql } from "@/lib/db";
 import { performanceCards } from "./cards";
+import { cleared, HELD } from "./review";
 
 export const SEARCH_PAGE_SIZE = 30;
 export const TYPEAHEAD_LIMIT = 10;
@@ -27,7 +28,7 @@ export function searchIdsQuery(request: CatalogSearchRequest) {
     from performance p
     join performance_yt_cache c on c.performance_id = p.id
     join series s on s.id = p.series_id
-    where p.eligible and c.available
+    where p.eligible and c.available and ${cleared()}
       ${
         tsquery
           ? sql`and p.id in (
@@ -66,7 +67,7 @@ export async function search(
 
 const escapeLike = (s: string) => s.replace(/[\\%_]/g, "\\$&");
 
-// Artists whose name or an alias contains `q`, through the trigram indexes.
+// Cleared artists whose name or an alias contains `q`, through the trigram indexes.
 // Names that start with it come first, then artists with more to play.
 export function typeaheadQuery(q: string) {
   const contains = `%${escapeLike(q)}%`;
@@ -85,10 +86,11 @@ export function typeaheadQuery(q: string) {
       from performance_artist pa
       join performance p on p.id = pa.performance_id
       join performance_yt_cache c on c.performance_id = p.id
-      where pa.artist_id = a.id and p.eligible and c.available
+      where pa.artist_id = a.id and p.eligible and c.available and ${cleared()}
     ) as "eligibleCount"
     from matched m
     join artist a on a.id = m.artist_id
+    where a.review_status <> all(${HELD}::text[])
     order by m.prefix desc, "eligibleCount" desc, a.name, a.id
     limit ${TYPEAHEAD_LIMIT}`;
 }

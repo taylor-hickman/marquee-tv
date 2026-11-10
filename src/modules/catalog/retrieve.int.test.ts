@@ -63,11 +63,78 @@ const playable = () => sql<Playable[]>`
   join performance_artist lead on lead.performance_id = p.id and lead.billing_order = 1
   join artist_profile lp on lp.artist_id = lead.artist_id
   where p.eligible and c.available
+    and p.review_status not in ('flagged', 'rejected')
+    and not exists (select 1 from performance_artist pa
+      join artist a on a.id = pa.artist_id
+      where pa.performance_id = p.id and a.review_status in ('flagged', 'rejected'))
   order by p.id`;
 const by = (rows: Playable[], artists: number[]) =>
   rows
     .filter((r) => r.artistIds.some((a) => artists.includes(a)))
     .map((r) => r.id);
+
+// Eligible, available performances by one profiled lead artist, one for each
+// way review can hold a performance back and one for each it lets through.
+// Durations are equal and unusual so replace ranks them all first.
+async function reviewCases(durationS: number) {
+  const lead = await factories.artist();
+  await factories.artistProfile({ artist_id: lead.id, energy: 3 });
+  const make = async (
+    review_status: string,
+    lead_id: number,
+    second?: string,
+  ) => {
+    const p = await factories.performance({
+      eligible: true,
+      kind: "performance",
+      review_status,
+      series_id: 1,
+    });
+    await factories.performanceArtist({
+      performance_id: p.id,
+      artist_id: lead_id,
+    });
+    if (second) {
+      const a = await factories.artist({ review_status: second });
+      await factories.performanceArtist({
+        performance_id: p.id,
+        artist_id: a.id,
+        billing_order: 2,
+      });
+    }
+    await factories.performanceYtCache({
+      performance_id: p.id,
+      duration_s: durationS,
+    });
+    return p.id as number;
+  };
+  const heldLead = async (review_status: string) => {
+    const a = await factories.artist({ review_status });
+    await factories.artistProfile({ artist_id: a.id, energy: 3 });
+    return a.id as number;
+  };
+  const flaggedLead = await heldLead("flagged");
+  const rejectedLead = await heldLead("rejected");
+  // Held rows first, so without the filter they'd win replace's id tie-break.
+  const held = [
+    await make("flagged", lead.id),
+    await make("rejected", lead.id),
+    await make("accepted", lead.id, "flagged"),
+    await make("pending", lead.id, "rejected"),
+    await make("accepted", flaggedLead),
+    await make("pending", rejectedLead),
+  ];
+  const cleared = [
+    await make("pending", lead.id),
+    await make("accepted", lead.id, "pending"),
+  ];
+  return {
+    lead: lead.id as number,
+    heldLeads: [flaggedLead, rejectedLead],
+    held,
+    cleared,
+  };
+}
 
 describe("retrieveCandidates", () => {
   test("orders seeds, then similar artists, then profile matches in the energy range", async () => {
@@ -197,6 +264,21 @@ describe("retrieveCandidates", () => {
       noState,
     );
     expect(ids(candidates).filter((id) => id >= good)).toEqual([good]);
+  });
+
+  test("rule 5: flagged and rejected performances and artists never become candidates", async () => {
+    const { lead, heldLeads, held, cleared } = await reviewCases(7777);
+    const candidates = await retrieveCandidates(
+      brief({
+        seeds: [lead, ...heldLeads].map((artist_id) => ({
+          artist_id,
+          must_include: true,
+        })),
+      }),
+      noState,
+    );
+    for (const id of held) expect(ids(candidates)).not.toContain(id);
+    for (const id of cleared) expect(ids(candidates)).toContain(id);
   });
 
   test("rule 2: removed ids and excluded artists, publishers and series never come back", async () => {
@@ -399,6 +481,28 @@ describe("replaceOptions", () => {
         Math.abs(byId.get(option.id)!.energy - list[1].energy),
       ).toBeLessThanOrEqual(1);
     }
+  });
+
+  test("rule 5: never offers a flagged or rejected performance or artist", async () => {
+    const { lead, held, cleared } = await reviewCases(7333);
+    const item = await factories.performance({ eligible: true, series_id: 1 });
+    await factories.performanceArtist({
+      performance_id: item.id,
+      artist_id: lead,
+    });
+    await factories.performanceYtCache({
+      performance_id: item.id,
+      duration_s: 7333,
+    });
+    const options = await replaceOptions({
+      items: [{ performance_id: item.id, pinned: "none", source: "ai" }],
+      removedIds: [],
+      brief: null,
+      index: 0,
+    });
+    const offered = options.map((o) => o.id);
+    for (const id of held) expect(offered).not.toContain(id);
+    for (const id of cleared) expect(offered).toContain(id);
   });
 
   test("drops a removed option on the next ask", async () => {
