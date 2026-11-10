@@ -1,6 +1,5 @@
 // Publishers, series, artists, performances and profiles; search and candidate
-// retrieval (architecture 3). Lane A fills these in.
-import { notImplemented } from "@/contracts";
+// retrieval (architecture 3).
 import type {
   ArtistTypeahead,
   ListItemFactsById,
@@ -9,17 +8,16 @@ import type {
   RetrieveCandidates,
   Search,
 } from "./types";
+import * as cards from "./cards";
+import * as retrieve from "./retrieve";
+import * as searching from "./search";
 
 export type * from "./types";
 
-export const search: Search = () => notImplemented("catalog.search");
-export const artistTypeahead: ArtistTypeahead = () =>
-  notImplemented("catalog.artistTypeahead");
-export const retrieveCandidates: RetrieveCandidates = () =>
-  notImplemented("catalog.retrieveCandidates");
-export const listItemFacts: ListItemFactsById = () =>
-  notImplemented("catalog.listItemFacts");
-export const replaceOptions: ReplaceOptions = () =>
-  notImplemented("catalog.replaceOptions");
-export const performanceCards: PerformanceCards = () =>
-  notImplemented("catalog.performanceCards");
+export const search: Search = searching.search;
+export const artistTypeahead: ArtistTypeahead = searching.artistTypeahead;
+export const retrieveCandidates: RetrieveCandidates =
+  retrieve.retrieveCandidates;
+export const listItemFacts: ListItemFactsById = retrieve.listItemFacts;
+export const replaceOptions: ReplaceOptions = retrieve.replaceOptions;
+export const performanceCards: PerformanceCards = cards.performanceCards;
