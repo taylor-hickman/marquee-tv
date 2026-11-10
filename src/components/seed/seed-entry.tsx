@@ -2,12 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useState, type KeyboardEvent } from "react";
+import { savePendingBrief } from "@/components/landing/pending-brief";
 import { Button } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
 import { cn } from "@/components/ui/cn";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
 import { createApiClient } from "@/lib/client/api";
+import type { BriefInput } from "@/contracts";
 import {
   addSeed,
   canMustInclude,
@@ -93,16 +95,19 @@ export function SeedEntry() {
 
   async function submit() {
     setSubmitting(true);
-    const result = await api.createDraft({
-      creationMethod: "artist",
-      input: { text: "", durationS: DURATION_S, seeds: toBriefSeeds(seeds) },
-    });
+    const input: BriefInput = {
+      text: "",
+      durationS: DURATION_S,
+      seeds: toBriefSeeds(seeds),
+    };
+    const result = await api.createDraft({ creationMethod: "artist", input });
     if (!result.ok) {
       setSubmitting(false);
       toast("Try again.");
       return;
     }
     const draftId = result.value.draft.draft.id;
+    savePendingBrief(draftId, input);
     void api
       .sendEvent({
         name: "brief_submitted",
