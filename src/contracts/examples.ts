@@ -235,6 +235,15 @@ export const examples = {
       },
     ],
   },
+  accountResponse: {
+    email: "host@example.com",
+    defaultPlan: "subscription",
+    plan: {
+      kind: "subscription",
+      status: "active",
+      periodEnd: "2026-12-09T18:30:00Z",
+    },
+  },
   deleteAccountResponse: { deleted: true },
   staticPageResponse: "<!doctype html><title>Privacy</title>",
 } satisfies { [K in keyof typeof schemas]: z.input<(typeof schemas)[K]> };
