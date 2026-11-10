@@ -88,10 +88,10 @@ export type ResolveShareLink = (code: string) => Promise<SharedList | null>;
 
 export type RecordHandoff = (event: HandoffEvent) => Promise<void>;
 
-// Library and claiming (C4).
+// Library and claiming (C4). An unknown, used or expired code is `not_found`.
 export type ClaimGuestDrafts = (
   claimCode: string,
   userId: UserId,
-) => Promise<{ claimed: number }>;
+) => Promise<ApiResult<{ claimed: number }>>;
 
 export type ListLibrary = (userId: UserId) => Promise<LibraryResponse>;
