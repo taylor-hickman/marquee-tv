@@ -23,3 +23,6 @@ next-env.d.ts
 # debug
 *.log
 *.pem
+
+# eval results hold YouTube API Data (docs/architecture/compliance-memo.md)
+/evals/results/

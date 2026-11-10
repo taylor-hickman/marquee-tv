@@ -11,6 +11,7 @@
     "seed": "node scripts/seed/seed.mts",
     "expire-passes": "tsx --conditions=react-server scripts/billing/expire-passes.mts",
     "ingest": "tsx --conditions=react-server scripts/ingest/run.mts",
+    "evals": "tsx --conditions=react-server scripts/evals/run.mts",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint && prettier --check .",
     "format": "prettier --write .",
