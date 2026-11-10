@@ -199,7 +199,7 @@ finish() {
 # shellcheck source=lib.sh source-path=SCRIPTDIR
 . "$(dirname "$0")/lib.sh"
 
-STAGES=(clis github vercel supabase google-cloud google-oauth stripe sentry llm verify)
+STAGES=(clis github vercel supabase google-cloud google-oauth stripe sentry llm email verify)
 ONLY=""
 if [[ "${1:-}" == "--only" ]]; then
   ONLY="${2:-}"
@@ -244,6 +244,22 @@ sentry_api() {
   [[ -n "${3:-}" ]] && data=(--data-binary "$3")
   curl -fsS -X "$method" "https://sentry.io/api/0$path" \
     -H @<(printf 'Authorization: Bearer %s\n' "$SENTRY_AUTH_TOKEN") \
+    -H 'Content-Type: application/json' ${data[@]+"${data[@]}"}
+}
+
+# resend_api and cloudflare_api METHOD PATH [JSON], the same way.
+resend_api() {
+  local method="$1" path="$2" data=()
+  [[ -n "${3:-}" ]] && data=(--data-binary "$3")
+  curl -fsS -X "$method" "https://api.resend.com$path" \
+    -H @<(printf 'Authorization: Bearer %s\n' "$RESEND_KEY") \
+    -H 'Content-Type: application/json' ${data[@]+"${data[@]}"}
+}
+cloudflare_api() {
+  local method="$1" path="$2" data=()
+  [[ -n "${3:-}" ]] && data=(--data-binary "$3")
+  curl -fsS -X "$method" "https://api.cloudflare.com/client/v4$path" \
+    -H @<(printf 'Authorization: Bearer %s\n' "$CLOUDFLARE_TOKEN") \
     -H 'Content-Type: application/json' ${data[@]+"${data[@]}"}
 }
 
@@ -542,7 +558,109 @@ stage_llm() {
   pause
 }
 
-# ── 10. Verify ────────────────────────────────────────────────────────────
+# ── 10. Email sign-in links through Resend ────────────────────────────────
+# Supabase's built-in sender mails only the org's team members, a few an hour,
+# so both projects send through Resend SMTP from MAIL_DOMAIN. Resend's free
+# plan allows one domain per team, so Marquee TV has a team of its own.
+MAIL_DOMAIN="${MAIL_DOMAIN:-getmarquee.tv}"
+
+# dns_record ZONE TYPE NAME CONTENT [PRIORITY] makes NAME carry CONTENT,
+# replacing the record of that type and name when one differs.
+dns_record() {
+  local zone="$1" type="$2" name="$3" content="$4" priority="${5:-}" found id body
+  found=$(cloudflare_api GET "/zones/$zone/dns_records?type=$type&name=$name" | jq -c '.result')
+  # Cloudflare may hand TXT content back quoted.
+  if jq -e --arg c "$content" 'any(.[]; (.content | ltrimstr("\"") | rtrimstr("\"")) == $c)' <<<"$found" >/dev/null; then
+    note "$type $name is set"; return
+  fi
+  body=$(jq -n --arg t "$type" --arg n "$name" --arg c "$content" --arg p "$priority" \
+    '{type: $t, name: $n, content: $c, ttl: 1, proxied: false} + (if $p == "" then {} else {priority: ($p | tonumber)} end)')
+  id=$(jq -r '.[0].id // empty' <<<"$found")
+  if [[ -n "$id" ]]; then
+    cloudflare_api PUT "/zones/$zone/dns_records/$id" "$body" >/dev/null
+  else
+    cloudflare_api POST "/zones/$zone/dns_records" "$body" >/dev/null
+  fi
+  printf '  %s✓%s %s %s\n' "$GREEN" "$RESET" "$type" "$name"
+}
+
+# supabase_email ENV points ENV's project at Resend SMTP with a key of its own,
+# and lets the email link come back to ENV's site.
+supabase_email() {
+  local env="$1" domain="$2" ref site key old auth allow
+  ref=$(supabase_ref "$(supabase_project_name "$env")")
+  [[ -n "$ref" ]] || { warn "no Supabase project for $env yet: run --only supabase first"; exit 1; }
+  case "$env" in
+    preview) site="https://staging.$MAIL_DOMAIN" ;;
+    production) site="https://$MAIL_DOMAIN" ;;
+  esac
+  # A key's token shows only at creation, so a re-run replaces the key.
+  for old in $(resend_api GET /api-keys | jq -r --arg n "supabase-auth-$env" '.data[] | select(.name == $n) | .id'); do
+    resend_api DELETE "/api-keys/$old" >/dev/null
+  done
+  key=$(resend_api POST /api-keys "$(jq -n --arg n "supabase-auth-$env" --arg d "$domain" \
+    '{name: $n, permission: "sending_access", domain_id: $d}')" | jq -r .token)
+  auth=$(supabase_api GET "/v1/projects/$ref/config/auth")
+  # Keep any redirect URLs already allowed, such as preview deploys.
+  allow=$(jq -r --arg s "$site/**" '[(.uri_allow_list // "") | split(",")[] | select(. != "")] + [$s] | unique | join(",")' <<<"$auth")
+  supabase_api PATCH "/v1/projects/$ref/config/auth" "$(jq -n --arg k "$key" --arg from "noreply@$MAIL_DOMAIN" \
+    --arg site "$site" --arg allow "$allow" '{
+      smtp_host: "smtp.resend.com", smtp_port: "465", smtp_user: "resend", smtp_pass: $k,
+      smtp_admin_email: $from, smtp_sender_name: "Marquee TV", rate_limit_email_sent: 30,
+      site_url: $site, uri_allow_list: $allow}')" >/dev/null
+  printf '  %s✓%s Supabase %s sends from noreply@%s and returns to %s\n' \
+    "$GREEN" "$RESET" "$(supabase_project_name "$env")" "$MAIL_DOMAIN" "$site"
+}
+
+stage_email() {
+  stage "Email sign-in links: Resend SMTP from $MAIL_DOMAIN"
+  need supabase
+  local domain records record zone status="" name env
+
+  open_url "https://resend.com/settings/team"
+  step "Sign in. In the team switcher, create a team \"Marquee TV\" and switch to it."
+  open_url "https://resend.com/api-keys"
+  step "Create API key → name \"marquee provisioning\" → Full access → copy it."
+  ask_secret RESEND_KEY "Paste the Resend API key:"
+
+  domain=$(resend_api GET /domains | jq -r --arg n "$MAIL_DOMAIN" '.data[] | select(.name == $n) | .id')
+  if [[ -z "$domain" ]]; then
+    domain=$(resend_api POST /domains "$(jq -n --arg n "$MAIL_DOMAIN" '{name: $n, region: "us-east-1"}')" | jq -r .id)
+    printf '  %s✓%s added %s to Resend\n' "$GREEN" "$RESET" "$MAIL_DOMAIN"
+  fi
+  records=$(resend_api GET "/domains/$domain" | jq -c '.records[]')
+
+  open_url "https://dash.cloudflare.com/profile/api-tokens"
+  step "Create Token → Edit zone DNS template → Zone Resources: Specific zone, $MAIL_DOMAIN → Create → copy it."
+  ask_secret CLOUDFLARE_TOKEN "Paste the Cloudflare API token:"
+  zone=$(cloudflare_api GET "/zones?name=$MAIL_DOMAIN" | jq -r '.result[0].id // empty')
+  [[ -n "$zone" ]] || { warn "the token can't see the $MAIL_DOMAIN zone"; exit 1; }
+  while read -r record; do
+    name=$(jq -r .name <<<"$record")
+    [[ "$name" == *".$MAIL_DOMAIN" ]] || name="$name.$MAIL_DOMAIN"
+    dns_record "$zone" "$(jq -r .type <<<"$record")" "$name" "$(jq -r .value <<<"$record")" "$(jq -r '.priority // empty' <<<"$record")"
+  done <<<"$records"
+  # A DMARC policy helps inbox placement; one already there is left alone.
+  if [[ $(cloudflare_api GET "/zones/$zone/dns_records?type=TXT&name=_dmarc.$MAIL_DOMAIN" | jq '.result | length') == 0 ]]; then
+    dns_record "$zone" TXT "_dmarc.$MAIL_DOMAIN" "v=DMARC1; p=none"
+  fi
+
+  resend_api POST "/domains/$domain/verify" >/dev/null
+  say "waiting for Resend to verify $MAIL_DOMAIN…"
+  for _ in $(seq 60); do
+    status=$(resend_api GET "/domains/$domain" | jq -r .status)
+    [[ "$status" == verified ]] && break
+    sleep 10
+  done
+  [[ "$status" == verified ]] || { warn "$MAIL_DOMAIN is still $status after 10 minutes; re-run --only email"; exit 1; }
+  printf '  %s✓%s %s verified\n' "$GREEN" "$RESET" "$MAIL_DOMAIN"
+
+  supabase_token
+  for env in "${ENVIRONMENTS[@]}"; do supabase_email "$env" "$domain"; done
+  pause
+}
+
+# ── 11. Verify ────────────────────────────────────────────────────────────
 stage_verify() {
   stage "Verify"
   "$PROVISION_DIR/verify.sh" || SKIPPED+=("variables above: re-run the stage each one names")
