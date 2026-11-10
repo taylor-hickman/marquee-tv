@@ -2,6 +2,7 @@
 // hands back (build plan B3). Catalog reads are stubs: the rules live in code.
 import { describe, expect, test, vi } from "vitest";
 import type {
+  Brief,
   BriefInput,
   CuratorProposal,
   PerformanceCard,
@@ -11,7 +12,7 @@ import type {
 import type { Candidate } from "@/modules/catalog";
 import type { BriefContext } from "./brief";
 import type { ModelBrief } from "./brief/prompt";
-import { createGenerate, echo } from "./generate";
+import { createGenerate, echo, keepExclusions } from "./generate";
 import { createFakeAdapter } from "./llm";
 import type { FakeReply } from "./llm/fake";
 import type { CuratorState } from "./types";
@@ -93,6 +94,7 @@ type Setup = {
   candidates?: Candidate[];
   items?: RevisionItem[];
   removedIds?: number[];
+  held?: Brief;
   cards?: PerformanceCard[];
   composed: number[] | (() => FakeReply);
 };
@@ -130,7 +132,7 @@ async function run(setup: Setup) {
       seeds: [],
       ...setup.input,
     },
-    brief: null,
+    brief: setup.held ?? null,
     items: setup.items ?? [],
     removedIds: setup.removedIds ?? [],
     earlierIds: [],
@@ -226,6 +228,23 @@ describe("generate", () => {
     const { outcome } = await run({ candidates, composed: [1, 2, 3, 4, 5, 6] });
     const p = proposal(outcome);
     expect(ids(p)).toEqual([1, 2, 4, 5, 6, 7]);
+    expect(p.warnings).toEqual([]);
+  });
+
+  test("rule 2: exclusions on the held brief survive a generate with new input", async () => {
+    const held: Brief = {
+      ...proposalBrief,
+      series_exclude: [2],
+      exclusions: { artist_ids: [3], publisher_ids: [9] },
+    };
+    const { outcome } = await run({
+      held,
+      composed: [1, 2, 3, 4, 5, 6],
+    });
+    const p = proposal(outcome);
+    expect(ids(p)).toEqual([1, 2, 4, 5, 6, 7]);
+    expect(p.brief.exclusions).toEqual({ artist_ids: [3], publisher_ids: [9] });
+    expect(p.brief.series_exclude).toEqual([2]);
     expect(p.warnings).toEqual([]);
   });
 
@@ -413,6 +432,12 @@ describe("generate", () => {
     expect(outcome).toMatchObject({ ok: false, error: "timeout" });
     expect(retrieveCandidates).not.toHaveBeenCalled();
   });
+});
+
+test("a series the new input names as its source lifts its held exclusion", () => {
+  const held = { ...proposalBrief, series_exclude: [2, 4] };
+  const next = { ...proposalBrief, series_include: [2], series_exclude: [5] };
+  expect(keepExclusions(next, held).series_exclude).toEqual([4, 5]);
 });
 
 describe("echo", () => {
