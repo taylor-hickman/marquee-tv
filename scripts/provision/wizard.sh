@@ -489,6 +489,7 @@ stripe_webhook() {
 stage_stripe() {
   stage "Stripe test mode: keys, prices, webhooks"
   need stripe vercel
+  local bypass
   open_url "https://dashboard.stripe.com/test/apikeys"
   step "Make sure the account switcher shows the Marquee TV account and Test mode is on."
   step "Secret key → Reveal test key → copy it (starts sk_test_)."
@@ -502,10 +503,17 @@ stage_stripe() {
   put_both STRIPE_PRICE_MONTHLY "$(stripe_price marquee_monthly "Monthly" 499 month)"
 
   stripe_webhook production "${PRODUCTION_URL:-https://getmarquee.tv}/api/webhooks/stripe"
-  say "Preview deploys need one stable URL that Stripe can reach (no Vercel login wall)."
+  say "Preview deploys need one stable URL; Stripe gets past Vercel's login with the automation bypass secret."
   ask PREVIEW_URL "Preview base URL for the webhook, e.g. https://staging.getmarquee.tv (Enter skips):"
   if [[ -n "$PREVIEW_URL" ]]; then
-    stripe_webhook preview "${PREVIEW_URL%/}/api/webhooks/stripe"
+    bypass=$(show vc api "/v9/projects/$VERCEL_PROJECT" |
+      jq -r '.protectionBypass // {} | to_entries[] | select(.value.scope == "automation-bypass") | .key' | head -1)
+    if [[ -n "$bypass" ]]; then
+      stripe_webhook preview "${PREVIEW_URL%/}/api/webhooks/stripe?x-vercel-protection-bypass=$bypass"
+    else
+      warn "$VERCEL_PROJECT has no automation bypass secret, so Stripe can't reach preview deploys"
+      SKIPPED+=("Stripe preview webhook: create a Protection Bypass for Automation in Vercel (Settings → Deployment Protection), then re-run --only stripe")
+    fi
   else
     SKIPPED+=("Stripe preview webhook: re-run --only stripe with a stable preview URL")
   fi
