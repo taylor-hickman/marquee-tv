@@ -14,6 +14,8 @@ import {
   shareLinkResponse,
   streamEvent,
   urlResponse,
+  youtubeConnectionResponse,
+  youtubeExportResponse,
   type ApiResult,
   type CatalogSearchRequest,
   type CheckoutRequest,
@@ -149,6 +151,16 @@ export function createApiClient({
     library: () => json(libraryResponse, "GET", "/api/library"),
     account: () => json(accountResponse, "GET", "/api/account"),
     deleteAccount: () => json(deleteAccountResponse, "DELETE", "/api/account"),
+    youtubeConnect: (draftId: DraftId) =>
+      json(urlResponse, "POST", "/api/youtube/connect", { draftId }),
+    youtubeConnection: () =>
+      json(youtubeConnectionResponse, "GET", "/api/youtube/connection"),
+    youtubeDisconnect: () =>
+      json(youtubeConnectionResponse, "DELETE", "/api/youtube/connection"),
+    youtubeExport: (id: DraftId, baseRevision: number) =>
+      json(youtubeExportResponse, "POST", `${draft(id)}/youtube-export`, {
+        baseRevision,
+      }),
   };
 }
 

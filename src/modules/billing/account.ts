@@ -1,6 +1,7 @@
 import "server-only";
 import type { AccountResponse, UserId } from "@/contracts";
 import { sql } from "@/lib/db";
+import { disconnect } from "@/modules/youtube";
 import { stripe } from "./stripe";
 import type { DeleteAccount } from "./types";
 
@@ -42,6 +43,7 @@ export async function getAccount(
 // drafts, revisions and share links; curator_run, handoff_event and event
 // rows stay with their draft and user links set null (the schema's foreign
 // keys). A webhook arriving afterwards finds no app_user and writes nothing.
+// A YouTube grant is revoked at Google before its row goes.
 
 // Stripe statuses after which a subscription can never charge again.
 const ENDED = ["canceled", "incomplete_expired"];
@@ -55,5 +57,6 @@ export const deleteAccount: DeleteAccount = async (userId) => {
   for (const { id } of subscriptions) {
     await stripe().subscriptions.cancel(id);
   }
+  await disconnect(userId);
   await sql`delete from auth.users where id = ${userId}`;
 };

@@ -44,6 +44,7 @@ flowchart LR
     CA[catalog module]
     BI[billing module]
     EV[events module]
+    YM[youtube module<br/>handoff_mode api only]
   end
   subgraph Supabase
     DB[(Postgres)]
@@ -51,19 +52,22 @@ flowchart LR
   end
   W[Ingestion worker<br/>scheduled]
   LLM[LLM provider]
-  YT[YouTube Data API<br/>read-only]
+  YT[YouTube Data API]
   STRIPE[Stripe]
   YTW[youtube.com / YouTube app]
 
   UI --> API
   UI -. watch_videos URL .-> YTW
-  API --> PL & CU & CA & BI & EV
+  API --> PL & CU & CA & BI & EV & YM
   CU --> CA
   CU --> LLM
   PL & CA & BI & EV --> DB
   BI <--> STRIPE
   API --> AUTH
   W --> YT
+  YM --> YT
+  BI --> YM
+  YM --> DB
   W --> LLM
   W --> DB
 ```
@@ -73,8 +77,9 @@ flowchart LR
 | `catalog` | Publishers, series, artists, performances, artist profiles; search and candidate retrieval | Postgres |
 | `curator` | Brief extraction, composition, refinement, replace suggestions, validation | `catalog` (through its interface only), LLM adapter |
 | `playlist` | Drafts, revisions, edit operations, undo, concurrency | Postgres, `curator` |
-| `billing` | Entitlements, checkout, Stripe webhooks, the free-playlist rule | Stripe, Postgres |
+| `billing` | Entitlements, checkout, Stripe webhooks, the free-playlist rule | Stripe, Postgres, `youtube` (account deletion revokes the grant) |
 | `events` | Analytics events and `HandoffEvent` rows | Postgres |
+| `youtube` | Save to my YouTube (P1, section 11): the Google grant, export jobs | Google OAuth, YouTube Data API (`playlists.insert`, `playlistItems.insert`), Postgres, `playlist` |
 | `ingest` (worker) | Pulling uploads, classifying, parsing artists, refreshing availability, building artist profiles | YouTube Data API, LLM, Postgres |
 
 The one boundary that matters most: `curator` never writes to Postgres and never runs SQL. It reads through `catalog` functions and returns proposed operations. `playlist` validates and applies them. That makes "the model never writes to playlist state" (PRD 8.3) a property of the code layout, not a rule someone has to remember.
@@ -334,6 +339,9 @@ Only `eligible AND available` performances reach the curator. A new upload becom
 | `GET /api/account` | Email, current plan and its period end, and the cohort's default plan (J10) |
 | `DELETE /api/account` | Delete my data (J10) |
 | `GET /privacy`, `GET /terms` | Static pages required before the first sign-in |
+| `POST /api/youtube/connect`, `GET /api/youtube/callback` | P1 Save to my YouTube: Google consent for the `youtube` scope, with a signed state and a nonce cookie, and the grant stored encrypted. Off unless `handoff_mode` is `api` |
+| `GET /api/youtube/connection`, `DELETE /api/youtube/connection` | Whether the user holds a grant; disconnect revokes it at Google (J10, J12) |
+| `POST /api/drafts/:id/youtube-export` | Writes the revision to a new private playlist, once per revision; a failed export resumes from its last item |
 
 Every write carries `baseRevision`. If it isn't the draft's current revision, the server returns `409` with the current one and the client re-renders. This covers two tabs and the mid-party edit from a second phone. No locking needed.
 
@@ -388,6 +396,7 @@ src/
     playlist/          drafts, revisions, ops, concurrency
     billing/           entitlements, stripe
     events/
+    youtube/           Google grant, Save to my YouTube export
   lib/                 db client, auth, rate limit, flags
 scripts/
   ingest/              worker jobs
@@ -401,7 +410,7 @@ db/
 
 | P1 item | What's already in place | What gets added |
 | --- | --- | --- |
-| Save to my YouTube | `handoff_mode` flag, `handoff_event`, server-side drafts and revisions | `youtube_connection` (encrypted refresh token), `export_job` with an idempotency key of `(draft_id, revision)`, an incremental Google OAuth grant for the `youtube` scope |
+| Save to my YouTube | `handoff_mode` flag, `handoff_event`, server-side drafts and revisions | `youtube_connection` (encrypted refresh token), `export_job` with an idempotency key of `(draft_id, revision)`, an incremental Google OAuth grant for the `youtube` scope. Built in R3 behind `handoff_mode = 'api'` (row 20) |
 | Preview player | Client has ordered IDs | IFrame player with `playlist=` in the editor |
 | Why this | `brief` and `artist_profile` per item | A short model call on demand, cached per `(revision, index)` |
 | Feedback tags | `performance_tag` table reserved | Write path from feedback buttons; retrieval reads tags where present and falls back to artist energy |
@@ -432,6 +441,7 @@ Every row below was adopted into PRD 1.1 (section 18.1 there) unless the Status 
 | 17 | `kind` classification | Binary eligibility flag (12) | Four-value `kind` kept for the review queue | Adopted with a memo check |
 | 18 | Rate-limit columns | Not covered; 9.2 counts model-backed runs per IP hash from `curator_run`, but 5.2 gave `curator_run` no IP | `curator_run.ip_hash`, indexed with `created_at` for the per-hour count; per-guest and per-user counts join through `draft_id` | Added in T2's initial migration |
 | 19 | Staging's GitHub environment | Not covered; build plan 6.3 names the GitHub Actions environments `staging` and `production` | R4 created `preview` and `production`. `preview` holds the secrets for the `marquee-staging` Supabase project, and `deploy.yml` migrates staging from it | Followed in T2b's `deploy.yml`; build plan still says `staging` |
+| 20 | When Save to my YouTube is built | P1 API export begins once the quota extension is approved (PRD 10.2, 14) | The quota form asks for a screencast of the working flow, so R3 builds it first, live only where `app_flag.handoff_mode` is `api`: staging's database, not production's. The button sits in the editor until E5's handoff sheet exists. To film it, R3 pushed `20261110180000_youtube_export.sql` to staging with `supabase db push` before merge, where build plan 6.3 has only `deploy.yml` migrate staging; the migration only adds tables, and `deploy.yml` finds it applied after merge | Taylor chose this, Nov 8, 2026 (quota-application.md, option 1); the staging push Nov 10 |
 
 ## 13. ADR backlog
 

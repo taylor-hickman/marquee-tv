@@ -1,6 +1,6 @@
 # Privacy policy
 
-Draft, not yet reviewed by counsel. Last updated November 10, 2026.
+Last updated November 10, 2026.
 
 Marquee TV ("we") builds playlists of live performances that play on YouTube. This policy says what we collect, why, how long we keep it, and how to delete it.
 
@@ -34,7 +34,13 @@ Marquee TV uses YouTube API Services. Playlists open on YouTube, and what you wa
 
 From the YouTube API we store a video's title, duration, upload date and availability. We refresh this data every week and delete any of it older than 30 days. Thumbnails are shown from YouTube's own servers and never stored. We store our own records of which videos are live performances and who performs in them. None of the YouTube data is about you.
 
-We do not ask for access to your YouTube account. If you have granted any app access to your Google account, you can revoke it at https://security.google.com/settings/security/permissions.
+### Save to my YouTube
+
+Only if you choose Save to my YouTube do we ask Google for access to your YouTube account. Google's consent screen names the permission: manage your YouTube account. We use it only to create a private playlist of your set in your account, one playlist each time you save a version of a set. We do not read your videos, subscriptions or history.
+
+Google gives us a refresh token, which we store encrypted on our servers and never send to your browser. We also keep the ID of each playlist we created, so a second save of the same set returns it instead of making another.
+
+Disconnect, in Account, revokes the access at Google and deletes the token at once. Delete my data does the same. You can also revoke it yourself at https://security.google.com/settings/security/permissions; the next time we try to use the token, Google refuses it and we delete it.
 
 ## Who processes your data
 
@@ -46,7 +52,7 @@ We do not ask for access to your YouTube account. If you have granted any app ac
 
 ## Deleting your data
 
-Delete my data, in Account, deletes your account, your plan records, your drafts and their history, and your share links at once. It cancels any active subscription at Stripe first. We keep a record of each playlist the model built, with what was asked and which videos it chose, but no longer linked to you or to a draft, so we can measure and improve the curator. Events stay without your account attached.
+Delete my data, in Account, deletes your account, your plan records, your drafts and their history, your share links, and any YouTube access you granted (revoked at Google first) at once. It cancels any active subscription at Stripe first. We keep a record of each playlist the model built, with what was asked and which videos it chose, but no longer linked to you or to a draft, so we can measure and improve the curator. Events stay without your account attached.
 
 Stripe keeps its own payment records as the law requires.
 

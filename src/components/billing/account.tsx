@@ -13,7 +13,8 @@ import { api } from "./session";
 import { SignIn } from "./sign-in";
 
 // Account (J10): the plan, the Stripe Customer Portal for cancel, switch and
-// card, sign out, and delete my data after one confirmation.
+// card, disconnect YouTube when Save to my YouTube holds a grant (J12), sign
+// out, and delete my data after one confirmation.
 
 const heading = "m-0 text-display-phone font-extrabold md:text-display";
 
@@ -45,12 +46,17 @@ export function Account() {
   );
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [youtube, setYouTube] = useState(false);
 
   useEffect(() => {
     (async () => {
       if (!(await accessToken())) return setAccount("signed-out");
-      const result = await api.account().catch(() => null);
+      const [result, connection] = await Promise.all([
+        api.account().catch(() => null),
+        api.youtubeConnection().catch(() => null),
+      ]);
       setAccount(result?.ok ? result.value : "signed-out");
+      setYouTube(connection?.ok === true && connection.value.connected);
     })();
   }, []);
 
@@ -70,6 +76,14 @@ export function Account() {
     if (result?.ok) return window.location.assign(result.value.url);
     setBusy(false);
     toast("Billing is unavailable. Try again.");
+  }
+
+  async function disconnect() {
+    setBusy(true);
+    const result = await api.youtubeDisconnect().catch(() => null);
+    setBusy(false);
+    if (result?.ok) setYouTube(false);
+    else toast("Couldn't disconnect YouTube. Try again.");
   }
 
   async function signOut() {
@@ -111,6 +125,15 @@ export function Account() {
           </Button>
         )}
       </section>
+      {youtube && (
+        <section aria-label="YouTube" className="flex flex-col gap-3">
+          <h2 className="meta m-0">YouTube</h2>
+          <p className="m-0 text-heading font-bold">Connected</p>
+          <Button className="self-start" disabled={busy} onClick={disconnect}>
+            Disconnect
+          </Button>
+        </section>
+      )}
       <div className="flex flex-wrap gap-2 border-t border-fg pt-6">
         <Button onClick={signOut}>Sign out</Button>
         <Button onClick={() => setConfirming(true)}>Delete my data</Button>

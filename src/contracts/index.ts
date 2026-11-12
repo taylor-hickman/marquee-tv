@@ -75,4 +75,10 @@ export const schemas = {
   accountResponse: api.accountResponse,
   deleteAccountResponse: api.deleteAccountResponse,
   staticPageResponse: api.staticPageResponse,
+  youtubeConnectRequest: api.youtubeConnectRequest,
+  youtubeCallbackRequest: api.youtubeCallbackRequest,
+  youtubeCallbackResponse: api.youtubeCallbackResponse,
+  youtubeConnectionResponse: api.youtubeConnectionResponse,
+  youtubeExportRequest: api.youtubeExportRequest,
+  youtubeExportResponse: api.youtubeExportResponse,
 };

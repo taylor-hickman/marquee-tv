@@ -40,6 +40,10 @@ describe("database", () => {
       await tx`insert into app_flag (key, value) values (${userId}, 'test')`;
       await tx`insert into performance_tag (performance_id, kind, value, source)
                select min(id), 'mood', ${userId}, 'editor' from performance`;
+      await tx`insert into youtube_connection (user_id, refresh_token)
+               values (${userId}, sha256(convert_to(${userId}, 'utf8')))`;
+      await tx`insert into export_job (draft_id, revision, user_id)
+               values (${draft.id}, 1, ${userId})`;
     });
   });
 

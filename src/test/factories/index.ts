@@ -186,3 +186,30 @@ export const handoffEvent = async (o: Overrides = {}) =>
     type: "open",
     ...o,
   });
+
+// P1: Save to my YouTube (architecture 11)
+
+export const youtubeConnection = async (o: Overrides = {}) =>
+  insert("youtube_connection", {
+    user_id: o.user_id ?? (await appUser()).id,
+    refresh_token: randomBytes(48),
+    ...o,
+  });
+
+// On a new revision of a new user's draft unless draft_id and revision are given.
+export const exportJob = async (o: Overrides = {}) => {
+  const userId = o.user_id ?? (await appUser()).id;
+  const target =
+    o.draft_id && o.revision
+      ? {}
+      : await playlistRevision({
+          draft_id:
+            o.draft_id ?? (await playlistDraft({ owner_user_id: userId })).id,
+        });
+  return insert("export_job", {
+    user_id: userId,
+    draft_id: target.draft_id,
+    revision: target.number,
+    ...o,
+  });
+};

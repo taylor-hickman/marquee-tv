@@ -291,7 +291,7 @@ Mitigations for Path A's risk: a daily automated check that the URL still resolv
 
 ### 10.2 Path B — Data API export (P1)
 
-Apply for a quota extension during Phase 0 with real usage projections. Build OAuth with the minimum scope, store refresh tokens server-side only, verify every insert via the API response, and prevent duplicate exports with an idempotency key per playlist revision. Expose as "Save to my YouTube" beside "Play on YouTube" once quota is approved.
+Apply for a quota extension with real usage projections once the export runs on staging, since the application is an audit of a working flow (submitted Nov 10, 2026; `docs/architecture/quota-application.md`). Build OAuth with the minimum scope, store refresh tokens server-side only, verify every insert via the API response, and prevent duplicate exports with an idempotency key per playlist revision. Expose as "Save to my YouTube" beside "Play on YouTube" once quota is approved.
 
 ### 10.3 Preview (P1)
 
@@ -368,11 +368,11 @@ Paid access (section 16) covers our curation, editor and library, never YouTube 
 
 ## 14. Development phases
 
-Five phases, each with a hard exit gate. Phase 0 is short because the URL handoff needs no OAuth or quota to validate; what remains is confirming it works on every surface, checking compliance, and starting the quota clock for P1.
+Five phases, each with a hard exit gate. Phase 0 is short because the URL handoff needs no OAuth or quota to validate; what remains is confirming it works on every surface, checking compliance, and drafting the quota application for P1.
 
 | Phase | Objective | Key deliverables | Exit gate |
 | --- | --- | --- | --- |
-| **0. De-risk** (1–2 weeks) | Confirm the launch path and start long-lead items | URL handoff tested on desktop, iOS, Android, cast-to-TV and the Instagram in-app browser, including "play from here" while casting and a short-link redirect into the YouTube app; what `watch_videos` returns to a non-browser client; ingestion of one channel end-to-end; compliance memo; quota extension application submitted | Handoff works on all five surfaces; one publisher fully ingested |
+| **0. De-risk** (1–2 weeks) | Confirm the launch path and start long-lead items | URL handoff tested on desktop, iOS, Android, cast-to-TV and the Instagram in-app browser, including "play from here" while casting and a short-link redirect into the YouTube app; what `watch_videos` returns to a non-browser client; ingestion of one channel end-to-end; compliance memo; quota extension application drafted (submitted later, once the app is live and Save to my YouTube can be filmed on staging) | Handoff works on all five surfaces; one publisher fully ingested |
 | **1. Catalog** (2–3 weeks) | Build the source of truth | Three publishers at full depth; performance classifier; artist parser; artist profiles; weekly refresh and expiry jobs; review-queue procedure; catalog search API | 2,000+ eligible performances; under 2% misclassified in a 200-item audit |
 | **2. Curator** (3–4 weeks) | Deliver the intelligence | Brief extraction; candidate retrieval over profiles; composition with energy arc; validation and repair layer; conversational edit ops; eval runner and set of 50 prompts | 45 of 50 eval prompts rated acceptable by two reviewers; zero invalid IDs in 500 runs; p90 under 8 s |
 | **3. App** (3–4 weeks) | Ship the end-to-end experience | Landing + prompt; artist seed; manual browse; editor with pins, reorder, undo; URL handoff, play from here, share links; guest persistence and returning-guest card; sign-up, payment and the paywall; library; account screen; privacy policy and terms; broken-handoff runbook; analytics | A first-time user goes from landing to YouTube playing in under 60 s with no help |
@@ -449,7 +449,7 @@ Annual billing, crediting a session pass toward a subscription bought within the
 
 | Risk | Likelihood | Impact | Mitigation |
 | --- | --- | --- | --- |
-| YouTube retires the `watch_videos` URL | Medium | High | Daily automated check; copy-list fallback behind a runtime flag; P1 API export behind the same flag; quota application filed in Phase 0; runbook written before launch |
+| YouTube retires the `watch_videos` URL | Medium | High | Daily automated check; copy-list fallback behind a runtime flag; P1 API export behind the same flag; quota application filed from staging in Phase 3; runbook written before launch |
 | Quota extension denied or slow | Medium | Medium | P0 does not need it; P1 waits; usage projections in the application |
 | Arc feels generic without performance-level tags | Medium | Medium | Publisher conventions as proxy; P1 feedback buttons; editorial tags for the 100 most-played performances |
 | Catalog dead ends on niche requests | Medium | Medium | Depth-first catalog; honest "nothing here, try these" responses; log unmet requests to drive expansion |

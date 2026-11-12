@@ -11,7 +11,7 @@ describe("legal pages render docs/legal/ as HTML", () => {
   test("/privacy says the app uses YouTube API Services and links Google's privacy policy", () => {
     const page = html(PrivacyPage);
     expect(page).toContain("<h1>Privacy policy</h1>");
-    expect(page).toContain("Draft, not yet reviewed by counsel.");
+    expect(page).not.toContain("Draft, not yet reviewed by counsel.");
     expect(page).toContain("uses YouTube API Services");
     expect(page).toContain('href="https://policies.google.com/privacy"');
   });

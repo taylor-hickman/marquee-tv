@@ -44,6 +44,11 @@ export const errorBody = z.discriminatedUnion("error", [
   }),
   // 25 model-backed runs on this draft; manual edits and replace still work.
   z.object({ error: z.literal("run_cap_reached") }),
+  // Save to my YouTube: no Google grant, or Google revoked it. The client
+  // starts the connect flow.
+  z.object({ error: z.literal("youtube_not_connected") }),
+  // The YouTube API refused or failed mid-export. Retrying resumes the job.
+  z.object({ error: z.literal("youtube_failed") }),
 ]);
 export type ErrorBody = z.infer<typeof errorBody>;
 
@@ -56,6 +61,8 @@ export const errorStatus = {
   conflict: 409,
   rate_limited: 429,
   run_cap_reached: 429,
+  youtube_not_connected: 403,
+  youtube_failed: 502,
 } as const satisfies Record<ErrorBody["error"], number>;
 
 // What a module returns to its route: a body, or the error the route sends.
@@ -237,6 +244,37 @@ export const accountResponse = z.object({
 // DELETE /api/account
 export const deleteAccountResponse = z.object({ deleted: z.literal(true) });
 
+// Save to my YouTube (P1, J12, architecture 11). Live only while
+// app_flag.handoff_mode is `api`.
+
+// POST /api/youtube/connect. The response's url is Google's consent screen.
+export const youtubeConnectRequest = z.strictObject({ draftId });
+
+// GET /api/youtube/callback, Google's redirect back. The response is a 302 to
+// the draft's editor; this is its Location header.
+export const youtubeCallbackRequest = z.union([
+  z.object({ code: z.string().min(1), state: z.string().min(1) }),
+  z.object({ error: z.string().min(1), state: z.string().min(1) }),
+]);
+export const youtubeCallbackResponse = z.object({
+  location: z.string().regex(/^\/d\/[0-9a-f-]{36}(\?youtube=save)?$/),
+});
+
+// GET and DELETE /api/youtube/connection. DELETE revokes the grant at Google.
+export const youtubeConnectionResponse = z.object({ connected: z.boolean() });
+
+// POST /api/drafts/:id/youtube-export. One playlist per draft revision: a
+// second call returns the first's playlist, or `running` while it is going.
+export const youtubeExportRequest = z.object({ baseRevision: revisionNumber });
+export const youtubeExportResponse = z.discriminatedUnion("status", [
+  z.object({
+    status: z.literal("done"),
+    playlistId: z.string().min(1),
+    url: z.url().startsWith("https://www.youtube.com/playlist?list="),
+  }),
+  z.object({ status: z.literal("running") }),
+]);
+
 // GET /privacy, GET /terms: static HTML pages.
 export const staticPageResponse = z.string().min(1);
 
@@ -300,6 +338,26 @@ export const routes = {
   },
   "GET /privacy": { request: emptyRequest, response: staticPageResponse },
   "GET /terms": { request: emptyRequest, response: staticPageResponse },
+  "POST /api/youtube/connect": {
+    request: youtubeConnectRequest,
+    response: urlResponse,
+  },
+  "GET /api/youtube/callback": {
+    request: youtubeCallbackRequest,
+    response: youtubeCallbackResponse,
+  },
+  "GET /api/youtube/connection": {
+    request: emptyRequest,
+    response: youtubeConnectionResponse,
+  },
+  "DELETE /api/youtube/connection": {
+    request: emptyRequest,
+    response: youtubeConnectionResponse,
+  },
+  "POST /api/drafts/:id/youtube-export": {
+    request: youtubeExportRequest,
+    response: youtubeExportResponse,
+  },
 } as const;
 
 export type CreateDraftRequest = z.infer<typeof createDraftRequest>;
@@ -321,5 +379,6 @@ export type CheckoutRequest = z.infer<typeof checkoutRequest>;
 export type UrlResponse = z.infer<typeof urlResponse>;
 export type LibraryResponse = z.infer<typeof libraryResponse>;
 export type AccountResponse = z.infer<typeof accountResponse>;
+export type YouTubeExportResponse = z.infer<typeof youtubeExportResponse>;
 export type ReplaceOptionsResponse = z.infer<typeof replaceOptionsResponse>;
 export type StripeWebhookResponse = z.infer<typeof stripeWebhookResponse>;

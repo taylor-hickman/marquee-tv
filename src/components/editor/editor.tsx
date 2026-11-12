@@ -17,6 +17,7 @@ import {
 } from "@/lib/client/draft-state";
 import { getDraftCache } from "@/lib/client/storage";
 import { Generating } from "./generating";
+import { SaveToYouTube } from "./save-to-youtube";
 import { advance, failureMessage, starting, type Progress } from "./progress";
 import { Title } from "./title";
 import { TrackList, type EditEvent, type OnOps } from "./track-list";
@@ -39,13 +40,16 @@ const send = (
 // brief the server held through payment (architecture 7.1, 7.3). A run refused
 // for payment goes to the plan screen. Every edit goes through /ops or /undo
 // with the current revision and renders what comes back; a 409 renders the
-// server's list instead (src/lib/client/draft-state.ts).
+// server's list instead (src/lib/client/draft-state.ts). `?youtube=save`
+// is Google's return to Save to my YouTube (J12), which saves on arrival.
 export function Editor({
   id,
   run: arrivalRun,
+  youtubeSave = false,
 }: {
   id: string;
   run: "fill" | "generate" | null;
+  youtubeSave?: boolean;
 }) {
   const router = useRouter();
   const toast = useToast();
@@ -53,6 +57,8 @@ export function Editor({
   const [missing, setMissing] = useState<string | null>(null);
   const [run, setRun] = useState<Run | null>(null);
   const arrived = useRef(false);
+  // Kept from arrival: the router.replace below drops it from the URL.
+  const [saveOnArrival] = useState(youtubeSave);
 
   async function start(draft: DraftState, request: RunRequest) {
     setRun({ ...request, progress: starting });
@@ -99,7 +105,9 @@ export function Editor({
       // eslint-disable-next-line react-hooks/set-state-in-effect -- local storage exists only after mount
       setState(draft);
     }
-    if (arrivalRun) router.replace(`/d/${encodeURIComponent(id)}`);
+    if (arrivalRun || youtubeSave) {
+      router.replace(`/d/${encodeURIComponent(id)}`);
+    }
     api
       .getDraft(id)
       .catch(() => null)
@@ -161,6 +169,7 @@ export function Editor({
       run={run}
       onRun={(request) => start(state, request)}
       toast={toast}
+      youtubeSave={saveOnArrival}
     />
   );
 }
@@ -170,11 +179,13 @@ function Loaded({
   run,
   onRun,
   toast,
+  youtubeSave,
 }: {
   state: DraftState;
   run: Run | null;
   onRun: (request: RunRequest) => void;
   toast: (message: string) => void;
+  youtubeSave: boolean;
 }) {
   const view = useDraft(state);
   // One write at a time, so each carries the revision the last one returned.
@@ -257,6 +268,15 @@ function Loaded({
             <Button size="sm" onClick={() => onRun({ mode: "regenerate" })}>
               Regenerate unpinned
             </Button>
+            {view.flags.handoffMode === "api" && (
+              <SaveToYouTube
+                api={api}
+                draftId={id}
+                revision={revision.number}
+                autoSave={youtubeSave}
+                toast={toast}
+              />
+            )}
           </div>
         )}
       </div>
