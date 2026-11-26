@@ -1,0 +1,64 @@
+name: Evals
+
+# Every eval prompt through curator.generate with the real model against the
+# staging catalog, failing on any invariant violation (architecture 6.5, build
+# plan 6.3). Runs on curator changes, on changes to the evals themselves,
+# nightly and by hand.
+on:
+  pull_request:
+    paths:
+      - src/modules/curator/**
+      - scripts/evals/**
+      - docs/evals/prompts.md
+      - .github/workflows/evals.yml
+  schedule:
+    - cron: "37 6 * * *"
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: Runs per prompt (10 makes the 500-run check)
+        default: "1"
+      invent_id:
+        description: After the run, put an invented id into one result and check the file again; the job must fail
+        type: boolean
+        default: false
+
+concurrency:
+  group: evals-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    # Staging's secrets live in the preview environment.
+    environment: preview
+    timeout-minutes: 90
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm evals --runs "$RUNS"
+        env:
+          RUNS: ${{ inputs.runs || '1' }}
+      - if: inputs.invent_id
+        run: |
+          file=$(ls evals/results/*.json)
+          jq '(.results | map(.error == null) | index(true)) as $i | .results[$i].items[0].id = 999999999' "$file" > invented.json
+          pnpm evals --check invented.json
+      # Results hold YouTube API Data, so they expire inside the 30-day limit.
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: eval-results
+          path: evals/results/
+          retention-days: 30
